@@ -121,9 +121,8 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div className="border-t border-white/8 px-6 py-5">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-white/35">
-          <p>© {new Date().getFullYear()} Cognidx Enterprises Pvt. Ltd. All rights reserved.</p>
-          <p>Designed with ♥ in Kathmandu · We support the GenZ Movement</p>
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-center items-center gap-3 text-xs text-white">
+          <p>© {new Date().getFullYear()} Cognidx Enterprises Pvt. Ltd. | All rights reserved.</p>
         </div>
       </div>
     </footer>

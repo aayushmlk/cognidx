@@ -4,6 +4,19 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Space+Mono:wght@400;700&display=swap');
 
+@keyframes vibrate {
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(-15deg); }
+  40% { transform: rotate(15deg); }
+  60% { transform: rotate(-10deg); }
+  80% { transform: rotate(10deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.vibrate-hover:hover .icon-vibrate {
+  animation: vibrate 0.3s linear;
+}
+
 :root {
   --font-playfair: "Playfair Display", Georgia, serif;
   --font-dm-sans: "DM Sans", system-ui, sans-serif;
