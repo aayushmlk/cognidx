@@ -30,9 +30,9 @@ export const metadata: Metadata = {
   icons: {
     icon: [
 
-      { url: "/cognidx_logo.png" },
+      { url: "/favicon.png" },
     ],
-    apple: [{ url: "/cognidx_logo.png", sizes: "180x180" }],
+    apple: [{ url: "/favicon.png", sizes: "180x180" }],
 
   },
 
@@ -75,7 +75,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body >{children}</body>
     </html>
   );
 }
