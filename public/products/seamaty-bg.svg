@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e0f2fe"/>
+      <stop offset="100%" style="stop-color:#bae6fd"/>
+    </linearGradient>
+    <linearGradient id="hand" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff"/>
+      <stop offset="100%" style="stop-color:#e5e7eb"/>
+    </linearGradient>
+    <linearGradient id="scr2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f4c81"/>
+      <stop offset="100%" style="stop-color:#073a63"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg2)" rx="12"/>
+  <!-- Handheld body -->
+  <rect x="145" y="40" width="110" height="210" rx="20" fill="url(#hand)" stroke="#93c5fd" stroke-width="2"/>
+  <!-- Screen -->
+  <rect x="155" y="55" width="90" height="120" rx="8" fill="url(#scr2)"/>
+  <!-- Screen data -->
+  <text x="200" y="78" font-family="Arial" font-size="9" fill="#60a5fa" text-anchor="middle">BLOOD GAS</text>
+  <rect x="162" y="84" width="60" height="2" rx="1" fill="#60a5fa" opacity="0.5"/>
+  <text x="165" y="100" font-family="Arial" font-size="8" fill="#34d399">pH   7.42</text>
+  <text x="165" y="113" font-family="Arial" font-size="8" fill="#fbbf24">Na+  138</text>
+  <text x="165" y="126" font-family="Arial" font-size="8" fill="#a78bfa">K+   4.2</text>
+  <text x="165" y="139" font-family="Arial" font-size="8" fill="#34d399">pO2  98</text>
+  <text x="165" y="152" font-family="Arial" font-size="8" fill="#60a5fa">Lac  1.1</text>
+  <!-- Home button -->
+  <circle cx="200" cy="220" r="12" fill="#e5e7eb" stroke="#d1d5db" stroke-width="1.5"/>
+  <rect x="196" y="216" width="8" height="8" rx="1.5" fill="#9ca3af"/>
+  <!-- Side buttons -->
+  <rect x="142" y="100" width="5" height="20" rx="2" fill="#d1d5db"/>
+  <rect x="142" y="125" width="5" height="15" rx="2" fill="#d1d5db"/>
+  <!-- Cartridge slot -->
+  <rect x="162" y="185" width="76" height="22" rx="4" fill="#1e40af"/>
+  <rect x="170" y="190" width="60" height="12" rx="2" fill="#1d4ed8" stroke="#3b82f6" stroke-width="0.5"/>
+  <text x="200" y="200" font-family="Arial" font-size="7" fill="#93c5fd" text-anchor="middle">INSERT CARTRIDGE</text>
+  <!-- Label -->
+  <text x="200" y="268" font-family="Arial" font-size="13" font-weight="bold" fill="#0369a1" text-anchor="middle">Seamaty SG1</text>
+  <text x="200" y="283" font-family="Arial" font-size="10" fill="#0284c7" text-anchor="middle">Blood Gas &amp; Electrolyte Analyzer</text>
+</svg>
