@@ -1,47 +1,66 @@
+import { FaHandFist } from "react-icons/fa6";
+
 export default function GenzBanner() {
   return (
-    <section className="bg-gradient-to-r from-purple-700 via-purple-600 to-purple-700 py-14 px-6">
-      <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 text-center sm:text-left">
+    <section
+      className="relative py-16 px-6 sm:px-10"
+      style={{
+        background: "#0f0520",
+        backgroundImage: `
+          radial-gradient(ellipse at 0% 100%, #3b0764 0%, transparent 50%),
+          radial-gradient(ellipse at 100% 0%, #2e1065 0%, transparent 50%)
+        `,
+      }}
+    >
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-80px] left-[-80px] w-[300px] h-[300px] rounded-full bg-violet-900/35 blur-[60px]" />
+        <div className="absolute bottom-[-60px] right-[10%] w-[200px] h-[200px] rounded-full bg-purple-900/40 blur-[60px]" />
+      </div>
 
-        {/* Fist icon */}
-        <div className="shrink-0">
-          <svg
-            width="72"
-            height="72"
-            viewBox="0 0 72 72"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Wrist / base */}
-            <rect x="22" y="48" width="28" height="16" rx="6" fill="white" fillOpacity="0.95"/>
-            {/* Palm */}
-            <rect x="20" y="30" width="32" height="22" rx="8" fill="white" fillOpacity="0.95"/>
-            {/* Index finger */}
-            <rect x="22" y="14" width="8" height="22" rx="4" fill="white" fillOpacity="0.95"/>
-            {/* Middle finger */}
-            <rect x="32" y="10" width="8" height="22" rx="4" fill="white" fillOpacity="0.95"/>
-            {/* Ring finger */}
-            <rect x="42" y="14" width="8" height="20" rx="4" fill="white" fillOpacity="0.95"/>
-            {/* Pinky */}
-            <rect x="50" y="20" width="6" height="16" rx="3" fill="white" fillOpacity="0.9"/>
-            {/* Thumb */}
-            <rect x="12" y="32" width="12" height="8" rx="4" fill="white" fillOpacity="0.9"/>
-          </svg>
+      <div className="relative z-10 max-w-3xl mx-auto flex flex-col sm:flex-row items-center gap-12 text-center sm:text-left">
+
+        {/* Icon card */}
+        <div
+          className="shrink-0 w-[110px] h-[110px] rounded-[28px] flex items-center justify-center relative"
+          style={{
+            background: "linear-gradient(135deg, #3b0764, #5b21b6)",
+            border: "1px solid rgba(167,139,250,0.2)",
+            boxShadow: "0 0 50px rgba(109,40,217,0.55), inset 0 1px 0 rgba(255,255,255,0.08)",
+          }}
+        >
+          <div className="absolute inset-px rounded-[27px] bg-gradient-to-br from-white/[0.07] to-transparent pointer-events-none" />
+          <FaHandFist size={52} color="#ede9fe" />
         </div>
 
         {/* Text */}
-        <div>
-          <p className="text-white/70 text-xs font-mono-custom tracking-[0.2em] uppercase mb-2">
+        <div className="min-w-0 w-full">
+          <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-violet-500 mb-3 flex items-center gap-2.5 justify-center sm:justify-start">
+            <span className="block w-6 h-px bg-violet-600 rounded" />
             Our Commitment
           </p>
-          <h2 className="font-playfair text-3xl sm:text-4xl font-bold text-white leading-tight mb-3">
-            We Support the Gen Z Movement
+          <h2 className="font-playfair text-3xl sm:text-4xl font-black text-violet-50 leading-[1.15] mb-4">
+            We Support the{" "}
+            <em className="italic text-violet-400">
+              Gen Z Movement
+            </em>
           </h2>
-          <p className="text-white/75 text-base leading-relaxed max-w-lg">
+          <p className="text-violet-300/70 text-[15px] leading-relaxed max-w-[420px] mb-6">
             Empowering the next generation of healthcare professionals with
             precision diagnostic tools, modern technology, and a commitment
             to accessible, future-forward medicine.
           </p>
+          <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+            <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full font-mono text-[10px] tracking-widest uppercase text-violet-200 bg-violet-700/35 border border-violet-500/40">
+              <span className="w-[5px] h-[5px] rounded-full bg-violet-400 animate-pulse" />
+              Future-Forward Medicine
+            </span>
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full font-mono text-[10px] tracking-widest uppercase text-violet-300/70 bg-violet-900/20 border border-violet-700/25">
+              Precision Diagnostics
+            </span>
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full font-mono text-[10px] tracking-widest uppercase text-violet-300/70 bg-violet-900/20 border border-violet-700/25">
+              Next Gen Healthcare
+            </span>
+          </div>
         </div>
 
       </div>
