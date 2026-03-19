@@ -34,9 +34,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        serif: ["var(--font-playfair)", "Georgia", "serif"],
-        sans: ["var(--font-dm-sans)", "system-ui", "sans-serif"],
-        mono: ["var(--font-space-mono)", "monospace"],
+        playfair: ["Raleway", "system-ui", "sans-serif"],
+        raleway: ["Raleway", "system-ui", "sans-serif"],
+        mono: ["Space Mono", "monospace"],
       },
       animation: {
         "banner-shift": "bannerShift 4s ease infinite",
