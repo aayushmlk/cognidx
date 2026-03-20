@@ -1,6 +1,5 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import ScrollFade from "@/components/ScrollFade";
 import About from "@/components/About";
 import ProductSlideshow from "@/components/ProductSlideshow";
 import Products from "@/components/Products";
@@ -13,10 +12,8 @@ export default function Home() {
     <main>
       <Navbar />
       <Hero />
-      <ScrollFade />
       <About />
       <ProductSlideshow />
-      <Products />
       <Donate />
       <GenzBanner />
       <Footer />

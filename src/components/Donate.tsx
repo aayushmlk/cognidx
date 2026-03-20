@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Heart, X, Copy, Check } from "lucide-react";
+import { Heart, X, Copy, Check, Sparkles, ArrowRight } from "lucide-react";
 
 export default function Donate() {
   const [showQR, setShowQR] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [flipping, setFlipping] = useState(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText("9819425801");
@@ -14,307 +15,368 @@ export default function Donate() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleDonate = () => {
+    setFlipping(true);
+    setTimeout(() => {
+      setShowQR(true);
+      setFlipping(false);
+    }, 400);
+  };
+
+  const handleBack = () => {
+    setFlipping(true);
+    setTimeout(() => {
+      setShowQR(false);
+      setFlipping(false);
+    }, 400);
+  };
+
   return (
     <section
       id="donate"
-      className="relative py-32 px-6 overflow-hidden"
+      className="relative py-28 px-6 overflow-hidden"
       style={{
-        background: "linear-gradient(160deg, #07040f 0%, #0e0720 55%, #07040f 100%)",
+        background: "linear-gradient(160deg, #faf8ff 0%, #f3f0ff 40%, #fdf4ff 70%, #f8f7ff 100%)",
       }}
     >
-      {/* ── Background ── */}
-      <div className="pointer-events-none absolute inset-0">
-        {/* Main violet bloom */}
+      {/* ── Background atmosphere ── */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {/* Large soft violet bloom center */}
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[560px]"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full"
           style={{
-            background:
-              "radial-gradient(ellipse, rgba(139,92,246,0.22) 0%, rgba(109,40,217,0.08) 45%, transparent 70%)",
-            filter: "blur(60px)",
+            background: "radial-gradient(ellipse, rgba(167,139,250,0.18) 0%, rgba(124,58,237,0.06) 50%, transparent 75%)",
+            filter: "blur(40px)",
           }}
         />
-        {/* Cyan top-right */}
+        {/* Pink top right */}
         <div
-          className="absolute -top-16 right-1/4 w-[320px] h-[320px]"
+          className="absolute -top-20 right-1/4 w-[350px] h-[350px] rounded-full"
           style={{
-            background:
-              "radial-gradient(ellipse, rgba(34,211,238,0.12) 0%, transparent 65%)",
-            filter: "blur(55px)",
+            background: "radial-gradient(circle, rgba(232,121,249,0.12) 0%, transparent 65%)",
+            filter: "blur(50px)",
           }}
         />
-        {/* Pink bottom-left */}
+        {/* Indigo bottom left */}
         <div
-          className="absolute -bottom-10 -left-10 w-[360px] h-[260px]"
+          className="absolute -bottom-10 left-1/4 w-[300px] h-[300px] rounded-full"
           style={{
-            background:
-              "radial-gradient(ellipse at bottom left, rgba(196,92,252,0.12) 0%, transparent 65%)",
-            filter: "blur(55px)",
+            background: "radial-gradient(circle, rgba(99,102,241,0.10) 0%, transparent 65%)",
+            filter: "blur(45px)",
           }}
         />
         {/* Dot grid */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 opacity-[0.04]"
           style={{
-            backgroundImage:
-              "radial-gradient(circle, rgba(167,139,250,0.13) 1px, transparent 1px)",
-            backgroundSize: "30px 30px",
+            backgroundImage: "radial-gradient(circle, #7c3aed 1px, transparent 1px)",
+            backgroundSize: "28px 28px",
           }}
         />
-        {/* Top shimmer */}
+        {/* Top shimmer line */}
         <div
           className="absolute top-0 inset-x-0 h-px"
           style={{
-            background:
-              "linear-gradient(90deg, transparent 5%, rgba(167,139,250,0.7) 35%, rgba(34,211,238,0.55) 65%, transparent 95%)",
+            background: "linear-gradient(90deg, transparent 10%, rgba(167,139,250,0.5) 40%, rgba(232,121,249,0.4) 60%, transparent 90%)",
           }}
         />
       </div>
 
       {/* ── Content ── */}
-      <div className="relative z-10 max-w-lg mx-auto text-center">
+      <div className="relative z-10 max-w-md mx-auto">
 
-        {!showQR ? (
-          <>
-            {/* Heart badge */}
-            <div className="flex justify-center mb-8">
-              <div
-                className="relative flex items-center justify-center w-[72px] h-[72px] rounded-[22px]"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(139,92,246,0.3) 0%, rgba(109,40,217,0.15) 100%)",
-                  border: "1px solid rgba(167,139,250,0.45)",
-                  boxShadow:
-                    "0 0 40px rgba(139,92,246,0.3), inset 0 1px 0 rgba(255,255,255,0.1)",
-                }}
-              >
-                <Heart
-                  size={30}
-                  className="text-violet-300"
-                  fill="rgba(139,92,246,0.4)"
-                  style={{ filter: "drop-shadow(0 0 10px rgba(167,139,250,0.7))" }}
-                />
-                <span
-                  className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full"
+        {/* Flip card wrapper */}
+        <div
+          className="transition-all duration-400"
+          style={{
+            opacity: flipping ? 0 : 1,
+            transform: flipping ? "scale(0.96) translateY(8px)" : "scale(1) translateY(0)",
+            transition: "opacity 0.35s ease, transform 0.35s ease",
+          }}
+        >
+
+          {/* ══════════════════
+              FRONT — CTA
+          ══════════════════ */}
+          {!showQR && (
+            <div className="text-center">
+
+              {/* Floating heart icon */}
+              <div className="flex justify-center mb-8">
+                <div
+                  className="relative flex items-center justify-center w-20 h-20 rounded-3xl"
                   style={{
-                    background: "#22d3ee",
-                    boxShadow: "0 0 10px rgba(34,211,238,0.9)",
+                    background: "linear-gradient(135deg, #fdf4ff 0%, #f3e8ff 100%)",
+                    border: "1px solid #e9d5ff",
+                    boxShadow: "0 8px 32px rgba(167,139,250,0.20), 0 2px 8px rgba(124,58,237,0.10)",
                   }}
-                />
+                >
+                  <Heart
+                    size={32}
+                    style={{
+                      color: "#a855f7",
+                      fill: "rgba(168,85,247,0.25)",
+                      filter: "drop-shadow(0 0 8px rgba(168,85,247,0.4))",
+                    }}
+                    className="animate-pulse-dot"
+                  />
+                  {/* Sparkle dot */}
+                  <span
+                    className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full border-2 border-white"
+                    style={{
+                      background: "linear-gradient(135deg, #e879f9, #a855f7)",
+                      boxShadow: "0 0 8px rgba(232,121,249,0.6)",
+                    }}
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Eyebrow */}
-            <p
-              className="text-[10px] tracking-[0.3em] uppercase font-bold mb-4"
-              style={{
-                background: "linear-gradient(90deg, #c084fc, #22d3ee)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              Support Healthcare
-            </p>
-
-            {/* Heading */}
-            <h2 className="text-[44px] lg:text-[56px] font-bold leading-[1.07] tracking-tight text-white mb-5">
-              Help Us Reach
-              <br />
-              <span
+              {/* Eyebrow */}
+              <div className="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full"
                 style={{
-                  background:
-                    "linear-gradient(135deg, #e879f9 0%, #a78bfa 40%, #38bdf8 100%)",
+                  background: "linear-gradient(135deg, #fdf4ff, #f3e8ff)",
+                  border: "1px solid #e9d5ff",
+                }}>
+                <Sparkles size={11} style={{ color: "#a855f7" }} />
+                <span className=" text-[10px] tracking-[0.2em] uppercase font-bold"
+                  style={{
+                    background: "linear-gradient(90deg, #9333ea, #e879f9)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}>
+                  Support Healthcare
+                </span>
+              </div>
+
+              {/* Heading */}
+              <h2 className=" text-[2.8rem] lg:text-[3.4rem] font-bold leading-[1.08] text-[#0f0a1e] mb-5">
+                Help Us Reach
+                <br />
+                <span style={{
+                  background: "linear-gradient(135deg, #9333ea 0%, #a855f7 40%, #e879f9 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
-                }}
-              >
-                More Lives
-              </span>
-            </h2>
+                }}>
+                  More Lives
+                </span>
+              </h2>
 
-            {/* Body */}
-            <p className="text-white/55 text-[15px] leading-relaxed mb-12 max-w-sm mx-auto">
-              Your contribution helps bring precision diagnostic equipment to
-              underserved clinics and remote healthcare facilities across Nepal.
-            </p>
+              {/* Body */}
+              <p className="text-[#6b7280] text-[15px] leading-relaxed mb-10 max-w-sm mx-auto">
+                Your contribution helps bring precision diagnostic equipment to
+                underserved clinics and remote healthcare facilities across Nepal.
+              </p>
 
-            {/* Donate button */}
-            <button
-              onClick={() => setShowQR(true)}
-              className="group relative inline-flex items-center gap-3 px-10 py-4 rounded-2xl font-bold text-[15px] text-white overflow-hidden transition-all duration-300"
-              style={{
-                background:
-                  "linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%)",
-                boxShadow:
-                  "0 4px 30px rgba(124,58,237,0.45), 0 0 0 1px rgba(167,139,250,0.2)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow =
-                  "0 8px 50px rgba(124,58,237,0.65), 0 0 0 1px rgba(167,139,250,0.45)";
-                e.currentTarget.style.transform = "translateY(-2px) scale(1.02)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow =
-                  "0 4px 30px rgba(124,58,237,0.45), 0 0 0 1px rgba(167,139,250,0.2)";
-                e.currentTarget.style.transform = "translateY(0) scale(1)";
-              }}
-            >
-              {/* Shine sweep */}
-              <span
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                style={{
-                  background:
-                    "linear-gradient(105deg, rgba(255,255,255,0.15) 0%, transparent 45%)",
-                }}
-              />
-              <Heart size={17} fill="rgba(255,255,255,0.4)" className="relative" />
-              <span className="relative">Donate Now</span>
-            </button>
-
-            <p className="text-white/20 text-xs mt-5">
-              Scan eSewa QR to contribute · every rupee counts
-            </p>
-          </>
-        ) : (
-          /* ── QR Panel ── */
-          <div
-            className="relative rounded-3xl p-8"
-            style={{
-              background:
-                "linear-gradient(160deg, rgba(124,58,237,0.16) 0%, rgba(7,4,15,0.97) 100%)",
-              border: "1px solid rgba(167,139,250,0.3)",
-              boxShadow:
-                "0 0 100px rgba(124,58,237,0.2), inset 0 1px 0 rgba(255,255,255,0.07)",
-            }}
-          >
-            {/* Inner shimmer */}
-            <div
-              className="absolute top-0 left-10 right-10 h-px"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent, rgba(196,132,252,0.6), rgba(34,211,238,0.4), transparent)",
-              }}
-            />
-
-            {/* Close */}
-            <button
-              onClick={() => setShowQR(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-xl transition-all duration-200 text-white/30 hover:text-white hover:bg-white/10"
-            >
-              <X size={15} />
-            </button>
-
-            {/* Title */}
-            <p
-              className="text-[10px] tracking-[0.3em] uppercase font-bold mb-2"
-              style={{
-                background: "linear-gradient(90deg, #c084fc, #22d3ee)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              eSewa Payment
-            </p>
-            <h3 className="text-white text-[22px] font-bold mb-6">
-              Scan to Donate
-            </h3>
-
-            {/* QR */}
-            <div className="flex justify-center mb-6">
+              {/* Impact stats strip */}
               <div
-                className="relative w-56 h-56 rounded-2xl overflow-hidden"
+                className="flex items-center justify-center gap-0 mb-10 rounded-2xl overflow-hidden"
                 style={{
-                  background: "#ffffff",
-                  padding: "10px",
-                  boxShadow:
-                    "0 0 60px rgba(139,92,246,0.4), 0 0 0 1px rgba(167,139,250,0.25)",
+                  border: "1px solid #e9d5ff",
+                  background: "white",
+                  boxShadow: "0 4px 20px rgba(167,139,250,0.10)",
                 }}
               >
-                <Image
-                  src="/esewa-qr.png"
-                  alt="eSewa QR Code"
-                  fill
-                  className="object-contain p-1.5"
-                />
-              </div>
-            </div>
-
-            {/* eSewa ID */}
-            <div
-              className="flex items-center justify-between gap-4 rounded-2xl px-5 py-4 mb-5"
-              style={{
-                background: "rgba(139,92,246,0.1)",
-                border: "1px solid rgba(139,92,246,0.25)",
-              }}
-            >
-              <div className="text-left">
-                <p
-                  className="text-[9.5px] uppercase tracking-widest mb-1"
-                  style={{ color: "rgba(196,132,252,0.65)" }}
-                >
-                  eSewa ID
-                </p>
-                <p className="text-white font-mono text-base font-bold tracking-widest">
-                  9819425801
-                </p>
-              </div>
-              <button
-                onClick={handleCopy}
-                className="flex items-center gap-1.5 text-xs px-4 py-2 rounded-xl font-bold transition-all duration-200"
-                style={
-                  copied
-                    ? {
-                      background: "rgba(34,211,238,0.18)",
-                      border: "1px solid rgba(34,211,238,0.45)",
-                      color: "#22d3ee",
-                      boxShadow: "0 0 14px rgba(34,211,238,0.2)",
-                    }
-                    : {
-                      background: "rgba(139,92,246,0.22)",
-                      border: "1px solid rgba(167,139,250,0.4)",
-                      color: "#c084fc",
-                    }
-                }
-              >
-                {copied ? <Check size={12} /> : <Copy size={12} />}
-                {copied ? "Copied!" : "Copy"}
-              </button>
-            </div>
-
-            {/* Steps */}
-            <ol className="space-y-2.5 mb-6 text-left">
-              {[
-                "Open eSewa app on your phone",
-                "Scan the QR code above using the app's QR scanner OR Tap 'Send Money' and enter the given eSewa ID (9819425801)",
-                "Enter amount and confirm the payment",
-              ].map((step, i) => (
-                <li key={i} className="flex items-center gap-3 text-[13px] text-white/50">
-                  <span
-                    className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
+                {[
+                  { num: "50+", label: "Clinics Reached" },
+                  { num: "13", label: "Districts" },
+                  { num: "100%", label: "Transparent" },
+                ].map((item, i) => (
+                  <div
+                    key={item.label}
+                    className="flex-1 py-4 px-3 text-center"
                     style={{
-                      background: "rgba(139,92,246,0.25)",
-                      border: "1px solid rgba(167,139,250,0.4)",
-                      color: "#c084fc",
+                      borderRight: i < 2 ? "1px solid #f3e8ff" : "none",
                     }}
                   >
-                    {i + 1}
-                  </span>
-                  {step}
-                </li>
-              ))}
-            </ol>
+                    <div
+                      className=" text-xl font-bold leading-none mb-1"
+                      style={{
+                        background: "linear-gradient(135deg, #7c3aed, #a855f7)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                      }}
+                    >
+                      {item.num}
+                    </div>
+                    <div className="text-[10px] text-[#9ca3af] font-medium">{item.label}</div>
+                  </div>
+                ))}
+              </div>
 
-            <p className="text-center text-[11.5px]" style={{ color: "rgba(255,255,255,0.25)" }}>
-              After payment, email us at{" "}
-              <span style={{ color: "rgba(196,132,252,0.7)" }}>
-                info@cognidx.com.np
-              </span>
-            </p>
-          </div>
-        )}
+              {/* CTA button */}
+              <button
+                onClick={handleDonate}
+                className="group relative inline-flex items-center gap-3 px-10 py-4 rounded-2xl font-bold text-[15px] text-white overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+                style={{
+                  background: "linear-gradient(135deg, #9333ea 0%, #7c3aed 50%, #6d28d9 100%)",
+                  boxShadow: "0 6px 32px rgba(124,58,237,0.35), 0 0 0 1px rgba(167,139,250,0.20)",
+                }}
+              >
+                {/* Shine sweep on hover */}
+                <span
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{
+                    background: "linear-gradient(105deg, rgba(255,255,255,0.18) 0%, transparent 50%)",
+                  }}
+                />
+                <Heart size={16} fill="rgba(255,255,255,0.5)" className="relative" />
+                <span className="relative">Donate via eSewa</span>
+                <ArrowRight size={15} className="relative transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+
+              <p className="text-[#c4b5fd] text-xs mt-5 font-medium">
+                Scan eSewa QR · Every penny counts ✨
+              </p>
+            </div>
+          )}
+
+          {/* ══════════════════
+              BACK — QR Panel
+          ══════════════════ */}
+          {showQR && (
+            <div
+              className="relative rounded-3xl overflow-hidden"
+              style={{
+                background: "white",
+                border: "1px solid #e9d5ff",
+                boxShadow: "0 20px 60px rgba(124,58,237,0.12), 0 4px 16px rgba(124,58,237,0.08)",
+              }}
+            >
+              {/* Top gradient bar */}
+              <div
+                className="h-1.5 w-full"
+                style={{
+                  background: "linear-gradient(90deg, #9333ea, #a855f7, #e879f9, #a855f7, #9333ea)",
+                  backgroundSize: "200% 100%",
+                  animation: "shimmerBar 3s linear infinite",
+                }}
+              />
+
+              <div className="p-8">
+                {/* Header */}
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <div className="inline-flex items-center gap-1.5 mb-2">
+                      <Sparkles size={11} style={{ color: "#a855f7" }} />
+                      <span className="text-[10px] tracking-[0.2em] uppercase text-violet-400">
+                        eSewa Payment
+                      </span>
+                    </div>
+                    <h3 className=" text-2xl font-bold text-[#0f0a1e]">
+                      Scan to Donate
+                    </h3>
+                  </div>
+                  <button
+                    onClick={handleBack}
+                    className="p-2 rounded-xl transition-all duration-200 text-[#9ca3af] hover:text-[#374151] hover:bg-violet-50"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+
+                {/* QR code */}
+                <div className="flex justify-center mb-6">
+                  <div
+                    className="relative w-52 h-52 rounded-2xl overflow-hidden"
+                    style={{
+                      padding: "10px",
+                      background: "white",
+                      border: "2px solid #f3e8ff",
+                      boxShadow: "0 8px 32px rgba(167,139,250,0.20)",
+                    }}
+                  >
+                    <Image
+                      src="/esewa-qr.png"
+                      alt="eSewa QR Code"
+                      fill
+                      className="object-contain p-1"
+                    />
+                  </div>
+                </div>
+
+                {/* eSewa ID copy row */}
+                <div
+                  className="flex items-center justify-between gap-4 rounded-2xl px-5 py-4 mb-5"
+                  style={{
+                    background: "linear-gradient(135deg, #faf8ff, #f3e8ff)",
+                    border: "1px solid #e9d5ff",
+                  }}
+                >
+                  <div>
+                    <p className="text-[10px]  uppercase tracking-widest text-violet-400 mb-1">
+                      eSewa ID
+                    </p>
+                    <p className="text-[#0f0a1e]  text-lg font-bold tracking-widest">
+                      9819425801
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleCopy}
+                    className="flex items-center gap-1.5 text-xs px-4 py-2 rounded-xl font-bold transition-all duration-200 hover:scale-105"
+                    style={copied ? {
+                      background: "linear-gradient(135deg, #ecfdf5, #d1fae5)",
+                      border: "1px solid #a7f3d0",
+                      color: "#059669",
+                    } : {
+                      background: "linear-gradient(135deg, #9333ea, #7c3aed)",
+                      color: "white",
+                      boxShadow: "0 4px 12px rgba(124,58,237,0.3)",
+                    }}
+                  >
+                    {copied ? <Check size={12} /> : <Copy size={12} />}
+                    {copied ? "Copied!" : "Copy"}
+                  </button>
+                </div>
+
+                {/* Steps */}
+                <div
+                  className="rounded-2xl p-5 mb-5"
+                  style={{ background: "#faf8ff", border: "1px solid #f3e8ff" }}
+                >
+                  <p className="text-[10px] tracking-widest text-violet-400 uppercase mb-3">
+                    How to pay
+                  </p>
+                  <ol className="space-y-3">
+                    {[
+                      "Open eSewa app on your phone",
+                      "Scan the QR above OR tap 'Send Money' and enter ID 9819425801",
+                      "Enter your amount and confirm payment",
+                    ].map((step, i) => (
+                      <li key={i} className="flex items-start gap-3 text-sm text-[#4b5563]">
+                        <span
+                          className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold mt-0.5"
+                          style={{
+                            background: "linear-gradient(135deg, #9333ea, #7c3aed)",
+                            color: "white",
+                          }}
+                        >
+                          {i + 1}
+                        </span>
+                        {step}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+
+                <p className="text-center text-xs text-[#9ca3af]">
+                  After payment, email us at{" "}
+                  <span className="text-violet-500 font-medium">info@cognidx.com.np</span>
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+
+      <style>{`
+        @keyframes shimmerBar {
+          0%   { background-position: 0% 0%; }
+          100% { background-position: 200% 0%; }
+        }
+      `}</style>
     </section>
   );
 }

@@ -54,7 +54,7 @@ export default function ProductCard({ product }: Props) {
               <circle cx="28" cy="22" r="8" stroke="currentColor" strokeWidth="2"/>
               <path d="M10 44c2-8 8-14 18-14s16 6 18 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
             </svg>
-            <span className="text-xs font-mono-custom tracking-wider">IMAGE COMING SOON</span>
+            <span className="text-xs  tracking-wider">IMAGE COMING SOON</span>
           </div>
         )}
 
@@ -71,10 +71,10 @@ export default function ProductCard({ product }: Props) {
 
       {/* Card Header */}
       <div className="px-5 pt-4 pb-2">
-        <p className="font-mono-custom text-[10px] tracking-[0.12em] text-purple-400 uppercase mb-1">
+        <p className=" text-[10px] tracking-[0.12em] text-purple-400 uppercase mb-1">
           {product.model}
         </p>
-        <h3 className="font-playfair text-[1.1rem] text-[#1a1a2e] font-semibold leading-snug">
+        <h3 className=" text-[1.1rem] text-[#1a1a2e] font-semibold leading-snug">
           {product.name}
         </h3>
       </div>

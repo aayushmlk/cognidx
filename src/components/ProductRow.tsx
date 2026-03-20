@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Eye, CheckCircle2, MessageSquare, ChevronDown, ChevronUp } from "lucide-react";
+import { Eye, CheckCircle2, MessageSquare, Zap } from "lucide-react";
 import type { Product } from "@/data/products";
 
 interface Props {
@@ -12,7 +12,6 @@ interface Props {
 
 export default function ProductRow({ product, highlight }: Props) {
   const [visitors, setVisitors] = useState(product.baseVisitors);
-  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     try {
@@ -21,174 +20,164 @@ export default function ProductRow({ product, highlight }: Props) {
       const next = count + 1;
       localStorage.setItem(`visitors_${product.id}`, String(next));
       setVisitors(next);
-    } catch {}
+    } catch { }
   }, [product.id, product.baseVisitors]);
+
+  const accent = product.accentColor;
+  const bg = product.bgColor;
 
   return (
     <div
       id={`product-${product.id}`}
-      className={`rounded-2xl overflow-hidden border transition-all duration-300 ${
-        highlight ? "ring-2 ring-offset-2" : ""
-      }`}
+      className="group relative rounded-3xl overflow-hidden transition-all duration-500"
       style={{
-        background: product.bgColor,
-        borderColor: product.accentColor + "33",
-        ["--ring-color" as string]: product.accentColor,
+        background: "white",
+        border: `1px solid ${accent}22`,
+        boxShadow: highlight
+          ? `0 0 0 3px ${accent}, 0 20px 60px ${accent}30`
+          : `0 4px 24px ${accent}12`,
       }}
     >
-      <div className="flex flex-col lg:flex-row min-h-[340px]">
+      {/* Top color stripe */}
+      <div className="h-1 w-full" style={{
+        background: `linear-gradient(90deg, ${accent}cc, ${accent}44, transparent)`
+      }} />
 
-        {/* ── LEFT: Product Image ── */}
+      <div className="flex flex-col lg:flex-row">
+
+        {/* ── LEFT: Image Panel ── */}
         <div
-          className="lg:w-[42%] relative flex items-center justify-center p-8 overflow-hidden shrink-0"
-          style={{ background: product.bgColor }}
+          className="lg:w-[36%] relative flex items-center justify-center p-10 shrink-0 overflow-hidden"
+          style={{ background: `linear-gradient(135deg, ${bg} 0%, ${bg}dd 100%)` }}
         >
-          {/* Radial glow behind the image */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `radial-gradient(ellipse at center, ${product.accentColor}18 0%, transparent 72%)`,
-            }}
-          />
+          <div className="absolute -bottom-16 -right-16 w-64 h-64 rounded-full opacity-20 transition-all duration-700 group-hover:opacity-30 group-hover:scale-110"
+            style={{ background: accent }} />
+          <div className="absolute -top-8 -left-8 w-32 h-32 rounded-full opacity-10"
+            style={{ background: accent }} />
 
-          <div className="relative z-10 w-full flex items-center justify-center" style={{ maxHeight: 320 }}>
+          <div className="relative z-10 w-full flex items-center justify-center" style={{ minHeight: 200 }}>
             <Image
               src={product.image}
               alt={product.name}
-              width={460}
-              height={320}
-              className="object-contain w-full transition-transform duration-500 hover:scale-105"
+              width={380}
+              height={280}
+              className="object-contain w-full transition-transform duration-700 group-hover:scale-105"
               style={{
-                maxHeight: 320,
-                filter: `drop-shadow(0 8px 32px ${product.accentColor}44)`,
+                maxHeight: 260,
+                filter: `drop-shadow(0 12px 40px ${accent}55)`,
               }}
             />
           </div>
 
           {/* Brand badge */}
-          <span
-            className="absolute top-4 left-4 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider text-white shadow-sm"
-            style={{ background: product.accentColor }}
+          <div
+            className="absolute top-5 left-5 text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-md"
+            style={{ background: accent }}
           >
-            {product.brand === "—" ? "Generic" : product.brand}
-          </span>
+            {product.brand === "—" ? "Generic" : product.brand.split(" ")[0]}
+          </div>
+
+          {/* Visitor pill */}
+          <div
+            className="absolute bottom-5 left-5 flex items-center gap-1.5 text-[11px] font-medium px-3 py-1.5 rounded-full backdrop-blur-sm"
+            style={{
+              background: "rgba(255,255,255,0.85)",
+              color: accent,
+              border: `1px solid ${accent}33`,
+            }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: accent }} />
+            <Eye size={10} />
+            {visitors.toLocaleString()}
+          </div>
         </div>
 
-        {/* ── RIGHT: Product Info ── */}
-        <div className="lg:w-[58%] flex flex-col justify-between p-8 lg:p-10 bg-white/70 backdrop-blur-sm">
+        {/* ── RIGHT: Info Panel ── */}
+        <div className="lg:w-[64%] flex flex-col p-8 lg:p-10 gap-7">
 
-          {/* Top section */}
+          {/* Category + model + name */}
           <div>
-            {/* Category + model */}
             <div className="flex items-center gap-3 mb-3 flex-wrap">
               <span
-                className="text-[10px] font-mono-custom tracking-[0.15em] uppercase font-semibold"
-                style={{ color: product.accentColor }}
+                className="text-[10px] font-bold tracking-[0.2em] uppercase px-3 py-1 rounded-full"
+                style={{
+                  background: `${accent}15`,
+                  color: accent,
+                  border: `1px solid ${accent}30`,
+                }}
               >
                 {product.category}
               </span>
-              <span
-                className="text-[10px] px-2.5 py-0.5 rounded-full font-mono-custom"
-                style={{
-                  background: product.accentColor + "18",
-                  color: product.accentColor,
-                  border: `1px solid ${product.accentColor}44`,
-                }}
-              >
+              <span className="text-[11px] text-[#9ca3af] font-mono">
                 {product.model}
               </span>
             </div>
 
-            {/* Name */}
-            <h3
-              className="font-playfair text-2xl lg:text-[1.65rem] font-bold leading-snug mb-3"
-              style={{ color: "#1a1a2e" }}
-            >
+            <h3 className="font-playfair text-2xl lg:text-[1.7rem] font-bold leading-snug mb-3 text-[#111827]">
               {product.name}
             </h3>
 
-            {/* Description */}
-            <p className="text-sm text-[#4a4a6a] leading-relaxed mb-5">
+            <p className="text-sm text-[#6b7280] leading-relaxed max-w-lg">
               {product.description}
             </p>
-
-            {/* Key highlights */}
-            <ul className="space-y-2 mb-5">
-              {product.highlights.slice(0, expanded ? product.highlights.length : 3).map((h) => (
-                <li key={h} className="flex items-start gap-2.5 text-sm">
-                  <CheckCircle2
-                    size={15}
-                    className="shrink-0 mt-0.5"
-                    style={{ color: product.accentColor }}
-                  />
-                  <span className="text-[#374151]">{h}</span>
-                </li>
-              ))}
-            </ul>
-
-            {/* Specs table */}
-            {expanded && (
-              <div className="mb-5 rounded-xl overflow-hidden border" style={{ borderColor: product.accentColor + "22" }}>
-                <table className="w-full text-xs">
-                  <tbody>
-                    {product.specs.map((s, i) => (
-                      <tr
-                        key={s.key}
-                        className={i % 2 === 0 ? "bg-white/60" : "bg-white/30"}
-                      >
-                        <td
-                          className="px-4 py-2.5 font-semibold w-[38%]"
-                          style={{ color: product.accentColor }}
-                        >
-                          {s.key}
-                        </td>
-                        <td className="px-4 py-2.5 text-[#374151]">{s.value}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
           </div>
 
-          {/* Bottom section */}
-          <div className="flex items-center justify-between flex-wrap gap-3 pt-4 border-t border-gray-200/60">
-            {/* Visitor count */}
-            <div className="flex items-center gap-1.5 text-xs text-[#9ca3af]">
-              <span
-                className="w-2 h-2 rounded-full animate-pulse-dot"
-                style={{ background: product.accentColor }}
-              />
-              <Eye size={12} />
-              <span>{visitors.toLocaleString()} views</span>
+          {/* Highlights — all shown */}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-3" style={{ color: accent }}>
+              Key Highlights
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {product.highlights.map((h) => (
+                <div key={h} className="flex items-start gap-2.5 text-sm">
+                  <CheckCircle2 size={14} className="shrink-0 mt-0.5" style={{ color: accent }} />
+                  <span className="text-[#374151] leading-snug">{h}</span>
+                </div>
+              ))}
             </div>
+          </div>
 
-            {/* Actions */}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setExpanded((v) => !v)}
-                className="flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-lg border transition-all"
-                style={{
-                  color: product.accentColor,
-                  borderColor: product.accentColor + "44",
-                  background: product.accentColor + "0d",
-                }}
-              >
-                {expanded ? (<>Less <ChevronUp size={13} /></>) : (<>Full Specs <ChevronDown size={13} /></>)}
-              </button>
-
-              <a
-                href="#contact"
-                className="flex items-center gap-1.5 text-xs font-bold px-5 py-2 rounded-lg text-white transition-all hover:opacity-90 hover:shadow-lg"
-                style={{
-                  background: product.accentColor,
-                  boxShadow: `0 4px 15px ${product.accentColor}44`,
-                }}
-              >
-                <MessageSquare size={12} />
-                Enquire Now
-              </a>
+          {/* Specs table — always visible */}
+          <div className="rounded-2xl overflow-hidden" style={{ border: `1px solid ${accent}20` }}>
+            <div
+              className="px-4 py-2.5 flex items-center gap-2"
+              style={{ background: `${accent}10` }}
+            >
+              <Zap size={12} style={{ color: accent }} />
+              <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: accent }}>
+                Technical Specifications
+              </span>
             </div>
+            <table className="w-full text-xs">
+              <tbody>
+                {product.specs.map((s, i) => (
+                  <tr key={s.key} style={{ background: i % 2 === 0 ? "white" : `${accent}06` }}>
+                    <td
+                      className="px-4 py-2.5 font-semibold w-[38%] border-r"
+                      style={{ color: accent, borderColor: `${accent}15` }}
+                    >
+                      {s.key}
+                    </td>
+                    <td className="px-4 py-2.5 text-[#4b5563]">{s.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Enquire button */}
+          <div className="pt-2" style={{ borderTop: `1px solid ${accent}15` }}>
+            <a
+              href="/#contact"
+              className="inline-flex items-center gap-2 text-sm font-bold px-7 py-3 rounded-xl text-white transition-all duration-200 hover:scale-[1.02] hover:opacity-90"
+              style={{
+                background: `linear-gradient(135deg, ${accent}, ${accent}cc)`,
+                boxShadow: `0 4px 20px ${accent}40`,
+              }}
+            >
+              <MessageSquare size={14} />
+              Enquire Now
+            </a>
           </div>
         </div>
       </div>
