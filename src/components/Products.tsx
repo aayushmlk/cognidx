@@ -1,19 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { products, categories } from "@/data/products";
 import ProductRow from "./ProductRow";
-import { ArrowLeft, FlaskConical, Search } from "lucide-react";
+import { ArrowLeft, FlaskConical, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export default function Products() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [highlightId, setHighlightId] = useState<string | null>(null);
-  const [totalVisitors, setTotalVisitors] = useState(
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+  const tabsRef = useRef<HTMLDivElement>(null);
+
+  const [totalVisitors] = useState(
     products.reduce((a, p) => a + p.baseVisitors, 0)
   );
 
-  // Read hash AFTER mount so window is available — fixes the flash
   useEffect(() => {
     const readHash = () => {
       const hash = window.location.hash.replace("#", "");
@@ -25,33 +28,55 @@ export default function Products() {
     return () => window.removeEventListener("hashchange", readHash);
   }, []);
 
-  const handleCategoryChange = (catId: string) => {
-    setActiveCategory(catId);
-    window.history.replaceState(null, "", `#${catId}`);
+  const checkScroll = () => {
+    const el = tabsRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 8);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 8);
   };
 
   useEffect(() => {
-    const total = products.reduce((acc, p) => {
-      try {
-        const stored = localStorage.getItem(`visitors_${p.id}`);
-        return acc + (stored ? parseInt(stored, 10) : p.baseVisitors);
-      } catch { return acc + p.baseVisitors; }
-    }, 0);
-    setTotalVisitors(total);
-  }, []);
+    const el = tabsRef.current;
+    if (!el) return;
+    // Small delay so DOM is ready
+    setTimeout(checkScroll, 50);
+    el.addEventListener("scroll", checkScroll, { passive: true });
+    window.addEventListener("resize", checkScroll);
+    return () => {
+      el.removeEventListener("scroll", checkScroll);
+      window.removeEventListener("resize", checkScroll);
+    };
+  }, [activeCategory]);
+
+  const scrollTabs = (dir: "left" | "right") => {
+    const el = tabsRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir === "left" ? -200 : 200, behavior: "smooth" });
+  };
+
+  const handleCategoryChange = (catId: string) => {
+    setActiveCategory(catId);
+    window.history.replaceState(null, "", `#${catId}`);
+    const el = tabsRef.current;
+    if (el) {
+      const btn = el.querySelector(`[data-cat="${catId}"]`) as HTMLElement;
+      btn?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    }
+  };
 
   const filtered = activeCategory
     ? products.filter((p) => p.categoryId === activeCategory)
     : [];
   const activeCat = categories.find((c) => c.id === activeCategory);
 
-  // Prevent flash before hash is resolved
   if (!activeCategory) return (
-    <div className="min-h-screen flex items-center justify-center"
-      style={{ background: "linear-gradient(160deg, #fafafa 0%, #f3f0ff 50%, #fafafa 100%)" }}>
+    <div
+      className="min-h-screen flex items-center justify-center"
+      style={{ background: "linear-gradient(160deg, #fafafa 0%, #f3f0ff 50%, #fafafa 100%)" }}
+    >
       <div className="flex flex-col items-center gap-3">
         <div className="w-10 h-10 rounded-full border-2 border-violet-300 border-t-violet-600 animate-spin" />
-        <p className="text-sm text-[#9ca3af] font-mono-custom tracking-widest uppercase">Loading</p>
+        <p className="text-sm text-[#9ca3af] tracking-widest uppercase" style={{ fontFamily: "monospace" }}>Loading</p>
       </div>
     </div>
   );
@@ -59,52 +84,54 @@ export default function Products() {
   return (
     <div className="min-h-screen" style={{ background: "linear-gradient(160deg, #fafafa 0%, #f3f0ff 50%, #fafafa 100%)" }}>
 
-      {/* ══════════════════════════════════════
-          TOP HERO BANNER — makes it unmistakably a new page
-      ══════════════════════════════════════ */}
+      {/* ══ HERO BANNER ══ */}
       <div
         className="relative overflow-hidden"
         style={{
           background: "linear-gradient(145deg, #3b0e82 0%, #5521a8 25%, #7c3aed 55%, #9333ea 78%, #a855f7 100%)",
         }}
       >
-        {/* Atmosphere */}
+        {/* Decorative blobs */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[350px]"
-            style={{
-              background: "radial-gradient(ellipse, rgba(216,180,254,0.22) 0%, transparent 68%)",
-              filter: "blur(60px)",
-            }}
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[350px]"
+            style={{ background: "radial-gradient(ellipse, rgba(216,180,254,0.22) 0%, transparent 68%)", filter: "blur(60px)" }}
           />
-          <div className="absolute -top-10 right-0 w-[380px] h-[280px]"
-            style={{
-              background: "radial-gradient(circle, rgba(232,121,249,0.15) 0%, transparent 65%)",
-              filter: "blur(50px)",
-            }}
+          <div
+            className="absolute -top-10 right-0 w-[380px] h-[280px]"
+            style={{ background: "radial-gradient(circle, rgba(232,121,249,0.15) 0%, transparent 65%)", filter: "blur(50px)" }}
           />
-          <div className="absolute bottom-0 left-1/4 w-[400px] h-[150px]"
-            style={{
-              background: "radial-gradient(ellipse, rgba(251,191,36,0.08) 0%, transparent 70%)",
-              filter: "blur(30px)",
-            }}
+          <div
+            className="absolute bottom-0 left-1/4 w-[400px] h-[150px]"
+            style={{ background: "radial-gradient(ellipse, rgba(251,191,36,0.08) 0%, transparent 70%)", filter: "blur(30px)" }}
           />
-          <div className="absolute inset-0"
-            style={{
-              backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)",
-              backgroundSize: "28px 28px",
-            }}
+          {/* Dot grid */}
+          <div
+            className="absolute inset-0"
+            style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)", backgroundSize: "28px 28px" }}
           />
-          <div className="absolute inset-0 opacity-[0.07]"
+          {/* Shimmer */}
+          <div
+            className="absolute inset-0 opacity-[0.07]"
             style={{ background: "linear-gradient(118deg, transparent 35%, rgba(255,255,255,0.5) 50%, transparent 65%)" }}
           />
-          {/* Bottom fade into content */}
-          <div className="absolute bottom-0 inset-x-0 h-16"
+          {/* Decorative arcs */}
+          <svg className="absolute right-0 top-0 opacity-[0.06] w-80 h-80" viewBox="0 0 320 320" fill="none">
+            <circle cx="320" cy="0" r="200" stroke="white" strokeWidth="1" fill="none" />
+            <circle cx="320" cy="0" r="140" stroke="white" strokeWidth="0.6" fill="none" />
+            <circle cx="320" cy="0" r="90" stroke="white" strokeWidth="0.4" fill="none" />
+          </svg>
+          <svg className="absolute left-0 bottom-0 opacity-[0.05] w-48 h-48" viewBox="0 0 192 192" fill="none">
+            <circle cx="0" cy="192" r="120" stroke="white" strokeWidth="1" fill="none" />
+            <circle cx="0" cy="192" r="80" stroke="white" strokeWidth="0.6" fill="none" />
+          </svg>
+          <div
+            className="absolute bottom-0 inset-x-0 h-16"
             style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.08))" }}
           />
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto px-6 pt-10 pb-14">
-
           {/* Back nav */}
           <Link
             href="/"
@@ -115,10 +142,8 @@ export default function Products() {
           </Link>
 
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
-
-            {/* Left — title block */}
+            {/* Title block */}
             <div>
-              {/* Eyebrow pill */}
               <div
                 className="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full"
                 style={{
@@ -128,7 +153,7 @@ export default function Products() {
                 }}
               >
                 <FlaskConical size={10} className="text-violet-300" />
-                <span className="font-mono-custom text-[10px] tracking-[0.22em] text-white/65 uppercase">
+                <span style={{ fontFamily: "monospace", fontSize: "10px", letterSpacing: "0.22em", color: "rgba(255,255,255,0.65)", textTransform: "uppercase" }}>
                   Product Catalogue
                 </span>
               </div>
@@ -136,7 +161,7 @@ export default function Products() {
               <h1 className="font-playfair text-4xl lg:text-[3.2rem] font-bold text-white leading-[1.12] mb-4">
                 Biomedical{" "}
                 <em
-                  className="italic not-italic"
+                  className="not-italic"
                   style={{
                     background: "linear-gradient(135deg, #fde68a 0%, #fbbf24 50%, #f59e0b 100%)",
                     WebkitBackgroundClip: "text",
@@ -156,9 +181,9 @@ export default function Products() {
               </p>
             </div>
 
-            {/* Right — stats */}
+            {/* Stats */}
             <div
-              className="flex items-center gap-0 rounded-2xl overflow-hidden shrink-0"
+              className="flex items-center rounded-2xl overflow-hidden shrink-0"
               style={{
                 background: "rgba(255,255,255,0.08)",
                 border: "1px solid rgba(255,255,255,0.16)",
@@ -186,7 +211,7 @@ export default function Products() {
                   >
                     {s.num}
                   </div>
-                  <div className="text-white/45 text-[10px] font-medium tracking-wide uppercase">
+                  <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "10px", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase" }}>
                     {s.label}
                   </div>
                 </div>
@@ -196,85 +221,107 @@ export default function Products() {
         </div>
       </div>
 
-      {/* ══════════════════════════════════════
-          CATEGORY TABS — sticky
-      ══════════════════════════════════════ */}
+      {/* ══ CATEGORY TABS — sticky, scrollable ══ */}
       <div
         className="sticky top-0 z-30 border-b"
         style={{
-          background: "rgba(250,248,255,0.92)",
+          background: "rgba(250,248,255,0.94)",
           backdropFilter: "blur(20px)",
           borderColor: "#ede9fe",
-          boxShadow: "0 4px 20px rgba(124,58,237,0.06)",
+          boxShadow: "0 4px 24px rgba(124,58,237,0.07)",
         }}
       >
-        <div className="max-w-5xl mx-auto px-6 py-3">
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
-            {categories.map((cat) => {
-              const isActive = activeCategory === cat.id;
-              const catProducts = products.filter((p) => p.categoryId === cat.id);
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => handleCategoryChange(cat.id)}
-                  className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-250"
-                  style={isActive ? {
-                    background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
-                    color: "white",
-                    boxShadow: "0 4px 16px rgba(124,58,237,0.30)",
-                  } : {
-                    background: "transparent",
-                    color: "#6b7280",
-                    border: "1px solid #e5e7eb",
-                  }}
-                >
-                  {cat.label}
-                  <span
-                    className="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+        <div className="max-w-5xl mx-auto px-4 py-3">
+          <div className="relative flex items-center gap-1">
+
+            {/* Left arrow */}
+            {canScrollLeft && (
+              <button
+                onClick={() => scrollTabs("left")}
+                className="shrink-0 flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-150 z-10"
+                style={{ background: "rgba(124,58,237,0.08)", color: "#7c3aed", border: "1px solid #ede9fe" }}
+              >
+                <ChevronLeft size={15} />
+              </button>
+            )}
+
+            {/* Scrollable tabs */}
+            <div
+              ref={tabsRef}
+              className="flex items-center gap-2 overflow-x-auto flex-1"
+              style={{
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+                WebkitOverflowScrolling: "touch",
+              }}
+            >
+              {categories.map((cat) => {
+                const isActive = activeCategory === cat.id;
+                const count = products.filter((p) => p.categoryId === cat.id).length;
+                return (
+                  <button
+                    key={cat.id}
+                    data-cat={cat.id}
+                    onClick={() => handleCategoryChange(cat.id)}
+                    className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200"
                     style={isActive ? {
-                      background: "rgba(255,255,255,0.20)",
+                      background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
                       color: "white",
+                      boxShadow: "0 4px 16px rgba(124,58,237,0.30)",
                     } : {
-                      background: "#f3f4f6",
-                      color: "#9ca3af",
+                      background: "transparent",
+                      color: "#6b7280",
+                      border: "1px solid #e5e7eb",
                     }}
                   >
-                    {catProducts.length}
-                  </span>
-                </button>
-              );
-            })}
+                    {cat.label}
+                    <span
+                      className="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                      style={isActive ? {
+                        background: "rgba(255,255,255,0.20)",
+                        color: "white",
+                      } : {
+                        background: "#f3f4f6",
+                        color: "#9ca3af",
+                      }}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Right arrow */}
+            {canScrollRight && (
+              <button
+                onClick={() => scrollTabs("right")}
+                className="shrink-0 flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-150 z-10"
+                style={{ background: "rgba(124,58,237,0.08)", color: "#7c3aed", border: "1px solid #ede9fe" }}
+              >
+                <ChevronRight size={15} />
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      {/* ══════════════════════════════════════
-          PRODUCT LIST
-      ══════════════════════════════════════ */}
+      {/* ══ PRODUCT LIST ══ */}
       <div className="max-w-5xl mx-auto px-6 py-12">
 
-        {/* Active category info bar */}
-        <div className="flex items-center justify-between mb-8 flex-wrap gap-3">
-          <div className="flex items-center gap-3">
-            <div
-              className="w-1 h-8 rounded-full"
-              style={{ background: "linear-gradient(180deg, #7c3aed, #a855f7)" }}
-            />
-            <div>
-              <h2 className="font-playfair text-xl font-bold text-[#0f0a1e]">
-                {activeCat?.label}
-              </h2>
-              <p className="text-xs text-[#9ca3af]">
-                {filtered.length} product{filtered.length !== 1 ? "s" : ""} available
-              </p>
-            </div>
-          </div>
+        {/* Section heading */}
+        <div className="flex items-center gap-3 mb-8">
           <div
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs text-[#6b7280]"
-            style={{ background: "white", border: "1px solid #f3f0ff" }}
-          >
-            <Search size={12} className="text-violet-400" />
-            <span>Showing all in category</span>
+            className="w-1 h-8 rounded-full"
+            style={{ background: "linear-gradient(180deg, #7c3aed, #a855f7)" }}
+          />
+          <div>
+            <h2 className="font-playfair text-xl font-bold text-[#0f0a1e]">
+              {activeCat?.label}
+            </h2>
+            <p className="text-xs text-[#9ca3af]">
+              {filtered.length} product{filtered.length !== 1 ? "s" : ""} available
+            </p>
           </div>
         </div>
 
@@ -310,8 +357,8 @@ export default function Products() {
         .product-item {
           animation: productReveal 0.45s cubic-bezier(0.16,1,0.3,1) both;
         }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        div[ref] ::-webkit-scrollbar,
+        div::-webkit-scrollbar { display: none; }
       `}</style>
     </div>
   );
