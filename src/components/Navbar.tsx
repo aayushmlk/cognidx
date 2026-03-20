@@ -159,13 +159,13 @@ export default function Navbar() {
 
           {/* ── Desktop right ── */}
           <div className="hidden lg:flex items-center gap-3">
-            <div className="w-px h-5 bg-violet-100" />
             <Link href="/#contact"
               className="vibrate-hover inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               style={{ background: "linear-gradient(135deg, #7c3aed, #6d28d9)", boxShadow: "0 4px 16px rgba(124,58,237,0.30)" }}>
               <PhoneCall size={14} className="icon-vibrate" />
               Contact
             </Link>
+            <div className="w-px h-5 bg-violet-100" />
             <Link href="/#donate"
               className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               style={{ background: "linear-gradient(135deg, #10b981, #059669)", boxShadow: "0 4px 16px rgba(16,185,129,0.25)" }}>
