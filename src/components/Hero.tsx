@@ -91,7 +91,7 @@ export default function Hero() {
         >
           <span className="w-2 h-2 rounded-full bg-emerald-300"
             style={{ boxShadow: "0 0 10px rgba(110,231,183,1), 0 0 4px rgba(110,231,183,0.8)", animation: "heroPulse 2s ease-in-out infinite" }} />
-          <span className="font-mono-custom text-[11px] tracking-[0.18em] uppercase text-white/90 font-medium">
+          <span className=" text-[11px] tracking-[0.18em] uppercase text-white/90 font-medium">
             Kathmandu, Nepal &nbsp;·&nbsp; Est. 2019 &nbsp;·&nbsp; CE &amp; NMPA Certified
           </span>
         </div>
@@ -101,7 +101,7 @@ export default function Hero() {
           className={`mb-6 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           style={{ transitionDelay: "100ms" }}
         >
-          <p className="font-mono-custom text-[11px] tracking-[0.32em] uppercase mb-4 font-bold"
+          <p className=" text-[11px] tracking-[0.32em] uppercase mb-4 font-bold"
             style={{
               background: "linear-gradient(90deg, rgba(255,255,255,0.5), rgba(255,255,255,0.9), rgba(255,255,255,0.5))",
               WebkitBackgroundClip: "text",
@@ -112,7 +112,7 @@ export default function Hero() {
           </p>
 
           <h1
-            className="font-playfair font-bold text-white leading-[1.05]"
+            className=" font-bold text-white leading-[1.05]"
             style={{
               fontSize: "clamp(2.6rem, 7.5vw, 5.2rem)",
               letterSpacing: "-0.025em",
@@ -235,7 +235,7 @@ export default function Hero() {
                     style={{ background: "rgba(255,255,255,0.07)" }} />
                   <Icon size={16} className="relative mb-2 text-white/50" />
                   <div
-                    className="font-playfair text-[2rem] font-bold leading-none mb-1 relative"
+                    className=" text-[2rem] font-bold leading-none mb-1 relative"
                     style={{
                       background: "linear-gradient(135deg, #fef9c3, #fbbf24)",
                       WebkitBackgroundClip: "text",
