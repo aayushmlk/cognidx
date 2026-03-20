@@ -345,7 +345,7 @@ export const products: Product[] = [
       "Fully compatible with Shine series reagents and consumables",
       "Automatic dilution, multiple barcode reading, carry over < 10 ppms",
     ],
-    baseVisitors: 0,
+    baseVisitors: 2148,
     image: "/products/shine-i1900.png",
     bgColor: "#e0f4f4",
     accentColor: "#007b7f",

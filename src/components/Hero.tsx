@@ -1,297 +1,269 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, FlaskConical, Microscope, Activity, Award } from "lucide-react";
 
 const stats = [
-  { num: "70+", label: "Test Parameters" },
-  { num: "200+", label: "Institutions" },
-  { num: "5", label: "Global Brands" },
-  { num: "50+", label: "Product Lines" },
+  { num: "70+", label: "Test Parameters", icon: FlaskConical },
+  { num: "200+", label: "Institutions Served", icon: Award },
+  { num: "5", label: "Global Brands", icon: Microscope },
+  { num: "50+", label: "Product Lines", icon: Activity },
 ];
 
+const pills = ["Fluorescence Immunoassay", "Haematology", "Blood Gas", "Chemiluminescence", "Biochemistry", "Urinalysis"];
+
 export default function Hero() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
   return (
     <section
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
       style={{
-        background: "linear-gradient(145deg, #3b0e82 0%, #5521a8 20%, #7c3aed 45%, #9333ea 65%, #a855f7 80%, #c084fc 100%)",
+        background: "linear-gradient(155deg, #6d28d9 0%, #7c3aed 20%, #8b5cf6 42%, #a78bfa 62%, #c4b5fd 80%, #ddd6fe 100%)",
       }}
     >
 
-      {/* ═══════════════════════════════════
-          ATMOSPHERE LAYERS
-      ═══════════════════════════════════ */}
+      {/* ── Atmosphere ── */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-
-        {/* Center bloom — brighter */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1100px] h-[800px]"
+        {/* Main center bloom */}
+        <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[700px]"
           style={{
-            background: "radial-gradient(ellipse at center, rgba(216,180,254,0.30) 0%, rgba(167,139,250,0.12) 45%, transparent 70%)",
-            filter: "blur(70px)",
-          }}
-        />
-        {/* Rose top-right */}
-        <div className="absolute -top-20 right-0 w-[550px] h-[550px]"
+            background: "radial-gradient(ellipse, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 40%, transparent 68%)",
+            filter: "blur(50px)",
+          }} />
+        {/* Rose accent top-right */}
+        <div className="absolute -top-20 -right-10 w-[500px] h-[500px]"
           style={{
-            background: "radial-gradient(circle, rgba(244,114,182,0.20) 0%, rgba(232,121,249,0.10) 45%, transparent 70%)",
-            filter: "blur(55px)",
-          }}
-        />
-        {/* Lavender bottom-left */}
+            background: "radial-gradient(circle, rgba(244,114,182,0.25) 0%, transparent 65%)",
+            filter: "blur(50px)",
+          }} />
+        {/* Indigo bottom-left */}
         <div className="absolute -bottom-10 -left-10 w-[450px] h-[380px]"
           style={{
-            background: "radial-gradient(ellipse at bottom left, rgba(196,132,252,0.28) 0%, transparent 65%)",
-            filter: "blur(50px)",
-          }}
-        />
-        {/* Gold horizon */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[900px] h-[200px]"
-          style={{
-            background: "radial-gradient(ellipse, rgba(251,191,36,0.12) 0%, transparent 65%)",
-            filter: "blur(35px)",
-          }}
-        />
-        {/* White soft top vignette */}
+            background: "radial-gradient(ellipse, rgba(109,40,217,0.35) 0%, transparent 65%)",
+            filter: "blur(45px)",
+          }} />
+        {/* Top white haze */}
         <div className="absolute top-0 inset-x-0 h-48"
-          style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 100%)" }}
-        />
+          style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%)" }} />
+        {/* Bottom gold horizon */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[150px]"
+          style={{
+            background: "radial-gradient(ellipse, rgba(251,191,36,0.15) 0%, transparent 70%)",
+            filter: "blur(35px)",
+          }} />
 
-        {/* Dot grid */}
+        {/* Fine dot grid */}
         <div className="absolute inset-0"
           style={{
-            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.10) 1px, transparent 1px)",
-            backgroundSize: "30px 30px",
-          }}
-        />
+            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.18) 1px, transparent 1px)",
+            backgroundSize: "28px 28px",
+          }} />
 
-        {/* Diagonal shimmer */}
-        <div className="absolute inset-0 opacity-[0.10]"
-          style={{
-            background: "linear-gradient(118deg, transparent 35%, rgba(255,255,255,0.5) 50%, transparent 65%)",
-          }}
-        />
-
-        {/* Top shimmer line */}
-        <div className="absolute top-0 inset-x-0 h-px"
-          style={{
-            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4) 30%, rgba(244,114,182,0.5) 50%, rgba(255,255,255,0.4) 70%, transparent)",
-          }}
-        />
+        {/* Diagonal shimmer sweep */}
+        <div className="absolute inset-0 opacity-[0.14]"
+          style={{ background: "linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.7) 50%, transparent 70%)" }} />
       </div>
 
-      {/* ═══════════════════════════════════
-          EDITORIAL GRID LINES
-      ═══════════════════════════════════ */}
+      {/* ── Vertical editorial lines ── */}
       <div className="pointer-events-none absolute inset-0 hidden lg:block">
-        <div className="absolute left-[10%] top-0 bottom-0 w-px"
-          style={{ background: "linear-gradient(180deg, transparent, rgba(255,255,255,0.10) 30%, rgba(255,255,255,0.10) 70%, transparent)" }}
-        />
-        <div className="absolute right-[10%] top-0 bottom-0 w-px"
-          style={{ background: "linear-gradient(180deg, transparent, rgba(255,255,255,0.10) 30%, rgba(255,255,255,0.10) 70%, transparent)" }}
-        />
-        <div className="absolute top-[58%] inset-x-0 h-px"
-          style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.07) 20%, rgba(255,255,255,0.07) 80%, transparent)" }}
-        />
+        <div className="absolute left-[8%] top-0 bottom-0 w-px"
+          style={{ background: "linear-gradient(180deg, transparent, rgba(255,255,255,0.15) 25%, rgba(255,255,255,0.15) 75%, transparent)" }} />
+        <div className="absolute right-[8%] top-0 bottom-0 w-px"
+          style={{ background: "linear-gradient(180deg, transparent, rgba(255,255,255,0.15) 25%, rgba(255,255,255,0.15) 75%, transparent)" }} />
       </div>
 
-      {/* ═══════════════════════════════════
-          MAIN CONTENT
-      ═══════════════════════════════════ */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-6 pt-32 pb-28 flex flex-col items-center text-center">
+      {/* ── Main content ── */}
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-6 pt-24 pb-20 flex flex-col items-center text-center">
 
-        {/* Badge */}
+        {/* ── Live badge ── */}
         <div
-          className="hero-item inline-flex items-center gap-2.5 mb-10 px-5 py-2 rounded-full text-[11px] tracking-[0.18em] uppercase text-white/80"
+          className={`inline-flex items-center gap-2.5 mb-7 px-5 py-2 rounded-full transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}
           style={{
-            background: "rgba(255,255,255,0.12)",
-            border: "1px solid rgba(255,255,255,0.25)",
+            background: "rgba(255,255,255,0.18)",
+            border: "1px solid rgba(255,255,255,0.38)",
             backdropFilter: "blur(16px)",
-            boxShadow: "0 2px 20px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.15)",
-            animationDelay: "0ms",
+            boxShadow: "0 2px 24px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.25)",
+            transitionDelay: "0ms",
           }}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse"
-            style={{ boxShadow: "0 0 8px rgba(110,231,183,0.9)" }}
-          />
-          Kathmandu, Nepal · Est. 2019 · CE Certified
+          <span className="w-2 h-2 rounded-full bg-emerald-300"
+            style={{ boxShadow: "0 0 10px rgba(110,231,183,1), 0 0 4px rgba(110,231,183,0.8)", animation: "heroPulse 2s ease-in-out infinite" }} />
+          <span className=" text-[11px] tracking-[0.18em] uppercase text-white/90 font-medium">
+            Kathmandu, Nepal &nbsp;·&nbsp; Est. 2019 &nbsp;·&nbsp; CE &amp; NMPA Certified
+          </span>
         </div>
 
-        {/* Eyebrow */}
-        <p
-          className="hero-item font-mono-custom text-[11px] tracking-[0.32em] uppercase mb-5 font-bold"
-          style={{
-            background: "linear-gradient(90deg, #fce7f3, #f5d0fe, #ede9fe)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-            animationDelay: "80ms",
-          }}
+        {/* ── Headline — big editorial treatment ── */}
+        <div
+          className={`mb-6 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          style={{ transitionDelay: "100ms" }}
         >
-          Biomedical Diagnostic Equipment
-        </p>
-
-        {/* Headline */}
-        <h1
-          className="hero-item font-playfair font-bold text-white leading-[1.04] mb-8"
-          style={{
-            fontSize: "clamp(3rem, 8vw, 5.5rem)",
-            letterSpacing: "-0.02em",
-            animationDelay: "160ms",
-          }}
-        >
-          Advancing Health
-          <br />
-          Through{" "}
-          <em
-            className="italic"
+          <p className=" text-[11px] tracking-[0.32em] uppercase mb-4 font-bold"
             style={{
-              background: "linear-gradient(135deg, #fde68a 0%, #fbbf24 35%, #f59e0b 65%, #fde68a 100%)",
-              backgroundSize: "200% auto",
+              background: "linear-gradient(90deg, rgba(255,255,255,0.5), rgba(255,255,255,0.9), rgba(255,255,255,0.5))",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
-              filter: "drop-shadow(0 0 40px rgba(251,191,36,0.55))",
-              animation: "goldShimmer 4s linear infinite",
+            }}>
+            Nepal&apos;s Premier Biomedical Diagnostics Partner
+          </p>
+
+          <h1
+            className=" font-bold text-white leading-[1.05]"
+            style={{
+              fontSize: "clamp(2.6rem, 7.5vw, 5.2rem)",
+              letterSpacing: "-0.025em",
+              textShadow: "0 4px 40px rgba(109,40,217,0.4)",
             }}
           >
             Precision
-          </em>
-          <br />
-          <span style={{ color: "rgba(255,255,255,0.92)" }}>Diagnostics</span>
-        </h1>
+            <span
+              className="mx-3 lg:mx-5 italic"
+              style={{
+                background: "linear-gradient(135deg, #fef9c3 0%, #fde68a 30%, #fbbf24 60%, #f59e0b 85%)",
+                backgroundSize: "200% auto",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                filter: "drop-shadow(0 0 30px rgba(251,191,36,0.6))",
+                animation: "goldShimmer 5s linear infinite",
+              }}
+            >
+              Diagnostics
+            </span>
+            <br className="hidden sm:block" />
+            for Modern Nepal
+          </h1>
+        </div>
 
-        {/* Sub */}
+        {/* ── Sub ── */}
         <p
-          className="hero-item text-white/70 max-w-xl leading-[1.9] mb-12"
-          style={{
-            fontSize: "clamp(1rem, 2vw, 1.15rem)",
-            animationDelay: "240ms",
-          }}
+          className={`text-white/75 max-w-lg leading-[1.85] mb-10 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          style={{ fontSize: "clamp(1rem, 1.8vw, 1.12rem)", transitionDelay: "200ms" }}
         >
-          Cognidx Enterprises brings world-class biomedical diagnostic
-          instruments to hospitals, labs, and clinics — empowering faster,
-          more accurate clinical decisions across Nepal and South Asia.
+          Cognidx Enterprises delivers world-class biomedical diagnostic
+          instruments — from immunoassay to haematology — empowering hospitals,
+          clinics, and labs across South Asia.
         </p>
 
-        {/* CTAs */}
+        {/* ── CTA buttons ── */}
         <div
-          className="hero-item flex flex-wrap gap-4 justify-center mb-16"
-          style={{ animationDelay: "320ms" }}
+          className={`flex flex-wrap gap-4 justify-center mb-12 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          style={{ transitionDelay: "300ms" }}
         >
           <Link
-            href="#products"
-            className="group relative inline-flex items-center gap-2.5 font-bold px-9 py-4 rounded-2xl text-[#2d0e5c] text-[15px] overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl"
+            href="/products"
+            className="group relative inline-flex items-center gap-2.5 font-bold px-8 py-3.5 rounded-2xl text-[#3b0764] text-[15px] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
             style={{
-              background: "linear-gradient(135deg, #fde68a 0%, #fbbf24 50%, #f59e0b 100%)",
-              boxShadow: "0 6px 32px rgba(251,191,36,0.45), 0 2px 8px rgba(0,0,0,0.15)",
+              background: "linear-gradient(135deg, #fef9c3 0%, #fde68a 35%, #fbbf24 70%, #f59e0b 100%)",
+              boxShadow: "0 6px 32px rgba(251,191,36,0.55), 0 2px 8px rgba(0,0,0,0.15)",
             }}
           >
-            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400"
-              style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.22) 0%, transparent 60%)" }}
-            />
+            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.28) 0%, transparent 55%)" }} />
             <span className="relative">Explore Products</span>
             <ArrowRight size={15} className="relative transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
 
           <Link
-            href="#about"
-            className="group inline-flex items-center gap-2.5 font-semibold px-9 py-4 rounded-2xl text-white text-[15px] transition-all duration-300 hover:-translate-y-1.5"
+            href="/#about"
+            className="group inline-flex items-center gap-2.5 font-semibold px-8 py-3.5 rounded-2xl text-white text-[15px] transition-all duration-300 hover:-translate-y-1"
             style={{
-              background: "rgba(255,255,255,0.14)",
-              border: "1px solid rgba(255,255,255,0.30)",
+              background: "rgba(255,255,255,0.15)",
+              border: "1px solid rgba(255,255,255,0.38)",
               backdropFilter: "blur(16px)",
-              boxShadow: "0 4px 20px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.15)",
+              boxShadow: "0 4px 20px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.20)",
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.22)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.14)"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.24)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.15)"; }}
           >
             Our Mission
           </Link>
         </div>
 
-        {/* Stats */}
+        {/* ── Specialty pills ── */}
         <div
-          className="hero-item w-full max-w-2xl"
-          style={{ animationDelay: "400ms" }}
+          className={`flex flex-wrap justify-center gap-2 mb-14 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          style={{ transitionDelay: "400ms" }}
+        >
+          {pills.map((p, i) => (
+            <span
+              key={p}
+              className="text-[11px] font-semibold px-3.5 py-1.5 rounded-full"
+              style={{
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.25)",
+                color: "rgba(255,255,255,0.85)",
+                backdropFilter: "blur(8px)",
+                animationDelay: `${i * 60}ms`,
+              }}
+            >
+              {p}
+            </span>
+          ))}
+        </div>
+
+        {/* ── Stats grid ── */}
+        <div
+          className={`w-full max-w-2xl transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          style={{ transitionDelay: "500ms" }}
         >
           <div
             className="grid grid-cols-2 sm:grid-cols-4 rounded-2xl overflow-hidden"
             style={{
-              background: "rgba(255,255,255,0.10)",
-              border: "1px solid rgba(255,255,255,0.20)",
-              backdropFilter: "blur(20px)",
-              boxShadow: "0 8px 40px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.15)",
+              background: "rgba(255,255,255,0.12)",
+              border: "1px solid rgba(255,255,255,0.25)",
+              backdropFilter: "blur(24px)",
+              boxShadow: "0 8px 40px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.22)",
             }}
           >
-            {stats.map((stat, i) => (
-              <div
-                key={stat.label}
-                className="flex flex-col items-center justify-center py-5 px-4 text-center relative group"
-                style={{
-                  borderRight: i < stats.length - 1 ? "1px solid rgba(255,255,255,0.12)" : "none",
-                  borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.12)" : "none",
-                }}
-              >
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ background: "rgba(255,255,255,0.06)" }}
-                />
+            {stats.map((stat, i) => {
+              const Icon = stat.icon;
+              return (
                 <div
-                  className="font-playfair text-[1.85rem] font-bold leading-none mb-1.5 relative"
+                  key={stat.label}
+                  className="flex flex-col items-center justify-center py-5 px-3 text-center relative group cursor-default"
                   style={{
-                    background: "linear-gradient(135deg, #fde68a, #fbbf24)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
+                    borderRight: i < stats.length - 1 ? "1px solid rgba(255,255,255,0.14)" : "none",
+                    borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.14)" : "none",
                   }}
                 >
-                  {stat.num}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ background: "rgba(255,255,255,0.07)" }} />
+                  <Icon size={16} className="relative mb-2 text-white/50" />
+                  <div
+                    className=" text-[2rem] font-bold leading-none mb-1 relative"
+                    style={{
+                      background: "linear-gradient(135deg, #fef9c3, #fbbf24)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                      filter: "drop-shadow(0 0 10px rgba(251,191,36,0.4))",
+                    }}
+                  >
+                    {stat.num}
+                  </div>
+                  <div className="text-white/60 text-[11px] font-medium tracking-wide relative leading-tight">
+                    {stat.label}
+                  </div>
                 </div>
-                <div className="text-white/60 text-[11px] font-medium tracking-wide relative">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
-
-      {/* Scroll cue */}
-      <a
-        href="#about"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/35 hover:text-white/65 transition-all duration-300 group"
-      >
-        <span className="font-mono-custom text-[9px] tracking-[0.25em] uppercase group-hover:tracking-[0.35em] transition-all duration-300">
-          Scroll
-        </span>
-        <div
-          className="w-6 h-10 rounded-full flex items-start justify-center pt-2"
-          style={{ border: "1px solid rgba(255,255,255,0.25)" }}
-        >
-          <div
-            className="w-1 h-2 rounded-full bg-white/60"
-            style={{ animation: "scrollDot 1.8s ease-in-out infinite" }}
-          />
-        </div>
-      </a>
 
       <style>{`
         @keyframes goldShimmer {
           0%   { background-position: 0% center; }
           100% { background-position: 200% center; }
         }
-        @keyframes scrollDot {
-          0%   { transform: translateY(0);    opacity: 1; }
-          80%  { transform: translateY(14px); opacity: 0; }
-          81%  { transform: translateY(0);    opacity: 0; }
-          100% { opacity: 1; }
-        }
-        @keyframes heroReveal {
-          from { opacity: 0; transform: translateY(22px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .hero-item {
-          animation: heroReveal 0.75s cubic-bezier(0.16,1,0.3,1) both;
+        @keyframes heroPulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50%       { opacity: 0.6; transform: scale(1.35); }
         }
       `}</style>
     </section>
