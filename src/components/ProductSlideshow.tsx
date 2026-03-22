@@ -286,19 +286,12 @@ export default function ProductSlideshow() {
 
       {/* ── Bottom bar ── */}
       <div
-        className="flex items-center justify-between px-6 lg:px-12 py-3.5 transition-all duration-700"
+        className="flex items-center justify-center px-6 lg:px-12 py-3.5 transition-all duration-700"
         style={{
           background: `linear-gradient(135deg, ${bg}88, white)`,
           borderTop: `1px solid ${accent}12`,
         }}
       >
-        {/* Product name */}
-        <span
-          className="hidden sm:block text-xs font-semibold max-w-[200px] truncate transition-all duration-700"
-          style={{ color: accent }}
-        >
-          {p.model}
-        </span>
 
         {/* Dot indicators */}
         <div className="flex items-center gap-1.5 mx-auto sm:mx-0">
@@ -318,13 +311,6 @@ export default function ProductSlideshow() {
           ))}
         </div>
 
-        {/* Category label */}
-        <span
-          className="hidden sm:block text-[10px] font-mono-custom uppercase tracking-widest transition-all duration-700"
-          style={{ color: `${accent}88` }}
-        >
-          {p.category}
-        </span>
       </div>
 
       {/* ── Progress bar ── */}
