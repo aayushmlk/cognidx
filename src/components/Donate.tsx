@@ -90,7 +90,7 @@ export default function Donate() {
           className="transition-all duration-400"
           style={{
             opacity: flipping ? 0 : 1,
-            transform: flipping ? "scale(0.96) translateY(8px)" : "scale(1) translateY(0)",
+            transform: flipping ? "F(0.96) translateY(8px)" : "scale(1) translateY(0)",
             transition: "opacity 0.35s ease, transform 0.35s ease",
           }}
         >

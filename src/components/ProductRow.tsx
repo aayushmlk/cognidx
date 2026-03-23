@@ -45,59 +45,100 @@ export default function ProductRow({ product, highlight }: Props) {
 
       <div className="flex flex-col lg:flex-row">
 
-        {/* ── LEFT: Image Panel ── */}
+        {/* ── LEFT: Image Panel — wider, taller, more air ── */}
         <div
-          className="lg:w-[36%] relative flex items-center justify-center p-10 shrink-0 overflow-hidden"
-          style={{ background: `linear-gradient(135deg, ${bg} 0%, ${bg}dd 100%)` }}
+          className="lg:w-[44%] relative flex items-center justify-center shrink-0 overflow-hidden"
+          style={{
+            background: `linear-gradient(145deg, ${bg} 0%, ${bg}cc 60%, ${bg}88 100%)`,
+            minHeight: 340,
+            padding: "48px 44px",
+          }}
         >
-          <div className="absolute -bottom-16 -right-16 w-64 h-64 rounded-full opacity-20 transition-all duration-700 group-hover:opacity-30 group-hover:scale-110"
-            style={{ background: accent }} />
-          <div className="absolute -top-8 -left-8 w-32 h-32 rounded-full opacity-10"
-            style={{ background: accent }} />
+          {/* Large decorative circle — back layer */}
+          <div
+            className="absolute -bottom-24 -right-24 w-80 h-80 rounded-full opacity-[0.18] transition-all duration-700 group-hover:opacity-[0.28] group-hover:scale-110"
+            style={{ background: accent }}
+          />
+          {/* Small decorative circle — top-left */}
+          <div
+            className="absolute -top-10 -left-10 w-40 h-40 rounded-full opacity-[0.10]"
+            style={{ background: accent }}
+          />
+          {/* Subtle centre glow behind image */}
+          <div
+            className="absolute inset-0 opacity-40 transition-opacity duration-700 group-hover:opacity-60"
+            style={{
+              background: `radial-gradient(ellipse 65% 60% at 55% 52%, ${accent}22 0%, transparent 70%)`,
+            }}
+          />
 
-          <div className="relative z-10 w-full flex items-center justify-center" style={{ minHeight: 200 }}>
+          {/* Image */}
+          <div className="relative z-10 w-full flex items-center justify-center">
             <Image
               src={product.image}
               alt={product.name}
-              width={380}
-              height={280}
-              className="object-contain w-full transition-transform duration-700 group-hover:scale-105"
+              width={480}
+              height={360}
+              className="object-contain w-full transition-transform duration-700 group-hover:scale-[1.06]"
               style={{
-                maxHeight: 260,
-                filter: `drop-shadow(0 12px 40px ${accent}55)`,
+                maxHeight: 310,
+                filter: `drop-shadow(0 18px 52px ${accent}60)`,
               }}
             />
           </div>
 
           {/* Brand badge */}
+          <div className="flex flex-row">
+            
+          </div>
           <div
-            className="absolute top-5 left-5 text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-md"
-            style={{ background: accent }}
+            className="absolute top-5 left-5 text-white text-[10px] font-bold px-3.5 py-1.5 rounded-full uppercase tracking-wider shadow-lg"
+            style={{
+              background: `linear-gradient(135deg, ${accent}, ${accent}cc)`,
+              boxShadow: `0 4px 14px ${accent}50`,
+            }}
           >
             {product.brand === "—" ? "Generic" : product.brand.split(" ")[0]}
+            
           </div>
+             {/* Model number — bottom right */}
+          <div
+            className="absolute bottom-5 right-5 text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg"
+            style={{
+              background: "rgba(255,255,255,0.75)",
+              color: accent,
+              border: `1px solid ${accent}20`,
+            }}
+          >
+            {product.model}
+          </div>
+         
 
           {/* Visitor pill */}
           <div
-            className="absolute bottom-5 left-5 flex items-center gap-1.5 text-[11px] font-medium px-3 py-1.5 rounded-full backdrop-blur-sm"
+            className="absolute bottom-5 left-5 flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-full backdrop-blur-sm"
             style={{
-              background: "rgba(255,255,255,0.85)",
+              background: "rgba(255,255,255,0.90)",
               color: accent,
-              border: `1px solid ${accent}33`,
+              border: `1px solid ${accent}28`,
+              boxShadow: `0 2px 10px ${accent}18`,
             }}
           >
             <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: accent }} />
             <Eye size={10} />
             {visitors.toLocaleString()}
           </div>
+          
+
+        
         </div>
 
         {/* ── RIGHT: Info Panel ── */}
-        <div className="lg:w-[64%] flex flex-col p-8 lg:p-10 gap-7">
+        <div className="lg:w-[56%] flex flex-col p-8 lg:p-10 gap-7">
 
-          {/* Category + model + name */}
+          {/* Category + name */}
           <div>
-            <div className="flex items-center gap-3 mb-3 flex-wrap">
+            <div className="flex items-center gap-3 mb-4 flex-wrap">
               <span
                 className="text-[10px] font-bold tracking-[0.2em] uppercase px-3 py-1 rounded-full"
                 style={{
@@ -108,12 +149,9 @@ export default function ProductRow({ product, highlight }: Props) {
               >
                 {product.category}
               </span>
-              <span className="text-[11px] text-[#9ca3af] font-mono">
-                {product.model}
-              </span>
             </div>
 
-            <h3 className="font-playfair text-2xl lg:text-[1.7rem] font-bold leading-snug mb-3 text-[#111827]">
+            <h3 className="font-playfair text-2xl lg:text-[1.8rem] font-bold leading-snug mb-3 text-[#111827]">
               {product.name}
             </h3>
 
@@ -122,9 +160,9 @@ export default function ProductRow({ product, highlight }: Props) {
             </p>
           </div>
 
-          {/* Highlights — all shown */}
+          {/* Highlights */}
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-3" style={{ color: accent }}>
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] mb-3" style={{ color: accent }}>
               Key Highlights
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -137,14 +175,14 @@ export default function ProductRow({ product, highlight }: Props) {
             </div>
           </div>
 
-          {/* Specs table — always visible */}
+          {/* Specs table */}
           <div className="rounded-2xl overflow-hidden" style={{ border: `1px solid ${accent}20` }}>
             <div
               className="px-4 py-2.5 flex items-center gap-2"
               style={{ background: `${accent}10` }}
             >
-              <Zap size={12} style={{ color: accent }} />
-              <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: accent }}>
+              <Zap size={14} style={{ color: accent }} />
+              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: accent }}>
                 Technical Specifications
               </span>
             </div>
