@@ -1,6 +1,7 @@
 "use client";
 
 import { FlaskConical, Users, Award, Microscope } from "lucide-react";
+import Image from "next/image";
 
 const stats = [
   { num: "50+",  label: "Product Lines",         icon: FlaskConical },
@@ -107,7 +108,7 @@ export default function About() {
                 position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
                 background: "linear-gradient(160deg, rgba(124,58,237,0.10) 0%, transparent 50%, rgba(109,40,217,0.08) 100%)",
               }} />
-              <img
+              <Image
                 src="/about.jpg"
                 alt="About Cognidx"
                 style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}

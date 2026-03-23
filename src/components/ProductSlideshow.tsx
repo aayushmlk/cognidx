@@ -11,9 +11,6 @@ export default function ProductSlideshow() {
   const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState(false);
   const [direction, setDirection] = useState<"left" | "right">("right");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => { setMounted(true); }, []);
 
   const go = useCallback(
     (idx: number, dir: "left" | "right" = "right") => {
@@ -44,6 +41,21 @@ export default function ProductSlideshow() {
   return (
     <section className="w-full overflow-hidden relative" style={{ background: "#f8f7ff" }}>
 
+      {/* ══ SECTION HEADER ══ */}
+      <div
+        className="relative overflow-hidden"
+        style={{
+          background: "linear-gradient(180deg, #ffffff 0%, #faf8ff 100%)",
+          borderBottom: "1px solid #ede9fe",
+        }}
+      >
+    
+        <div
+          className="absolute bottom-0 left-8 right-8 h-px"
+          style={{ background: "linear-gradient(90deg, transparent, #7c3aed33, transparent)" }}
+        />
+      </div>
+
       {/* ── Animated top accent bar ── */}
       <div className="h-[3px] w-full relative overflow-hidden">
         <div
@@ -64,35 +76,31 @@ export default function ProductSlideshow() {
         className="relative transition-all duration-700 overflow-hidden"
         style={{
           background: `linear-gradient(135deg, ${bg}ee 0%, #ffffff 55%, ${bg}55 100%)`,
-          minHeight: 520,
         }}
       >
-        {/* Large background orb — morphs with each product */}
+        {/* Background orbs */}
         <div
-          className="pointer-events-none absolute -right-40 top-1/2 -translate-y-1/2 w-[650px] h-[650px] rounded-full transition-all duration-700"
+          className="pointer-events-none absolute -right-40 top-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full transition-all duration-700"
           style={{
             background: `radial-gradient(circle, ${accent}12 0%, ${accent}05 40%, transparent 70%)`,
             filter: "blur(40px)",
           }}
         />
-        {/* Top-left accent blob */}
         <div
-          className="pointer-events-none absolute -left-20 -top-20 w-64 h-64 rounded-full transition-all duration-700"
+          className="pointer-events-none absolute -left-20 top-0 w-72 h-72 rounded-full transition-all duration-700"
           style={{
             background: `radial-gradient(circle, ${accent}10 0%, transparent 70%)`,
             filter: "blur(30px)",
           }}
         />
-        {/* Bottom center warm glow */}
         <div
-          className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-32 transition-all duration-700"
+          className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-40 transition-all duration-700"
           style={{
             background: `radial-gradient(ellipse, ${accent}08 0%, transparent 70%)`,
             filter: "blur(20px)",
           }}
         />
-
-        {/* Subtle grid pattern */}
+        {/* Dot grid */}
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.025]"
           style={{
@@ -100,28 +108,49 @@ export default function ProductSlideshow() {
             backgroundSize: "28px 28px",
           }}
         />
+            <div className="max-w-6xl mx-auto px-5 sm:px-8 lg:px-14 py-6 sm:py-8">
+          <div className="flex items-center gap-3">
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              padding: "7px 16px", borderRadius: 100,
+              background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
+              boxShadow: "0 4px 18px rgba(109,40,217,0.30)",
+            }}>
+              <span style={{
+                width: 6, height: 6, borderRadius: "50%",
+                background: "rgba(255,255,255,0.7)",
+                boxShadow: "0 0 6px rgba(255,255,255,0.9)",
+              }} />
+              <span style={{
+                fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase",
+                color: "#fff", fontWeight: 700,
+              }}>
+                New Products
+              </span>
+            </div>
+            <div style={{ height: 1, width: 40, background: "linear-gradient(90deg, #a78bfa, transparent)" }} />
+          </div>
+        </div>
 
-        <div className="max-w-6xl mx-auto px-8 lg:px-14">
-          <div className="flex flex-col lg:flex-row items-center gap-10 py-14 lg:py-20">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 lg:px-14">
+          {/* Stack vertically on mobile, side-by-side on md+ */}
+          <div className="flex flex-col md:flex-row items-center gap-6 md:gap-12 py-10 md:py-16 lg:py-20">
 
-            {/* ── LEFT: Image ── */}
-            <div className="w-full lg:w-[44%] flex items-center justify-center relative">
-              {/* Soft blob behind image */}
+            {/* ── Image ── */}
+            <div className="w-full md:w-[40%] md:shrink-0 flex items-center justify-center relative px-8 md:px-0">
               <div
                 className="absolute inset-4 rounded-3xl transition-all duration-700"
                 style={{
-                  background: `radial-gradient(ellipse at center, ${accent}20 0%, transparent 72%)`,
+                  background: `radial-gradient(ellipse at center, ${accent}22 0%, transparent 72%)`,
                   filter: "blur(20px)",
                 }}
               />
-
-              {/* Image with slide animation */}
               <div
                 className="relative z-10 w-full flex items-center justify-center"
                 style={{
                   opacity: animating ? 0 : 1,
                   transform: animating
-                    ? direction === "right" ? "translateX(-32px) scale(0.93)" : "translateX(32px) scale(0.93)"
+                    ? direction === "right" ? "translateX(-36px) scale(0.92)" : "translateX(36px) scale(0.92)"
                     : "translateX(0) scale(1)",
                   transition: "opacity 0.42s cubic-bezier(0.4,0,0.2,1), transform 0.42s cubic-bezier(0.4,0,0.2,1)",
                 }}
@@ -129,12 +158,12 @@ export default function ProductSlideshow() {
                 <Image
                   src={p.image}
                   alt={p.name}
-                  width={460}
-                  height={380}
+                  width={480}
+                  height={400}
                   className="object-contain w-full"
                   style={{
-                    maxHeight: 360,
-                    filter: `drop-shadow(0 20px 56px ${accent}50)`,
+                    maxHeight: 260,
+                    filter: `drop-shadow(0 20px 48px ${accent}55)`,
                   }}
                   priority={current === 0}
                 />
@@ -142,44 +171,31 @@ export default function ProductSlideshow() {
 
               {/* Brand badge */}
               <div
-                className="absolute top-0 left-0 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider text-white shadow-lg z-20 transition-all duration-700"
+                className="absolute top-0 left-8 md:left-0 text-[10px] sm:text-[11px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider text-white shadow-lg z-20 transition-all duration-700"
                 style={{
                   background: `linear-gradient(135deg, ${accent}, ${accent}cc)`,
-                  boxShadow: `0 4px 16px ${accent}50`,
+                  boxShadow: `0 4px 20px ${accent}55`,
                 }}
               >
                 {p.brand === "—" ? "Generic" : p.brand.split(" ")[0]}
               </div>
-
-              {/* Index indicator */}
-              <div
-                className="absolute bottom-0 right-0 font-mono-custom text-[11px] font-bold px-3 py-1.5 rounded-full z-20"
-                style={{
-                  background: "rgba(255,255,255,0.9)",
-                  color: accent,
-                  border: `1px solid ${accent}25`,
-                  boxShadow: `0 2px 12px ${accent}20`,
-                }}
-              >
-                {String(current + 1).padStart(2, "0")} / {String(products.length).padStart(2, "0")}
-              </div>
             </div>
 
-            {/* ── RIGHT: Info ── */}
-            <div className="w-full lg:w-[56%] lg:pl-6">
+            {/* ── Info ── */}
+            <div className="w-full md:flex-1 md:min-w-0 md:pl-4">
               <div
                 style={{
                   opacity: animating ? 0 : 1,
                   transform: animating
-                    ? direction === "right" ? "translateX(28px)" : "translateX(-28px)"
+                    ? direction === "right" ? "translateX(32px)" : "translateX(-32px)"
                     : "translateX(0)",
                   transition: "opacity 0.42s cubic-bezier(0.4,0,0.2,1), transform 0.42s cubic-bezier(0.4,0,0.2,1)",
                 }}
               >
-                {/* Category chip */}
-                <div className="flex items-center gap-2.5 mb-5 flex-wrap">
+                {/* Category + model */}
+                <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-5 flex-wrap">
                   <span
-                    className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3.5 py-1.5 rounded-full uppercase tracking-widest transition-all duration-700"
+                    className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full uppercase tracking-widest transition-all duration-700"
                     style={{
                       background: `${accent}14`,
                       color: accent,
@@ -189,60 +205,82 @@ export default function ProductSlideshow() {
                     <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: accent }} />
                     {p.category}
                   </span>
-                  <span className="text-xs text-[#9ca3af] font-mono">{p.model}</span>
+                  <span
+                    className="text-[10px] sm:text-[11px] font-mono font-semibold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg"
+                    style={{
+                      background: "rgba(0,0,0,0.04)",
+                      color: "#6b7280",
+                      border: "1px solid #e5e7eb",
+                    }}
+                  >
+                    {p.model}
+                  </span>
                 </div>
 
                 {/* Product name */}
-                <h2 className="font-playfair text-2xl sm:text-3xl lg:text-[2.3rem] font-bold text-[#0f0a1e] leading-tight mb-4">
+                <h3
+                  className="font-playfair font-bold text-[#0f0a1e] leading-[1.08] mb-3 sm:mb-4"
+                  style={{ fontSize: "clamp(1.5rem, 4vw, 2.8rem)" }}
+                >
                   {p.name}
-                </h2>
+                </h3>
 
                 {/* Description */}
-                <p className="text-sm text-[#6b7280] leading-[1.85] mb-7 max-w-md">
+                <p className="text-[#6b7280] leading-[1.8] mb-5 sm:mb-8 text-sm sm:text-[1.02rem]">
                   {p.description}
                 </p>
 
-                {/* Highlights */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-8">
+                {/* Divider */}
+                <div
+                  className="mb-5 sm:mb-7 h-px"
+                  style={{ background: `linear-gradient(90deg, ${accent}30, transparent)` }}
+                />
+
+                {/* Highlights — 1 col on mobile, 2 cols on sm+ */}
+                <div className="grid grid-cols-1 gap-2.5 sm:gap-3 mb-7 sm:mb-9">
                   {p.highlights.slice(0, 4).map((h, i) => (
                     <div
                       key={h}
-                      className="flex items-start gap-2 text-[13px] text-[#374151]"
+                      className="flex items-start gap-2.5"
                       style={{
                         opacity: animating ? 0 : 1,
-                        transform: animating ? "translateY(8px)" : "translateY(0)",
-                        transition: `opacity 0.4s ease ${i * 50}ms, transform 0.4s ease ${i * 50}ms`,
+                        transform: animating ? "translateY(10px)" : "translateY(0)",
+                        transition: `opacity 0.4s ease ${i * 60}ms, transform 0.4s ease ${i * 60}ms`,
                       }}
                     >
                       <span
-                        className="w-1.5 h-1.5 rounded-full mt-[5px] shrink-0"
-                        style={{ background: accent }}
-                      />
-                      <span className="leading-snug">{h}</span>
+                        className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                        style={{ background: `${accent}18`, border: `1px solid ${accent}30` }}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full" style={{ background: accent }} />
+                      </span>
+                      <span className="text-[#374151] leading-snug font-medium text-sm">
+                        {h}
+                      </span>
                     </div>
                   ))}
                 </div>
 
                 {/* CTA buttons */}
                 <div className="flex flex-wrap gap-3">
-                  {/* View Full Specs — navigates to /products#categoryId */}
                   <button
                     onClick={handleViewSpecs}
-                    className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-2xl text-sm font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+                    className="group inline-flex items-center gap-2.5 rounded-2xl text-sm font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl"
                     style={{
+                      padding: "0.7rem 1.4rem",
                       background: `linear-gradient(135deg, ${accent}, ${accent}cc)`,
-                      boxShadow: `0 4px 20px ${accent}45`,
+                      boxShadow: `0 6px 24px ${accent}45`,
                     }}
                   >
                     View Full Specs
                     <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
                   </button>
 
-                  {/* Enquire */}
                   <a
                     href="/#contact"
-                    className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+                    className="group inline-flex items-center gap-2.5 rounded-2xl text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
                     style={{
+                      padding: "0.7rem 1.4rem",
                       color: accent,
                       background: `${accent}10`,
                       border: `1px solid ${accent}30`,
@@ -257,51 +295,51 @@ export default function ProductSlideshow() {
           </div>
         </div>
 
-        {/* ── Prev / Next arrows ── */}
+        {/* Prev / Next — smaller on mobile, hidden on very small when content stacks */}
         <button
           onClick={() => go(current - 1, "left")}
-          className="absolute left-3 lg:left-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 hover:-translate-y-1/2 z-20"
+          className="absolute left-1 sm:left-3 lg:left-5 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 z-20"
           style={{
-            background: "rgba(255,255,255,0.95)",
+            background: "rgba(255,255,255,0.97)",
             border: `1px solid ${accent}22`,
             color: accent,
-            boxShadow: `0 4px 16px ${accent}20`,
+            boxShadow: `0 4px 20px ${accent}25`,
           }}
         >
-          <ChevronLeft size={18} />
+          <ChevronLeft size={15} className="sm:hidden" />
+          <ChevronLeft size={18} className="hidden sm:block" />
         </button>
         <button
           onClick={() => go(current + 1, "right")}
-          className="absolute right-3 lg:right-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 hover:-translate-y-1/2 z-20"
+          className="absolute right-1 sm:right-3 lg:right-5 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 z-20"
           style={{
-            background: "rgba(255,255,255,0.95)",
+            background: "rgba(255,255,255,0.97)",
             border: `1px solid ${accent}22`,
             color: accent,
-            boxShadow: `0 4px 16px ${accent}20`,
+            boxShadow: `0 4px 20px ${accent}25`,
           }}
         >
-          <ChevronRight size={18} />
+          <ChevronRight size={15} className="sm:hidden" />
+          <ChevronRight size={18} className="hidden sm:block" />
         </button>
       </div>
 
-      {/* ── Bottom bar ── */}
+      {/* ── Bottom dot bar ── */}
       <div
-        className="flex items-center justify-center px-6 lg:px-12 py-3.5 transition-all duration-700"
+        className="flex items-center justify-center px-5 sm:px-8 lg:px-14 py-3 sm:py-4 transition-all duration-700"
         style={{
           background: `linear-gradient(135deg, ${bg}88, white)`,
           borderTop: `1px solid ${accent}12`,
         }}
       >
-
-        {/* Dot indicators */}
-        <div className="flex items-center gap-1.5 mx-auto sm:mx-0">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {products.map((_, i) => (
             <button
               key={i}
               onClick={() => go(i, i > current ? "right" : "left")}
-              className="rounded-full transition-all duration-400"
+              className="rounded-full transition-all duration-300"
               style={{
-                width: i === current ? 28 : 6,
+                width: i === current ? 24 : 6,
                 height: 6,
                 background: i === current
                   ? `linear-gradient(90deg, ${accent}, ${accent}88)`
@@ -310,11 +348,10 @@ export default function ProductSlideshow() {
             />
           ))}
         </div>
-
       </div>
 
       {/* ── Progress bar ── */}
-      <div className="h-[2px] relative overflow-hidden" style={{ background: `${accent}12` }}>
+      <div className="h-[3px] relative overflow-hidden" style={{ background: `${accent}12` }}>
         <div
           key={current}
           className="absolute inset-y-0 left-0 h-full"

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { products, categories } from "@/data/products";
 import ProductRow from "./ProductRow";
+import { DNACanvas } from "./DNA";
 import { ArrowLeft, FlaskConical, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -38,7 +39,6 @@ export default function Products() {
   useEffect(() => {
     const el = tabsRef.current;
     if (!el) return;
-    // Small delay so DOM is ready
     setTimeout(checkScroll, 50);
     el.addEventListener("scroll", checkScroll, { passive: true });
     window.addEventListener("resize", checkScroll);
@@ -87,33 +87,36 @@ export default function Products() {
       {/* ══ HERO BANNER ══ */}
       <div
         className="relative overflow-hidden"
-        style={{
-          background: "linear-gradient(145deg, #3b0e82 0%, #5521a8 25%, #7c3aed 55%, #9333ea 78%, #a855f7 100%)",
-        }}
+        style={{ minHeight: "260px" }}
       >
-        {/* Decorative blobs */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {/* DNA Canvas — full bleed background */}
+        <div className="absolute inset-0 z-0">
+          <DNACanvas />
+        </div>
+
+        {/* Dark overlay to keep text readable over the canvas */}
+        <div
+          className="absolute inset-0 z-10"
+          style={{
+            background:
+              "linear-gradient(145deg, rgba(30,6,80,0.72) 0%, rgba(60,14,120,0.60) 35%, rgba(80,20,140,0.52) 65%, rgba(100,30,160,0.60) 100%)",
+          }}
+        />
+
+        {/* Decorative blobs — sit above canvas overlay */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden z-10">
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[350px]"
-            style={{ background: "radial-gradient(ellipse, rgba(216,180,254,0.22) 0%, transparent 68%)", filter: "blur(60px)" }}
+            style={{ background: "radial-gradient(ellipse, rgba(216,180,254,0.12) 0%, transparent 68%)", filter: "blur(60px)" }}
           />
           <div
             className="absolute -top-10 right-0 w-[380px] h-[280px]"
-            style={{ background: "radial-gradient(circle, rgba(232,121,249,0.15) 0%, transparent 65%)", filter: "blur(50px)" }}
-          />
-          <div
-            className="absolute bottom-0 left-1/4 w-[400px] h-[150px]"
-            style={{ background: "radial-gradient(ellipse, rgba(251,191,36,0.08) 0%, transparent 70%)", filter: "blur(30px)" }}
+            style={{ background: "radial-gradient(circle, rgba(232,121,249,0.10) 0%, transparent 65%)", filter: "blur(50px)" }}
           />
           {/* Dot grid */}
           <div
             className="absolute inset-0"
-            style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)", backgroundSize: "28px 28px" }}
-          />
-          {/* Shimmer */}
-          <div
-            className="absolute inset-0 opacity-[0.07]"
-            style={{ background: "linear-gradient(118deg, transparent 35%, rgba(255,255,255,0.5) 50%, transparent 65%)" }}
+            style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)", backgroundSize: "28px 28px" }}
           />
           {/* Decorative arcs */}
           <svg className="absolute right-0 top-0 opacity-[0.06] w-80 h-80" viewBox="0 0 320 320" fill="none">
@@ -127,15 +130,22 @@ export default function Products() {
           </svg>
           <div
             className="absolute bottom-0 inset-x-0 h-16"
-            style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.08))" }}
+            style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.15))" }}
           />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-6 pt-10 pb-14">
-          {/* Back nav */}
+        {/* Content — sits above everything */}
+        <div className="relative z-20 max-w-5xl mx-auto px-6 pt-10 pb-14">
+          {/* Back nav — frosted pill, clearly visible */}
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-white/55 hover:text-white text-sm font-medium mb-10 transition-all duration-200 group"
+            className="inline-flex items-center gap-2 mb-10 px-4 py-2 rounded-full text-sm font-semibold text-white transition-all duration-200 group back-btn"
+            style={{
+              background: "rgba(255,255,255,0.13)",
+              border: "1px solid rgba(255,255,255,0.32)",
+              backdropFilter: "blur(14px)",
+              letterSpacing: "0.01em",
+            }}
           >
             <ArrowLeft size={14} className="transition-transform duration-200 group-hover:-translate-x-1" />
             <span>Back to Home</span>
@@ -182,37 +192,54 @@ export default function Products() {
             </div>
 
             {/* Stats */}
-            <div
-              className="flex items-center rounded-2xl overflow-hidden shrink-0"
-              style={{
-                background: "rgba(255,255,255,0.08)",
-                border: "1px solid rgba(255,255,255,0.16)",
-                backdropFilter: "blur(16px)",
-              }}
-            >
+            <div className="shrink-0 flex flex-col gap-3">
               {[
-                { num: totalVisitors.toLocaleString(), label: "Total Views" },
-                { num: products.length.toString(), label: "Products" },
-                { num: categories.length.toString(), label: "Categories" },
-              ].map((s, i) => (
+                { num: totalVisitors.toLocaleString(), label: "Total Views", icon: "👁" },
+                { num: products.length.toString(), label: "Products Listed", icon: "🔬" },
+                { num: categories.length.toString(), label: "Categories", icon: "📂" },
+              ].map((s) => (
                 <div
                   key={s.label}
-                  className="px-7 py-4 text-center"
-                  style={{ borderRight: i < 2 ? "1px solid rgba(255,255,255,0.10)" : "none" }}
+                  className="flex items-center gap-4 px-5 py-3.5 rounded-2xl"
+                  style={{
+                    background: "rgba(255,255,255,0.10)",
+                    border: "1px solid rgba(255,255,255,0.20)",
+                    backdropFilter: "blur(18px)",
+                    boxShadow: "0 2px 16px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.15)",
+                    minWidth: 240,
+                  }}
                 >
                   <div
-                    className="font-playfair text-2xl font-bold leading-none mb-1"
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-base"
                     style={{
-                      background: "linear-gradient(135deg, #fde68a, #fbbf24)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      backgroundClip: "text",
+                      background: "rgba(255,255,255,0.12)",
+                      border: "1px solid rgba(255,255,255,0.18)",
                     }}
                   >
-                    {s.num}
+                    {s.icon}
                   </div>
-                  <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "10px", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                    {s.label}
+                  <div className="flex flex-col">
+                    <span
+                      className="font-playfair font-bold leading-none mb-1"
+                      style={{
+                        fontSize: "1.55rem",
+                        background: "linear-gradient(135deg, #ffffff 0%, #e9d5ff 100%)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                      }}
+                    >
+                      {s.num}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "11px", fontWeight: 600,
+                        letterSpacing: "0.10em", textTransform: "uppercase",
+                        color: "rgba(255,255,255,0.55)",
+                      }}
+                    >
+                      {s.label}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -234,7 +261,6 @@ export default function Products() {
         <div className="max-w-5xl mx-auto px-4 py-3">
           <div className="relative flex items-center gap-1">
 
-            {/* Left arrow */}
             {canScrollLeft && (
               <button
                 onClick={() => scrollTabs("left")}
@@ -245,7 +271,6 @@ export default function Products() {
               </button>
             )}
 
-            {/* Scrollable tabs */}
             <div
               ref={tabsRef}
               className="flex items-center gap-2 overflow-x-auto flex-1"
@@ -292,7 +317,6 @@ export default function Products() {
               })}
             </div>
 
-            {/* Right arrow */}
             {canScrollRight && (
               <button
                 onClick={() => scrollTabs("right")}
@@ -309,7 +333,6 @@ export default function Products() {
       {/* ══ PRODUCT LIST ══ */}
       <div className="max-w-5xl mx-auto px-6 py-12">
 
-        {/* Section heading */}
         <div className="flex items-center gap-3 mb-8">
           <div
             className="w-1 h-8 rounded-full"
@@ -325,7 +348,6 @@ export default function Products() {
           </div>
         </div>
 
-        {/* Products */}
         <div className="space-y-6">
           {filtered.map((product, i) => (
             <div
@@ -357,7 +379,11 @@ export default function Products() {
         .product-item {
           animation: productReveal 0.45s cubic-bezier(0.16,1,0.3,1) both;
         }
-        div[ref] ::-webkit-scrollbar,
+        .back-btn:hover {
+          background: rgba(255,255,255,0.22) !important;
+          border-color: rgba(255,255,255,0.5) !important;
+          box-shadow: 0 0 16px rgba(167,139,250,0.25);
+        }
         div::-webkit-scrollbar { display: none; }
       `}</style>
     </div>
