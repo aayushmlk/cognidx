@@ -4,10 +4,10 @@ import { FlaskConical, Users, Award, Microscope } from "lucide-react";
 import Image from "next/image";
 
 const stats = [
-  { num: "50+",  label: "Product Lines",         icon: FlaskConical },
-  { num: "200+", label: "Institutions Served",   icon: Users        },
-  { num: "5+",   label: "Global Brand Partners", icon: Award        },
-  { num: "70+",  label: "Test Parameters",       icon: Microscope   },
+  { num: "50+", label: "Product Lines", icon: FlaskConical },
+  { num: "200+", label: "Institutions Served", icon: Users },
+  { num: "5+", label: "Global Brand Partners", icon: Award },
+  { num: "70+", label: "Test Parameters", icon: Microscope },
 ];
 
 export default function About() {
@@ -109,6 +109,7 @@ export default function About() {
                 background: "linear-gradient(160deg, rgba(124,58,237,0.10) 0%, transparent 50%, rgba(109,40,217,0.08) 100%)",
               }} />
               <Image
+                width={400} height={500}
                 src="/about.jpg"
                 alt="About Cognidx"
                 style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
@@ -121,8 +122,8 @@ export default function About() {
               display: "flex", flexDirection: "column", gap: 8, zIndex: 10,
             }}>
               {[
-                { label: "CE",   sub: "EU Standards", bg: "linear-gradient(135deg,#f59e0b,#fbbf24)", shadow: "rgba(245,158,11,0.35)" },
-                { label: "NMPA", sub: "CN Standards",  bg: "linear-gradient(135deg,#059669,#10b981)", shadow: "rgba(5,150,105,0.3)"  },
+                { label: "CE", sub: "EU Standards", bg: "linear-gradient(135deg,#f59e0b,#fbbf24)", shadow: "rgba(245,158,11,0.35)" },
+                { label: "NMPA", sub: "CN Standards", bg: "linear-gradient(135deg,#059669,#10b981)", shadow: "rgba(5,150,105,0.3)" },
               ].map((cert) => (
                 <div key={cert.label} style={{
                   display: "flex", alignItems: "center", gap: 10,
@@ -150,14 +151,14 @@ export default function About() {
           {/* RIGHT — Text + Stats */}
           <div>
             <h2 style={{
-  fontWeight: 700,
-  lineHeight: 1.1,
-  letterSpacing: "-0.025em",
-  color: "rgb(20, 8, 48)",
-  marginBottom: 20,
-}} className="text-5xl">
-  Pioneering Biomedical <span style={{ color: "#7c3aed" }}>Diagnostics</span>
-</h2>
+              fontWeight: 700,
+              lineHeight: 1.1,
+              letterSpacing: "-0.025em",
+              color: "rgb(20, 8, 48)",
+              marginBottom: 20,
+            }} className="text-5xl">
+              Pioneering Biomedical <span style={{ color: "#7c3aed" }}>Diagnostics</span>
+            </h2>
 
             <p style={{
               fontSize: "clamp(0.95rem, 1.4vw, 1.05rem)",
