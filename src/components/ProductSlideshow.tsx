@@ -68,7 +68,7 @@ const SLIDESHOW_CSS = `
 
 /* ── Mobile <768px ── */
 @media (max-width:767px) {
-  .ss-slide  { height:450px; }
+  .ss-slide  { height:480px; }
   .ss-inner  { padding:0 14px; }
   .ss-eyebrow { padding-top:7px; padding-bottom:4px; flex-shrink:0; display:flex; align-items:center; gap:8px; }
   .ss-two-col { flex-direction:column; gap:0; padding:0; }
