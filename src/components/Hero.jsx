@@ -1,227 +1,209 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { DNACanvas } from "./DNA";
-import { FlaskConical, Microscope, Activity, Award } from "lucide-react";
-
-const pills = [
-  "Fluorescence Immunoassay",
-  "Haematology",
-  "Blood Gas",
-  "Chemiluminescence",
-  "Biochemistry",
-  "Urinalysis",
-];
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { ArrowRight, FlaskConical, Microscope, Activity, Award } from "lucide-react";
 
 const stats = [
-  { num: 70,  suffix: "+", label: "Test Parameters",     icon: FlaskConical },
-  { num: 200, suffix: "+", label: "Institutions Served", icon: Award },
-  { num: 5,   suffix: "",  label: "Global Brands",       icon: Microscope },
-  { num: 50,  suffix: "+", label: "Product Lines",       icon: Activity },
+  { num: "70+", label: "Test Parameters", icon: FlaskConical },
+  { num: "200+", label: "Institutions Served", icon: Award },
+  { num: "5", label: "Global Brands", icon: Microscope },
+  { num: "50+", label: "Product Lines", icon: Activity },
 ];
 
-function useCountUp(target, duration, start) {
-  const [value, setValue] = useState(0);
-  useEffect(() => {
-    if (!start) return;
-    let startTime = null;
-    const step = (ts) => {
-      if (!startTime) startTime = ts;
-      const p = Math.min((ts - startTime) / duration, 1);
-      setValue(Math.floor((1 - Math.pow(1 - p, 3)) * target));
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [target, duration, start]);
-  return value;
-}
-
-function StatCell({ stat, index, animate, borderRight }) {
-  const Icon  = stat.icon;
-  const count = useCountUp(stat.num, 1600 + index * 200, animate);
-  return (
-    <div
-      style={{
-        display: "flex", flexDirection: "column", alignItems: "center",
-        justifyContent: "center", textAlign: "center", padding: "14px 6px",
-        borderRight, transition: "background 0.2s", cursor: "default",
-      }}
-      onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(124,58,237,0.12)"; }}
-      onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
-    >
-      <Icon size={22} style={{ color: "rgba(167,139,250,0.5)", marginBottom: 5 }} />
-      <div style={{
-        fontSize: "clamp(1.2rem,2.6vw,1.6rem)", fontWeight: 700,
-        lineHeight: 1, marginBottom: 3,
-        fontFamily: "'Syne',sans-serif", color: "#e9d5ff",
-      }}>
-        {count}{stat.suffix}
-      </div>
-      <div style={{ color: "rgba(196,181,253,0.5)", fontSize: 10, fontWeight: 500, letterSpacing: "0.05em" }}>
-        {stat.label}
-      </div>
-    </div>
-  );
-}
 
 export default function Hero() {
-  const [mounted, setMounted]           = useState(false);
-  const [statsVisible, setStatsVisible] = useState(false);
- 
+  const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
-  useEffect(() => {
-    if (!mounted) return;
-    const t = setTimeout(() => setStatsVisible(true), 700);
-    return () => clearTimeout(t);
-  }, [mounted]);
- 
-  const fade = (delay) => ({
-    transition: "opacity 0.65s ease, transform 0.65s ease",
-    transitionDelay: delay,
-    opacity:   mounted ? 1 : 0,
-    transform: mounted ? "translateY(0)" : "translateY(14px)",
-  });
- 
+
   return (
-    <section style={{
-      position: "relative", width: "100%", height: "100vh",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      overflow: "hidden", background: "#0d0414",
-    }}>
-      <DNACanvas />
- 
-      {/* Overlay */}
-      <div style={{
-        position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
-        background: "radial-gradient(ellipse 65% 55% at 50% 50%, rgba(13,4,20,0.18) 0%, rgba(13,4,20,0.70) 100%), linear-gradient(180deg, rgba(13,4,20,0.88) 0%, rgba(13,4,20,0.10) 28%, rgba(13,4,20,0.10) 72%, rgba(13,4,20,0.88) 100%)",
-      }} />
- 
-      {/* Content */}
-      <div style={{
-        position: "relative", zIndex: 10, display: "flex", flexDirection: "column",
-        alignItems: "center", textAlign: "center", width: "100%",
-        maxWidth: 860, padding: "0 20px", gap: 0,
-      }}>
- 
-        {/* Badge */}
-        <div style={{
-          ...fade("0ms"), display: "inline-flex", alignItems: "center", gap: 8,
-          marginBottom: 12, padding: "6px 15px", borderRadius: 100,
-          background: "rgba(88,28,135,0.35)", border: "1px solid rgba(167,139,250,0.3)",
-          backdropFilter: "blur(14px)",
-        }}>
-          <span style={{
-            width: 7, height: 7, borderRadius: "50%", background: "#a78bfa",
-            boxShadow: "0 0 10px rgba(167,139,250,0.9), 0 0 22px rgba(167,139,250,0.5)",
-            flexShrink: 0, animation: "heroPulse 2s ease-in-out infinite",
-          }} />
-          <span style={{
-            fontSize: 13, letterSpacing: "0.12em", textTransform: "uppercase",
-            color: "#ddd6fe", fontWeight: 600, fontFamily: "'DM Sans', sans-serif", whiteSpace: "nowrap",
-          }}>
-            Kathmandu, Nepal &nbsp;-&nbsp; Est. 2019 
+    <section
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
+      style={{ background: "linear-gradient(160deg, #f9f8ff 0%, #f3f0ff 50%, #f9f8ff 100%)" }}
+    >
+      {/* ── Background layers ── */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {/* Layered background */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "linear-gradient(135deg, #0f0720 0%, #1a0a3c 35%, #12062e 65%, #0d0525 100%)",
+          }}
+        />
+
+        {/* Geometric grid lines */}
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(167,139,250,1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(167,139,250,1) 1px, transparent 1px)
+            `,
+            backgroundSize: "60px 60px",
+          }}
+        />
+
+        {/* Diagonal accent stripe */}
+        <div
+          className="absolute -right-32 top-0 w-[500px] h-full opacity-[0.06]"
+          style={{
+            background: "linear-gradient(135deg, transparent 30%, #a78bfa 50%, transparent 70%)",
+            transform: "skewX(-20deg)",
+          }}
+        />
+        {/* Soft glow orbs */}
+        <div
+          className="absolute top-0 left-1/4 w-96 h-48 opacity-20"
+          style={{
+            background: "radial-gradient(ellipse, #7c3aed 0%, transparent 70%)",
+            filter: "blur(40px)",
+          }}
+        />
+        <div
+          className="absolute bottom-0 right-1/4 w-64 h-32 opacity-15"
+          style={{
+            background: "radial-gradient(ellipse, #a78bfa 0%, transparent 70%)",
+            filter: "blur(30px)",
+          }}
+        />
+
+        {/* Dot field — subtle */}
+        <div
+          className="absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)",
+            backgroundSize: "24px 24px",
+          }}
+        />
+
+
+
+        {/* Vertical editorial lines */}
+        <div className="absolute left-[7%] top-0 bottom-0 w-px hidden lg:block"
+          style={{ background: "linear-gradient(180deg, transparent, rgba(124,58,237,0.1) 25%, rgba(124,58,237,0.1) 75%, transparent)" }} />
+        <div className="absolute right-[7%] top-0 bottom-0 w-px hidden lg:block"
+          style={{ background: "linear-gradient(180deg, transparent, rgba(124,58,237,0.1) 25%, rgba(124,58,237,0.1) 75%, transparent)" }} />
+      </div>
+
+      {/* ── Main content ── */}
+      <div className="relative z-10 w-full max-w-4xl mx-auto px-5 sm:px-8 pt-28 pb-20 flex flex-col items-center text-center">
+
+        {/* ── Badge ── */}
+        <div
+          className={`inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}
+          style={{
+            background: "rgba(167,139,250,0.10)",
+            border: "1px solid rgba(167,139,250,0.25)",
+            backdropFilter: "blur(12px)",
+            transitionDelay: "0ms",
+          }}
+        >
+          <span className="w-2 h-2 rounded-full bg-violet-500 flex-shrink-0"
+            style={{ boxShadow: "0 0 8px rgba(167,139,250,0.8)", animation: "heroPulse 2s ease-in-out infinite" }} />
+          <span className="text-[10px] sm:text-[11px] tracking-[0.16em] uppercase font-semibold whitespace-nowrap text-violet-400">
+            Kathmandu, Nepal &nbsp;·&nbsp; Est. 2080 BS &nbsp;·&nbsp; CE &amp; NMPA Certified
           </span>
         </div>
- 
-        {/* Eyebrow */}
-        <p style={{
-          ...fade("80ms"), fontSize: 13, letterSpacing: "0.22em",
-          textTransform: "uppercase", color: "#a78bfa",
-          fontWeight: 600, fontFamily: "'DM Sans', sans-serif", marginBottom: 14,
-        }}>
+
+        {/* ── Eyebrow ── */}
+        <p
+          className={`text-[10px] sm:text-[11px] tracking-[0.28em] uppercase font-bold text-violet-400 mb-5 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}
+          style={{ transitionDelay: "80ms" }}
+        >
           Nepal&apos;s Premier Biomedical Diagnostics Partner
         </p>
- 
-        {/* Headline — plain white, no gradient text */}
-        <h1 style={{
-          ...fade("140ms"),
-          fontSize: "clamp(2.8rem, 6.5vw, 5rem)",
-          fontWeight: 700, lineHeight: 1.06, letterSpacing: "-0.025em",
-          color: "#f5f0ff", fontFamily: "'DM Sans', sans-serif", marginBottom: 18,
-        }}>
-          Cognidx —{" "}
-          <span style={{ color: "#c4b5fd", fontStyle: "italic", fontWeight: 700 }}>
-            Improving lives
+
+        {/* ── Headline ── */}
+        <h1
+          className={`font-playfair font-bold leading-[1.1] text-white mb-5 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          style={{
+            fontSize: "clamp(2.2rem, 6.5vw, 4.5rem)",
+            letterSpacing: "-0.03em",
+            transitionDelay: "140ms",
+          }}
+        >
+          Precision{" "}
+          <span
+            style={{
+              background: "linear-gradient(135deg, #c4b5fd 0%, #a78bfa 40%, #7c3aed 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            Diagnostic
           </span>{" "}
-          with precision and care
+          <br className="hidden sm:block" />
+          for Modern Nepal
         </h1>
- 
-        {/* Divider */}
-        <div style={{
-          ...fade("200ms"), width: 44, height: 2, borderRadius: 99,
-          background: "linear-gradient(90deg,#7c3aed,#a78bfa)", margin: "0 auto 12px",
-        }} />
- 
-        {/* Sub — plain readable text */}
-        <p style={{
-          ...fade("250ms"),
-          fontSize: "clamp(1rem, 1.6vw, 1.15rem)",
-          color: "rgba(220,210,240,0.75)", lineHeight: 1.8,
-          maxWidth: 560, marginBottom: 20,
-          fontFamily: "'DM Sans', sans-serif", fontWeight: 400,
-        }}>
-          Cognidx Enterprises delivers world-class biomedical diagnostic instruments —
-          from immunoassay to haematology — empowering hospitals, clinics, and labs
-          across Nepal.
+
+        {/* ── Divider ── */}
+        <div
+          className={`w-16 h-0.5 rounded-full mb-6 transition-all duration-700 ${mounted ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`}
+          style={{
+            background: "linear-gradient(90deg, #7c3aed, #a78bfa)",
+            transitionDelay: "220ms",
+          }}
+        />
+
+        {/* ── Sub ── */}
+        <p
+          className={`text-gray-500 max-w-xl leading-[1.9] mb-10 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          style={{ fontSize: "clamp(0.95rem, 1.6vw, 1.08rem)", transitionDelay: "280ms" }}
+        >
+          Cognidx Enterprises delivers world-class biomedical diagnostic
+          instruments — Empowering hospitals,
+          clinics, and labs across Nepal.
         </p>
- 
-        {/* Pills */}
-        <div style={{
-          ...fade("310ms"), display: "flex", flexWrap: "wrap",
-          justifyContent: "center", gap: 6, marginBottom: 14, marginTop: 5,
-        }}>
-          {pills.map((p) => (
-            <span
-              key={p}
-              style={{
-                fontSize: 12, fontWeight: 500, padding: "6px 16px",
-                borderRadius: 100, background: "rgba(88,28,135,0.3)",
-                border: "1px solid rgba(167,139,250,0.22)", color: "#ddd6fe",
-                backdropFilter: "blur(6px)", cursor: "default",
-                transition: "background 0.2s",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(88,28,135,0.55)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(88,28,135,0.3)"; }}
-            >
-              {p}
-            </span>
-          ))}
+
+        {/* ── CTA buttons ── */}
+        <div
+          className={`flex flex-col sm:flex-row gap-3 justify-center mb-12 w-full max-w-xs sm:max-w-none transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          style={{ transitionDelay: "340ms" }}
+        >
+          <Link
+            href="/products"
+            className="group relative inline-flex items-center justify-center gap-2.5 font-bold px-8 py-3.5 rounded-2xl text-white text-[15px] overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+            style={{
+              background: "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)",
+              boxShadow: "0 4px 24px rgba(109,40,217,0.35), 0 1px 4px rgba(0,0,0,0.1)",
+            }}
+          >
+            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 55%)" }} />
+            <span className="relative">Explore Products</span>
+            <ArrowRight size={15} className="relative transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+
+          <Link
+            href="/#about"
+            className="group inline-flex items-center justify-center gap-2.5 font-semibold px-8 py-3.5 rounded-2xl text-violet-400 text-[15px] transition-all duration-300 hover:-translate-y-0.5"
+            style={{
+              background: "rgba(124,58,237,0.07)",
+              border: "1.5px solid rgba(124,58,237,0.22)",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(124,58,237,0.13)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(124,58,237,0.07)"; }}
+          >
+            About Us
+          </Link>
         </div>
- 
-        {/* Stats */}
-        <div style={{ ...fade("370ms"), width: "100%", maxWidth: 620 }}>
-          <div style={{
-            display: "grid", gridTemplateColumns: "repeat(4,1fr)", borderRadius: 15,
-            overflow: "hidden", background: "rgba(30,10,50,0.65)",
-            border: "1px solid rgba(167,139,250,0.18)", backdropFilter: "blur(24px)",
-            boxShadow: "0 4px 32px rgba(109,40,217,0.18), inset 0 1px 0 rgba(167,139,250,0.1)",
-          }}>
-            {stats.map((stat, i) => (
-              <StatCell
-                key={stat.label}
-                stat={stat}
-                index={i}
-                animate={statsVisible}
-                borderRight={i < stats.length - 1 ? "1px solid rgba(167,139,250,0.12)" : "none"}
-              />
-            ))}
-          </div>
-          <p style={{
-            textAlign: "center", fontSize: 10,
-            marginTop: 9, letterSpacing: "0.05em",
-          }} className="text-gray-100/60">
-            Trusted by leading hospitals &amp; diagnostic labs all over Nepal
+
+
+
+        {/* ── transition delay ── */}
+        <div
+          className={`w-full max-w-2xl transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          style={{ transitionDelay: "480ms" }}
+        >
+
+
+          {/* Trust line */}
+          <p className="text-center text-[11px] text-gray-400 mt-4 tracking-wide">
+            Trusted by leading hospitals &amp; diagnostic labs across Nepal
           </p>
         </div>
       </div>
- 
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
-        @keyframes heroPulse {
-          0%,100% { opacity:1; transform:scale(1); }
-          50%      { opacity:0.5; transform:scale(1.5); }
-        }
-      `}</style>
     </section>
   );
 }

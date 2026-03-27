@@ -12,12 +12,11 @@ export default function Home() {
   return (
     <main>
       <Navbar />
-      <FloatingCTA/>
+      <FloatingCTA />
       <Hero />
       <About />
       <ProductSlideshow />
       <Donate />
-      <GenzBanner />
       <Footer />
     </main>
   );
