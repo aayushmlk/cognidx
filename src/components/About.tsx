@@ -188,7 +188,7 @@ export default function About() {
               marginBottom: 14,
             }}>
               <strong style={{ color: "#140830", fontWeight: 700 }}>Cognidx Enterprises Pvt. Ltd.</strong> started
-              with a simple idea <br /> "Good diagnostic equipment should not be hard to find in Nepal." We work as a
+              with a simple idea <br /> &ldquo;Good diagnostic equipment should not be hard to find in Nepal.&rdquo; We work as a
               supplier and distributor of medical instruments with a strong focus on
               In Vitro Diagnostics, alongside the reagents, consumables, and other medical supplies that
               labs and hospitals use every day.
