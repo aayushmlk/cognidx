@@ -115,7 +115,7 @@ export default function Hero() {
 
         {/* ── Headline ── */}
         <h1
-          className={`font-playfair font-bold leading-[1.1] text-white mb-5 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          className={`font-bold leading-[1.1] text-white mb-5 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           style={{
             fontSize: "clamp(2.2rem, 6.5vw, 4.5rem)",
             letterSpacing: "-0.03em",

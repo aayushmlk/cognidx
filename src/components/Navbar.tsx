@@ -128,7 +128,7 @@ export default function Navbar() {
                     boxShadow: "0 20px 60px rgba(124,58,237,0.16), 0 4px 16px rgba(0,0,0,0.06)",
                   }}>
                   <div className="px-4 pb-2.5 mb-1" style={{ borderBottom: "1px solid #f3f0ff" }}>
-                    <p className="font-mono-custom text-[10px] tracking-[0.22em] text-violet-400 uppercase">
+                    <p className=" text-[10px] tracking-[0.22em] text-violet-400 uppercase">
                       Browse by category
                     </p>
                   </div>
@@ -281,7 +281,7 @@ export default function Navbar() {
               <div className="px-3 pb-3 space-y-0.5"
                 style={{ background: "rgba(124,58,237,0.04)", borderTop: "1px solid rgba(124,58,237,0.08)" }}>
                 <div className="pt-3 pb-1.5 px-2">
-                  <p className="font-mono-custom text-[9px] tracking-[0.25em] text-violet-400 uppercase">Select category</p>
+                  <p className=" text-[9px] tracking-[0.25em] text-violet-400 uppercase">Select category</p>
                 </div>
                 {categories.map((cat) => (
                   <button key={cat.id} onClick={() => handleCatClick(cat.id)}
@@ -320,7 +320,7 @@ export default function Navbar() {
             <Heart size={14} className="fill-white stroke-white group-hover:fill-red-300 group-hover:stroke-red-300 transition-all duration-300" />
             Donate Now
           </Link>
-          <p className="text-center text-[11px] text-[#9ca3af] pt-1 font-mono-custom tracking-wide">
+          <p className="text-center text-[11px] text-[#9ca3af] pt-1  tracking-wide">
             Cognidx Enterprises · Est. 2019
           </p>
         </div>

@@ -150,6 +150,8 @@ export default function Footer() {
                         key={phone.href}
                         href={phone.href}
                         className="text-sm text-[#6b7280] hover:text-[#0f0a1e] transition-colors duration-200"
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
                         {phone.label}
                       </a>

@@ -248,7 +248,7 @@ export default function ProductSlideshow() {
                     {p.category}
                   </span>
                   <span
-                    className="text-[10px] font-mono font-semibold px-2.5 py-1.5 rounded-lg"
+                    className="text-[10px]  font-semibold px-2.5 py-1.5 rounded-lg"
                     style={{
                       background: "rgba(0,0,0,0.035)",
                       color: "#6b7280",
@@ -261,7 +261,7 @@ export default function ProductSlideshow() {
 
                 {/* Product name */}
                 <h3
-                  className="font-playfair font-bold text-[#0f0a1e] leading-tight mb-3"
+                  className=" font-bold text-[#0f0a1e] leading-tight mb-3"
                   style={{
                     fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
                     display: "-webkit-box",
@@ -368,6 +368,8 @@ export default function ProductSlideshow() {
                   </button>
                   <a
                     href="https://wa.me/9779819425801?text=I'm%20interested%20in%20learning%20more%20about%20your%20products."
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="group inline-flex items-center gap-2 rounded-xl text-[0.78rem] font-semibold transition-all duration-300 hover:-translate-y-0.5"
                     style={{
                       padding: "0.65rem 1.4rem",

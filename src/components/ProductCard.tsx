@@ -67,7 +67,7 @@ export default function ProductRow({ product, highlight }: Props) {
             <div className="text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-lg" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}bb)`, boxShadow: `0 4px 14px ${accent}48` }}>
               {product.brand === "—" ? "Generic" : product.brand.split(" ")[0]}
             </div>
-            <div className="text-[10px] font-mono font-bold px-2.5 py-1.5 rounded-lg" style={{ background: "rgba(255,255,255,0.80)", color: accent, border: `1px solid ${accent}22` }}>
+            <div className="text-[10px]  font-bold px-2.5 py-1.5 rounded-lg" style={{ background: "rgba(255,255,255,0.80)", color: accent, border: `1px solid ${accent}22` }}>
               {product.model}
             </div>
           </div>
@@ -117,7 +117,7 @@ export default function ProductRow({ product, highlight }: Props) {
                 {product.category}
               </span>
             </div>
-            <h3 className="font-playfair text-xl lg:text-2xl font-bold leading-snug mb-2.5 text-[#111827]">
+            <h3 className="text-xl lg:text-2xl font-bold leading-snug mb-2.5 text-[#111827]">
               {product.name}
             </h3>
             <p className="text-sm text-[#6b7280] leading-relaxed">
@@ -218,6 +218,8 @@ export default function ProductRow({ product, highlight }: Props) {
             )}
             <a
               href="https://wa.me/9779819425801?text=I'm%20interested%20in%20learning%20more%20about%20your%20products."
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl text-white transition-all duration-200 hover:scale-[1.02] hover:opacity-90 shrink-0"
               style={{
                 background: `linear-gradient(135deg, ${accent}, ${accent}cc)`,
