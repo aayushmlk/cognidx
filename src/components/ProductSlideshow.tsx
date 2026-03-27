@@ -68,7 +68,7 @@ const SLIDESHOW_CSS = `
 
 /* ── Mobile <768px ── */
 @media (max-width:767px) {
-  .ss-slide  { height:480px; }
+  .ss-slide  { height:500px; }
   .ss-inner  { padding:0 14px; }
   .ss-eyebrow { padding-top:7px; padding-bottom:4px; flex-shrink:0; display:flex; align-items:center; gap:8px; }
   .ss-two-col { flex-direction:column; gap:0; padding:0; }
@@ -104,7 +104,7 @@ const SLIDESHOW_CSS = `
   .ss-cat-chip   { font-size:9px; padding:2px 9px; }
   .ss-model-chip { font-size:9px; padding:2px 8px; }
 
-  .ss-name { font-size:0.92rem; -webkit-line-clamp:1; margin-bottom:3px; flex-shrink:0; }
+  .ss-name { font-size:0.92rem; -webkit-line-clamp:2; margin-bottom:3px; flex-shrink:0; }
 
   .ss-tests-box { padding:5px 9px; margin-bottom:3px; border-radius:10px; flex-shrink:0; }
   .ss-tests-label-row { margin-bottom:3px; }
