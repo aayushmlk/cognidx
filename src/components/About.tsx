@@ -39,7 +39,7 @@ export default function About() {
       id="about"
       style={{
         position: "relative",
-        padding: "100px 24px",
+        padding: "80px 20px",
         background: "#f4f1fb",
         overflow: "hidden",
       }}
@@ -57,6 +57,96 @@ export default function About() {
           background: "radial-gradient(circle, rgba(196,181,253,0.14) 0%, transparent 68%)",
         }} />
       </div>
+
+      <style>{`
+        .about-hero-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 72px;
+          align-items: center;
+        }
+        .about-services-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 16px;
+        }
+        .about-stats-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+        }
+        .about-image-wrapper {
+          position: relative;
+          width: 100%;
+          max-width: 420px;
+          aspect-ratio: 4/5;
+          border-radius: 38% 62% 52% 48% / 46% 42% 58% 54%;
+          overflow: hidden;
+          border: 2px solid rgba(124,58,237,0.25);
+          box-shadow: 0 8px 48px rgba(109,40,217,0.18), 0 2px 12px rgba(109,40,217,0.1);
+        }
+        .about-cert-badges {
+          position: absolute;
+          bottom: 20px;
+          right: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          z-index: 10;
+        }
+        .about-services-header {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          margin-bottom: 52px;
+          flex-wrap: wrap;
+          gap: 16px;
+        }
+        @media (max-width: 900px) {
+          .about-hero-grid {
+            grid-template-columns: 1fr;
+            gap: 48px;
+          }
+          .about-services-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          .about-image-col {
+            display: flex;
+            justify-content: center;
+          }
+          .about-image-wrapper {
+            max-width: 320px;
+          }
+          .about-cert-badges {
+            right: 0;
+            bottom: 10px;
+          }
+        }
+        @media (max-width: 600px) {
+          .about-services-grid {
+            grid-template-columns: 1fr;
+          }
+          .about-stats-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+          }
+          .about-image-wrapper {
+            max-width: 260px;
+          }
+          .about-cert-badges {
+            right: -8px;
+            bottom: 0;
+          }
+          .about-services-header {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 32px;
+          }
+          .about-hero-title {
+            font-size: 2rem !important;
+          }
+        }
+      `}</style>
 
       <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto" }}>
 
@@ -84,15 +174,10 @@ export default function About() {
         </div>
 
         {/* Main 2-col grid */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 72,
-          alignItems: "center",
-        }}>
+        <div className="about-hero-grid">
 
           {/* LEFT — Image inside purple blob bubble */}
-          <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
+          <div className="about-image-col" style={{ position: "relative", display: "flex", justifyContent: "center" }}>
 
             {/* Outer soft glow */}
             <div style={{
@@ -116,16 +201,7 @@ export default function About() {
             }} />
 
             {/* Image bubble */}
-            <div style={{
-              position: "relative",
-              width: "100%",
-              maxWidth: 420,
-              aspectRatio: "4/5",
-              borderRadius: "38% 62% 52% 48% / 46% 42% 58% 54%",
-              overflow: "hidden",
-              border: "2px solid rgba(124,58,237,0.25)",
-              boxShadow: "0 8px 48px rgba(109,40,217,0.18), 0 2px 12px rgba(109,40,217,0.1)",
-            }}>
+            <div className="about-image-wrapper">
               <div style={{
                 position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
                 background: "linear-gradient(160deg, rgba(124,58,237,0.10) 0%, transparent 50%, rgba(109,40,217,0.08) 100%)",
@@ -139,10 +215,7 @@ export default function About() {
             </div>
 
             {/* Floating cert badges */}
-            <div style={{
-              position: "absolute", bottom: 20, right: 0,
-              display: "flex", flexDirection: "column", gap: 8, zIndex: 10,
-            }}>
+            <div className="about-cert-badges">
               {[
                 { label: "CE", sub: "EU Standards", bg: "linear-gradient(135deg,#f59e0b,#fbbf24)", shadow: "rgba(245,158,11,0.35)" },
                 { label: "NMPA", sub: "CN Standards", bg: "linear-gradient(135deg,#059669,#10b981)", shadow: "rgba(5,150,105,0.3)" },
@@ -172,18 +245,22 @@ export default function About() {
 
           {/* RIGHT — Text + Stats */}
           <div>
-            <h2 style={{
-              fontWeight: 700,
-              lineHeight: 1.1,
-              letterSpacing: "-0.025em",
-              color: "rgb(20, 8, 48)",
-              marginBottom: 20,
-            }} className="text-5xl">
+            <h2
+              className="about-hero-title"
+              style={{
+                fontWeight: 700,
+                lineHeight: 1.1,
+                letterSpacing: "-0.025em",
+                color: "rgb(20, 8, 48)",
+                marginBottom: 20,
+                fontSize: "clamp(2rem, 4vw, 3rem)",
+              }}
+            >
               We bring the right <span style={{ color: "#7c3aed" }}>diagnostic tools</span> to every hospital in Nepal
             </h2>
 
             <p style={{
-              fontSize: "clamp(0.95rem, 1.4vw, 1.05rem)",
+              fontSize: "clamp(0.92rem, 1.4vw, 1.05rem)",
               color: "#4b3f6b", lineHeight: 1.85,
               marginBottom: 14,
             }}>
@@ -195,7 +272,7 @@ export default function About() {
             </p>
 
             <p style={{
-              fontSize: "clamp(0.92rem, 1.3vw, 1rem)",
+              fontSize: "clamp(0.88rem, 1.3vw, 1rem)",
               color: "#7c6fa0", lineHeight: 1.8,
               marginBottom: 40,
             }}>
@@ -207,7 +284,7 @@ export default function About() {
             </p>
 
             {/* Stats 2×2 */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div className="about-stats-grid">
               {stats.map((s) => {
                 const Icon = s.icon;
                 return (
@@ -217,7 +294,7 @@ export default function About() {
                       background: "#fff",
                       border: "1px solid rgba(124,58,237,0.12)",
                       borderRadius: 18,
-                      padding: "22px 22px 18px",
+                      padding: "20px 18px 16px",
                       boxShadow: "0 2px 16px rgba(109,40,217,0.07)",
                       transition: "transform 0.2s, box-shadow 0.2s",
                       cursor: "default",
@@ -233,7 +310,7 @@ export default function About() {
                   >
                     <Icon size={18} style={{ color: "#a78bfa", marginBottom: 10 }} />
                     <div style={{
-                      fontSize: "clamp(1.8rem, 3vw, 2.4rem)",
+                      fontSize: "clamp(1.5rem, 2.8vw, 2.4rem)",
                       fontWeight: 800, lineHeight: 1,
                       color: "#7c3aed", marginBottom: 6, letterSpacing: "-0.02em",
                     }}>
@@ -285,10 +362,10 @@ export default function About() {
         </div>
 
         {/* ── Services section ── */}
-        <div style={{ marginTop: 96 }}>
+        <div style={{ marginTop: 80 }}>
 
           {/* Header */}
-          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 52, flexWrap: "wrap", gap: 16 }}>
+          <div className="about-services-header">
             <div>
               <div style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
@@ -303,7 +380,7 @@ export default function About() {
                 </span>
               </div>
               <h3 style={{
-                fontSize: "clamp(1.6rem, 2.8vw, 2.2rem)",
+                fontSize: "clamp(1.4rem, 2.8vw, 2.2rem)",
                 fontWeight: 700, color: "rgb(20,8,48)",
                 letterSpacing: "-0.02em", lineHeight: 1.15, margin: 0,
               }}>
@@ -312,7 +389,7 @@ export default function About() {
               </h3>
             </div>
             <p style={{
-              fontSize: "clamp(0.88rem, 1.2vw, 0.97rem)",
+              fontSize: "clamp(0.85rem, 1.2vw, 0.97rem)",
               color: "#7c6fa0", lineHeight: 1.8,
               maxWidth: 300, margin: 0,
             }}>
@@ -320,12 +397,8 @@ export default function About() {
             </p>
           </div>
 
-          {/* Cards — uniform 4-col horizontal row */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 16,
-          }}>
+          {/* Cards */}
+          <div className="about-services-grid">
             {services.map((svc, i) => {
               const Icon = svc.icon;
               return (
@@ -335,7 +408,7 @@ export default function About() {
                     background: "#fff",
                     border: "1px solid rgba(124,58,237,0.10)",
                     borderRadius: 22,
-                    padding: "32px 26px 28px",
+                    padding: "28px 22px 24px",
                     position: "relative",
                     overflow: "hidden",
                     transition: "transform 0.22s, box-shadow 0.22s, border-color 0.22s",

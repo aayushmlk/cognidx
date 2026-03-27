@@ -11,26 +11,20 @@ const stats = [
   { num: "50+", label: "Product Lines", icon: Activity },
 ];
 
-
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
 
   return (
     <section
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
-      style={{ background: "linear-gradient(160deg, #f9f8ff 0%, #f3f0ff 50%, #f9f8ff 100%)" }}
+      className="relative flex flex-col items-center justify-center overflow-hidden"
+      style={{
+        minHeight: "100svh", // svh accounts for mobile browser chrome
+        background: "linear-gradient(135deg, #0f0720 0%, #1a0a3c 35%, #12062e 65%, #0d0525 100%)",
+      }}
     >
       {/* ── Background layers ── */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        {/* Layered background */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: "linear-gradient(135deg, #0f0720 0%, #1a0a3c 35%, #12062e 65%, #0d0525 100%)",
-          }}
-        />
-
         {/* Geometric grid lines */}
         <div
           className="absolute inset-0 opacity-[0.04]"
@@ -51,6 +45,7 @@ export default function Hero() {
             transform: "skewX(-20deg)",
           }}
         />
+
         {/* Soft glow orbs */}
         <div
           className="absolute top-0 left-1/4 w-96 h-48 opacity-20"
@@ -67,7 +62,7 @@ export default function Hero() {
           }}
         />
 
-        {/* Dot field — subtle */}
+        {/* Dot field */}
         <div
           className="absolute inset-0 opacity-[0.06]"
           style={{
@@ -76,9 +71,7 @@ export default function Hero() {
           }}
         />
 
-
-
-        {/* Vertical editorial lines */}
+        {/* Vertical editorial lines — desktop only */}
         <div className="absolute left-[7%] top-0 bottom-0 w-px hidden lg:block"
           style={{ background: "linear-gradient(180deg, transparent, rgba(124,58,237,0.1) 25%, rgba(124,58,237,0.1) 75%, transparent)" }} />
         <div className="absolute right-[7%] top-0 bottom-0 w-px hidden lg:block"
@@ -86,28 +79,33 @@ export default function Hero() {
       </div>
 
       {/* ── Main content ── */}
-      <div className="relative z-10 w-full max-w-4xl mx-auto px-5 sm:px-8 pt-28 pb-20 flex flex-col items-center text-center">
+      <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center text-center"
+        style={{
+          padding: "clamp(5.5rem, 14vw, 7rem) clamp(1.1rem, 5vw, 3rem) clamp(2rem, 6vw, 5rem)",
+        }}
+      >
 
         {/* ── Badge ── */}
         <div
-          className={`inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}
+          className={`inline-flex items-center gap-2 mb-5 sm:mb-8 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}
           style={{
             background: "rgba(167,139,250,0.10)",
             border: "1px solid rgba(167,139,250,0.25)",
             backdropFilter: "blur(12px)",
             transitionDelay: "0ms",
+            maxWidth: "90vw",
           }}
         >
-          <span className="w-2 h-2 rounded-full bg-violet-500 flex-shrink-0"
+          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-violet-500 flex-shrink-0"
             style={{ boxShadow: "0 0 8px rgba(167,139,250,0.8)", animation: "heroPulse 2s ease-in-out infinite" }} />
-          <span className="text-[10px] sm:text-[11px] tracking-[0.16em] uppercase font-semibold whitespace-nowrap text-violet-400">
+          <span className="text-[9px] sm:text-[11px] tracking-[0.12em] sm:tracking-[0.16em] uppercase font-semibold text-violet-400 text-center leading-snug">
             Kathmandu, Nepal &nbsp;·&nbsp; Est. 2080 BS &nbsp;·&nbsp; CE &amp; NMPA Certified
           </span>
         </div>
 
         {/* ── Eyebrow ── */}
         <p
-          className={`text-[10px] sm:text-[11px] tracking-[0.28em] uppercase font-bold text-violet-400 mb-5 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}
+          className={`text-[9px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.28em] uppercase font-bold text-violet-400 mb-4 sm:mb-5 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}
           style={{ transitionDelay: "80ms" }}
         >
           Nepal&apos;s Premier Biomedical Diagnostics Partner
@@ -115,9 +113,9 @@ export default function Hero() {
 
         {/* ── Headline ── */}
         <h1
-          className={`font-bold leading-[1.1] text-white mb-5 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          className={`font-bold leading-[1.12] text-white mb-4 sm:mb-5 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           style={{
-            fontSize: "clamp(2.2rem, 6.5vw, 4.5rem)",
+            fontSize: "clamp(1.9rem, 7.5vw, 4.5rem)",
             letterSpacing: "-0.03em",
             transitionDelay: "140ms",
           }}
@@ -139,7 +137,7 @@ export default function Hero() {
 
         {/* ── Divider ── */}
         <div
-          className={`w-16 h-0.5 rounded-full mb-6 transition-all duration-700 ${mounted ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`}
+          className={`w-12 sm:w-16 h-0.5 rounded-full mb-4 sm:mb-6 transition-all duration-700 ${mounted ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`}
           style={{
             background: "linear-gradient(90deg, #7c3aed, #a78bfa)",
             transitionDelay: "220ms",
@@ -148,23 +146,23 @@ export default function Hero() {
 
         {/* ── Sub ── */}
         <p
-          className={`text-gray-500 max-w-xl leading-[1.9] mb-10 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
-          style={{ fontSize: "clamp(0.95rem, 1.6vw, 1.08rem)", transitionDelay: "280ms" }}
+          className={`text-gray-400 max-w-xl leading-[1.8] mb-8 sm:mb-10 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          style={{ fontSize: "clamp(0.82rem, 2.2vw, 1.05rem)", transitionDelay: "280ms" }}
         >
           Cognidx Enterprises delivers world-class biomedical diagnostic
-          instruments — Empowering hospitals,
-          clinics, and labs across Nepal.
+          instruments — Empowering hospitals, clinics, and labs across Nepal.
         </p>
 
         {/* ── CTA buttons ── */}
         <div
-          className={`flex flex-col sm:flex-row gap-3 justify-center mb-12 w-full max-w-xs sm:max-w-none transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          className={`flex flex-col sm:flex-row gap-3 justify-center mb-8 sm:mb-12 w-full max-w-xs sm:max-w-none transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           style={{ transitionDelay: "340ms" }}
         >
           <Link
             href="/products"
-            className="group relative inline-flex items-center justify-center gap-2.5 font-bold px-8 py-3.5 rounded-2xl text-white text-[15px] overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+            className="group relative inline-flex items-center justify-center gap-2.5 font-bold px-7 py-3 sm:px-8 sm:py-3.5 rounded-2xl text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
             style={{
+              fontSize: "clamp(0.85rem, 2.5vw, 0.94rem)",
               background: "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)",
               boxShadow: "0 4px 24px rgba(109,40,217,0.35), 0 1px 4px rgba(0,0,0,0.1)",
             }}
@@ -172,13 +170,14 @@ export default function Hero() {
             <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 55%)" }} />
             <span className="relative">Explore Products</span>
-            <ArrowRight size={15} className="relative transition-transform duration-300 group-hover:translate-x-1" />
+            <ArrowRight size={14} className="relative transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
 
           <Link
             href="/#about"
-            className="group inline-flex items-center justify-center gap-2.5 font-semibold px-8 py-3.5 rounded-2xl text-violet-400 text-[15px] transition-all duration-300 hover:-translate-y-0.5"
+            className="group inline-flex items-center justify-center gap-2.5 font-semibold px-7 py-3 sm:px-8 sm:py-3.5 rounded-2xl text-violet-400 transition-all duration-300 hover:-translate-y-0.5"
             style={{
+              fontSize: "clamp(0.85rem, 2.5vw, 0.94rem)",
               background: "rgba(124,58,237,0.07)",
               border: "1.5px solid rgba(124,58,237,0.22)",
             }}
@@ -189,21 +188,24 @@ export default function Hero() {
           </Link>
         </div>
 
-
-
-        {/* ── transition delay ── */}
+        {/* ── Trust line ── */}
         <div
           className={`w-full max-w-2xl transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           style={{ transitionDelay: "480ms" }}
         >
-
-
-          {/* Trust line */}
-          <p className="text-center text-[11px] text-gray-400 mt-4 tracking-wide">
+          <p className="text-center text-[10px] sm:text-[11px] text-gray-500 tracking-wide">
             Trusted by leading hospitals &amp; diagnostic labs across Nepal
           </p>
         </div>
       </div>
+
+      {/* Keyframe for badge pulse */}
+      <style>{`
+        @keyframes heroPulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.6; transform: scale(0.85); }
+        }
+      `}</style>
     </section>
   );
 }
