@@ -52,7 +52,7 @@ const SLIDESHOW_CSS = `
   .ss-tests-label-row { margin-bottom:10px; }
   .ss-tests-scroll { display:flex; flex-wrap:wrap; gap:6px; }
   .ss-tests-scroll span { font-size:10px; padding:4px 10px; }
-  .ss-desc  { font-size:0.9rem; line-height:1.9; margin-bottom:1.25rem; -webkit-line-clamp:3; }
+  .ss-desc  { font-size:0.9rem; line-height:1.9; margin-bottom:1.25rem; -webkit-line-clamp:4; }
   .ss-divider { margin-bottom:1.25rem; }
   .ss-highlights { display:flex; flex-direction:column; gap:10px; margin-bottom:1.75rem; }
   /* always show header on desktop too */
@@ -109,16 +109,36 @@ const SLIDESHOW_CSS = `
   .ss-tests-box { padding:5px 9px; margin-bottom:3px; border-radius:10px; flex-shrink:0; }
   .ss-tests-label-row { margin-bottom:3px; }
   .ss-tests-scroll {
-    display:flex; flex-wrap:nowrap;
-    overflow-x:auto; overflow-y:visible;
-    gap:3px; padding-bottom:2px;
-    scrollbar-width:none; -ms-overflow-style:none;
-  }
-  .ss-tests-scroll::-webkit-scrollbar { display:none; }
-  .ss-tests-scroll span { flex-shrink:0; white-space:nowrap; font-size:9px; padding:2px 7px; }
+  display:flex;
+  flex-wrap:wrap;
+  gap:3px;
+  overflow: hidden;
+  max-height: 32px; /* ~2 rows */
+}
+.ss-tests-scroll span {
+  font-size:8px;                /* smaller text */
+  padding:1.5px 6px;            /* tighter pills */
+  border-radius:6px;
+  line-height:1.2;
+  font-weight:600;
+  white-space:nowrap;           /* cleaner look like desktop */
+}
 
-  .ss-desc    { font-size:0.675rem; line-height:1.5; margin-bottom:3px; -webkit-line-clamp:2; flex-shrink:0; }
-  .ss-divider { margin-bottom:4px; flex-shrink:0; }
+.ss-desc {
+  font-size:0.68rem;
+  line-height:1.4;
+  margin-bottom:4px;
+  flex-shrink:0;
+
+  display:-webkit-box;
+  -webkit-line-clamp: 5;        /* ✅ limit to 5 lines */
+  -webkit-box-orient: vertical;
+  overflow:flex;
+
+  word-break: break-word;       /* ✅ prevent ugly cuts */
+}
+
+ 
 
   .ss-highlights { display:flex; flex-direction:column; gap:0; flex-shrink:0; margin-bottom:0; }
   /* show header on mobile */

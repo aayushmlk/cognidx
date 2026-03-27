@@ -164,7 +164,7 @@ export const products: Product[] = [
     category: "Haematology (3-Part)",
     categoryId: "hema3",
     tagline: "80 Samples an Hour. 9 µL of Blood.",
-    description: "It performs a complete blood count on just 9 µL of blood and handles 80 samples per hour with double-channel counting accuracy. It is simple to operate, stores 500,000 results, and comes with multiple built-in report templates",
+    description: "It performs a complete blood count on just 9 µL of blood and handles 80 samples per hour with double-channel counting accuracy. It is simple to operate, stores 500,000 results, and comes with multiple built-in report templates.",
     tests: ["Complete Blood Count (CBC)", "3-Part WBC Differential", "Haemoglobin", "Platelet Count"],
     specs: [
       { key: "Throughput", value: "80 samples/hour (whole blood)" },
