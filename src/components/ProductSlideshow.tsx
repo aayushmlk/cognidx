@@ -1,169 +1,211 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight, MessageCircle, } from "lucide-react";
 import { products } from "@/data/products";
 import { useRouter } from "next/navigation";
+
+const DURATION = 5500;
+
+
 
 export default function ProductSlideshow() {
   const router = useRouter();
   const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState(false);
   const [direction, setDirection] = useState<"left" | "right">("right");
+  const [paused, setPaused] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const progressRef = useRef<number>(0);
+  const pausedRef = useRef(false);
+  const lastTickRef = useRef<number>(Date.now());
 
   const go = useCallback(
     (idx: number, dir: "left" | "right" = "right") => {
       if (animating) return;
       setDirection(dir);
       setAnimating(true);
+      setProgress(0);
+      progressRef.current = 0;
+      lastTickRef.current = Date.now();
       setTimeout(() => {
         setCurrent((idx + products.length) % products.length);
         setAnimating(false);
-      }, 420);
+      }, 380);
     },
     [animating]
   );
 
   useEffect(() => {
-    const t = setInterval(() => go(current + 1, "right"), 5500);
-    return () => clearInterval(t);
+    let raf: number;
+    const tick = () => {
+      if (!pausedRef.current) {
+        const now = Date.now();
+        const delta = now - lastTickRef.current;
+        lastTickRef.current = now;
+        progressRef.current = Math.min(progressRef.current + delta / DURATION, 1);
+        setProgress(progressRef.current);
+        if (progressRef.current >= 1) go(current + 1, "right");
+      } else {
+        lastTickRef.current = Date.now();
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, [current, go]);
 
+  useEffect(() => { pausedRef.current = paused; }, [paused]);
+
+  const handlePointerDown = () => {
+    pressTimer.current = setTimeout(() => setPaused(true), 120);
+  };
+  const handlePointerUp = () => {
+    if (pressTimer.current) clearTimeout(pressTimer.current);
+    setPaused(false);
+  };
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    handlePointerDown();
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    handlePointerUp();
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const dy = e.changedTouches[0].clientY - touchStartY.current;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40)
+      go(dx < 0 ? current + 1 : current - 1, dx < 0 ? "right" : "left");
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
+
   const p = products[current];
+  const meta = { id: p.id, description: p.description, tests: p.tests };
   const accent = p.accentColor;
   const bg = p.bgColor;
 
-  const handleViewSpecs = () => {
-    router.push(`/products#${p.categoryId}`);
-  };
-
   return (
-    <section className="w-full overflow-hidden relative" style={{ background: "#f8f7ff" }}>
-
-      {/* ══ SECTION HEADER ══ */}
-      <div
-        className="relative overflow-hidden"
-        style={{
-          background: "linear-gradient(180deg, #ffffff 0%, #faf8ff 100%)",
-          borderBottom: "1px solid #ede9fe",
-        }}
-      >
-    
-        <div
-          className="absolute bottom-0 left-8 right-8 h-px"
-          style={{ background: "linear-gradient(90deg, transparent, #7c3aed33, transparent)" }}
-        />
-      </div>
-
-      {/* ── Animated top accent bar ── */}
+    <section
+      className="w-full overflow-hidden relative select-none"
+      style={{ background: "#f8f7ff" }}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerLeave={handlePointerUp}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* ── Top accent line ── */}
       <div className="h-[3px] w-full relative overflow-hidden">
         <div
           className="absolute inset-0 transition-all duration-700"
-          style={{ background: `linear-gradient(90deg, transparent, ${accent}88, ${accent}, ${accent}88, transparent)` }}
-        />
-        <div
-          className="absolute inset-0"
           style={{
-            background: `linear-gradient(90deg, transparent 0%, ${accent} 50%, transparent 100%)`,
-            animation: "shimmerAccent 2.5s ease-in-out infinite",
+            background: `linear-gradient(90deg, transparent, ${accent}66, ${accent}, ${accent}66, transparent)`,
           }}
         />
       </div>
 
-      {/* ── Main slide ── */}
+      {/* ── Main slide — fixed height ── */}
       <div
-        className="relative transition-all duration-700 overflow-hidden"
+        className="relative transition-colors duration-700 overflow-hidden"
         style={{
           background: `linear-gradient(135deg, ${bg}ee 0%, #ffffff 55%, ${bg}55 100%)`,
+          height: 740,
         }}
       >
         {/* Background orbs */}
         <div
-          className="pointer-events-none absolute -right-40 top-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full transition-all duration-700"
+          className="pointer-events-none absolute -right-40 top-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full transition-all duration-700"
           style={{
-            background: `radial-gradient(circle, ${accent}12 0%, ${accent}05 40%, transparent 70%)`,
-            filter: "blur(40px)",
+            background: `radial-gradient(circle, ${accent}0e 0%, ${accent}03 40%, transparent 70%)`,
+            filter: "blur(60px)",
           }}
         />
         <div
-          className="pointer-events-none absolute -left-20 top-0 w-72 h-72 rounded-full transition-all duration-700"
+          className="pointer-events-none absolute -left-24 -top-12 w-[420px] h-[420px] rounded-full transition-all duration-700"
           style={{
-            background: `radial-gradient(circle, ${accent}10 0%, transparent 70%)`,
-            filter: "blur(30px)",
+            background: `radial-gradient(circle, ${accent}08 0%, transparent 70%)`,
+            filter: "blur(44px)",
           }}
         />
         <div
-          className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-40 transition-all duration-700"
-          style={{
-            background: `radial-gradient(ellipse, ${accent}08 0%, transparent 70%)`,
-            filter: "blur(20px)",
-          }}
-        />
-        {/* Dot grid */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.025]"
+          className="pointer-events-none absolute inset-0 opacity-[0.016]"
           style={{
             backgroundImage: `radial-gradient(circle, ${accent} 1px, transparent 1px)`,
-            backgroundSize: "28px 28px",
+            backgroundSize: "34px 34px",
           }}
         />
-            <div className="max-w-6xl mx-auto px-5 sm:px-8 lg:px-14 py-6 sm:py-8">
-          <div className="flex items-center gap-3">
+
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 lg:px-14 h-full flex flex-col">
+
+          {/* ── Eyebrow row ── */}
+          <div className="pt-7 flex items-center gap-3">
             <div style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              padding: "7px 16px", borderRadius: 100,
-              background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
-              boxShadow: "0 4px 18px rgba(109,40,217,0.30)",
+              display: "inline-flex", alignItems: "center", gap: 7,
+              padding: "6px 15px", borderRadius: 100,
+              background: `linear-gradient(135deg, ${accent}18, ${accent}0a)`,
+              border: `1px solid ${accent}2e`,
             }}>
               <span style={{
-                width: 6, height: 6, borderRadius: "50%",
-                background: "rgba(255,255,255,0.7)",
-                boxShadow: "0 0 6px rgba(255,255,255,0.9)",
+                width: 5, height: 5, borderRadius: "50%",
+                background: accent,
+                boxShadow: `0 0 8px ${accent}`,
               }} />
               <span style={{
-                fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase",
-                color: "#fff", fontWeight: 700,
+                fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase",
+                color: accent, fontWeight: 700,
               }}>
-                New Products
+                Products
               </span>
             </div>
-            <div style={{ height: 1, width: 40, background: "linear-gradient(90deg, #a78bfa, transparent)" }} />
+            <div style={{ height: 1, width: 32, background: `linear-gradient(90deg, ${accent}30, transparent)` }} />
+            <span style={{ fontSize: 11, color: "#9ca3af", fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>
+              {String(current + 1).padStart(2, "0")} / {String(products.length).padStart(2, "0")}
+            </span>
           </div>
-        </div>
 
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 lg:px-14">
-          {/* Stack vertically on mobile, side-by-side on md+ */}
-          <div className="flex flex-col md:flex-row items-center gap-6 md:gap-12 py-10 md:py-16 lg:py-20">
+          {/* ── Two-column layout ── */}
+          <div className="flex flex-col md:flex-row gap-8 md:gap-14 flex-1 py-8">
 
-            {/* ── Image ── */}
-            <div className="w-full md:w-[40%] md:shrink-0 flex items-center justify-center relative px-8 md:px-0">
+            {/* LEFT — Image only, full height */}
+            <div
+              className="w-full md:w-[40%] md:shrink-0 flex items-center justify-center relative"
+            >
+              {/* Glow behind image */}
               <div
-                className="absolute inset-4 rounded-3xl transition-all duration-700"
+                className="absolute inset-0 rounded-3xl transition-all duration-700"
                 style={{
-                  background: `radial-gradient(ellipse at center, ${accent}22 0%, transparent 72%)`,
-                  filter: "blur(20px)",
+                  background: `radial-gradient(ellipse at center, ${accent}1c 0%, transparent 68%)`,
+                  filter: "blur(30px)",
                 }}
               />
+
               <div
-                className="relative z-10 w-full flex items-center justify-center"
+                className="relative z-10 w-full h-full flex items-center justify-center"
                 style={{
                   opacity: animating ? 0 : 1,
                   transform: animating
-                    ? direction === "right" ? "translateX(-36px) scale(0.92)" : "translateX(36px) scale(0.92)"
+                    ? direction === "right"
+                      ? "translateX(-44px) scale(0.88)"
+                      : "translateX(44px) scale(0.88)"
                     : "translateX(0) scale(1)",
-                  transition: "opacity 0.42s cubic-bezier(0.4,0,0.2,1), transform 0.42s cubic-bezier(0.4,0,0.2,1)",
+                  transition: "opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1)",
                 }}
               >
                 <Image
                   src={p.image}
                   alt={p.name}
-                  width={480}
-                  height={400}
+                  width={460}
+                  height={380}
                   className="object-contain w-full"
                   style={{
-                    maxHeight: 260,
-                    filter: `drop-shadow(0 20px 48px ${accent}55)`,
+                    maxHeight: 380,
+                    filter: `drop-shadow(0 24px 60px ${accent}55)`,
                   }}
                   priority={current === 0}
                 />
@@ -171,44 +213,44 @@ export default function ProductSlideshow() {
 
               {/* Brand badge */}
               <div
-                className="absolute top-0 left-8 md:left-0 text-[10px] sm:text-[11px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider text-white shadow-lg z-20 transition-all duration-700"
+                className="absolute top-3 left-3 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider text-white z-20 transition-all duration-700"
                 style={{
-                  background: `linear-gradient(135deg, ${accent}, ${accent}cc)`,
-                  boxShadow: `0 4px 20px ${accent}55`,
+                  background: `linear-gradient(135deg, ${accent}, ${accent}bb)`,
+                  boxShadow: `0 4px 18px ${accent}48`,
                 }}
               >
                 {p.brand === "—" ? "Generic" : p.brand.split(" ")[0]}
               </div>
             </div>
 
-            {/* ── Info ── */}
-            <div className="w-full md:flex-1 md:min-w-0 md:pl-4">
+            {/* RIGHT — All text content */}
+            <div className="w-full md:flex-1 md:min-w-0 flex flex-col justify-center">
               <div
                 style={{
                   opacity: animating ? 0 : 1,
                   transform: animating
-                    ? direction === "right" ? "translateX(32px)" : "translateX(-32px)"
+                    ? direction === "right" ? "translateX(36px)" : "translateX(-36px)"
                     : "translateX(0)",
-                  transition: "opacity 0.42s cubic-bezier(0.4,0,0.2,1), transform 0.42s cubic-bezier(0.4,0,0.2,1)",
+                  transition: "opacity 0.38s cubic-bezier(0.4,0,0.2,1), transform 0.38s cubic-bezier(0.4,0,0.2,1)",
                 }}
               >
-                {/* Category + model */}
-                <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-5 flex-wrap">
+                {/* Category + model chips */}
+                <div className="flex items-center gap-2 mb-4 flex-wrap">
                   <span
-                    className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full uppercase tracking-widest transition-all duration-700"
+                    className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3.5 py-1.5 rounded-full uppercase tracking-widest transition-all duration-700"
                     style={{
-                      background: `${accent}14`,
+                      background: `${accent}10`,
                       color: accent,
-                      border: `1px solid ${accent}30`,
+                      border: `1px solid ${accent}26`,
                     }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: accent }} />
                     {p.category}
                   </span>
                   <span
-                    className="text-[10px] sm:text-[11px] font-mono font-semibold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg"
+                    className="text-[10px] font-mono font-semibold px-2.5 py-1.5 rounded-lg"
                     style={{
-                      background: "rgba(0,0,0,0.04)",
+                      background: "rgba(0,0,0,0.035)",
                       color: "#6b7280",
                       border: "1px solid #e5e7eb",
                     }}
@@ -219,44 +261,93 @@ export default function ProductSlideshow() {
 
                 {/* Product name */}
                 <h3
-                  className="font-playfair font-bold text-[#0f0a1e] leading-[1.08] mb-3 sm:mb-4"
-                  style={{ fontSize: "clamp(1.5rem, 4vw, 2.8rem)" }}
+                  className="font-playfair font-bold text-[#0f0a1e] leading-tight mb-3"
+                  style={{
+                    fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                  }}
                 >
                   {p.name}
                 </h3>
 
+                {/* ── Tests / Used For card — sits right below title ── */}
+                <div
+                  className="rounded-2xl px-4 py-3.5 mb-5 transition-all duration-700"
+                  style={{
+                    background: `linear-gradient(135deg, ${accent}0c, ${accent}05)`,
+                    border: `1px solid ${accent}1e`,
+                  }}
+                >
+                  <div className="flex items-center gap-2 mb-2.5">
+                    <span
+                      className="w-[3px] h-4 rounded-full shrink-0"
+                      style={{ background: `linear-gradient(180deg, ${accent}, ${accent}44)` }}
+                    />
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: accent }}>
+                      Tests Covered
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {meta.tests.map((test) => (
+                      <span
+                        key={test}
+                        className="text-[10px] font-semibold px-2.5 py-1 rounded-lg leading-snug"
+                        style={{
+                          background: `${accent}10`,
+                          color: accent,
+                          border: `1px solid ${accent}22`,
+                        }}
+                      >
+                        {test}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
                 {/* Description */}
-                <p className="text-[#6b7280] leading-[1.8] mb-5 sm:mb-8 text-sm sm:text-[1.02rem]">
-                  {p.description}
+                <p
+                  className="text-[#5a6070] leading-[1.9] mb-5 text-[0.9rem]"
+                  style={{
+                    display: "-webkit-box",
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                  }}
+                >
+                  {meta.description}
                 </p>
 
                 {/* Divider */}
                 <div
-                  className="mb-5 sm:mb-7 h-px"
-                  style={{ background: `linear-gradient(90deg, ${accent}30, transparent)` }}
+                  className="mb-5 h-px"
+                  style={{ background: `linear-gradient(90deg, ${accent}22, transparent 65%)` }}
                 />
 
-                {/* Highlights — 1 col on mobile, 2 cols on sm+ */}
-                <div className="grid grid-cols-1 gap-2.5 sm:gap-3 mb-7 sm:mb-9">
-                  {p.highlights.slice(0, 4).map((h, i) => (
+                {/* Highlights */}
+                <div className="flex flex-col gap-2.5 mb-7">
+                  {p.highlights.slice(0, 3).map((h, i) => (
                     <div
                       key={h}
-                      className="flex items-start gap-2.5"
+                      className="flex items-start gap-3"
                       style={{
                         opacity: animating ? 0 : 1,
-                        transform: animating ? "translateY(10px)" : "translateY(0)",
-                        transition: `opacity 0.4s ease ${i * 60}ms, transform 0.4s ease ${i * 60}ms`,
+                        transform: animating ? "translateY(8px)" : "translateY(0)",
+                        transition: `opacity 0.4s ease ${i * 70}ms, transform 0.4s ease ${i * 70}ms`,
                       }}
                     >
                       <span
                         className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                        style={{ background: `${accent}18`, border: `1px solid ${accent}30` }}
+                        style={{
+                          background: `${accent}12`,
+                          border: `1.5px solid ${accent}28`,
+                        }}
                       >
                         <span className="w-1.5 h-1.5 rounded-full" style={{ background: accent }} />
                       </span>
-                      <span className="text-[#374151] leading-snug font-medium text-sm">
-                        {h}
-                      </span>
+                      <span className="text-[#374151] leading-snug font-medium text-[0.82rem]">{h}</span>
                     </div>
                   ))}
                 </div>
@@ -264,116 +355,100 @@ export default function ProductSlideshow() {
                 {/* CTA buttons */}
                 <div className="flex flex-wrap gap-3">
                   <button
-                    onClick={handleViewSpecs}
-                    className="group inline-flex items-center gap-2.5 rounded-2xl text-sm font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl"
+                    onClick={() => router.push(`/products#${p.categoryId}`)}
+                    className="group inline-flex items-center gap-2 rounded-xl text-[0.78rem] font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
                     style={{
-                      padding: "0.7rem 1.4rem",
+                      padding: "0.65rem 1.4rem",
                       background: `linear-gradient(135deg, ${accent}, ${accent}cc)`,
-                      boxShadow: `0 6px 24px ${accent}45`,
+                      boxShadow: `0 6px 22px ${accent}38`,
                     }}
                   >
                     View Full Specs
-                    <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
+                    <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-1" />
                   </button>
-
                   <a
-                    href="/#contact"
-                    className="group inline-flex items-center gap-2.5 rounded-2xl text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+                    href="https://wa.me/9779819425801?text=I'm%20interested%20in%20learning%20more%20about%20your%20products."
+                    className="group inline-flex items-center gap-2 rounded-xl text-[0.78rem] font-semibold transition-all duration-300 hover:-translate-y-0.5"
                     style={{
-                      padding: "0.7rem 1.4rem",
+                      padding: "0.65rem 1.4rem",
                       color: accent,
-                      background: `${accent}10`,
-                      border: `1px solid ${accent}30`,
+                      background: `${accent}0c`,
+                      border: `1px solid ${accent}26`,
                     }}
                   >
-                    <ExternalLink size={13} />
-                    Enquire Now
+                    <MessageCircle size={15} />
+                    WhatsApp to Know More
                   </a>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Prev / Next — smaller on mobile, hidden on very small when content stacks */}
-        <button
-          onClick={() => go(current - 1, "left")}
-          className="absolute left-1 sm:left-3 lg:left-5 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 z-20"
-          style={{
-            background: "rgba(255,255,255,0.97)",
-            border: `1px solid ${accent}22`,
-            color: accent,
-            boxShadow: `0 4px 20px ${accent}25`,
-          }}
-        >
-          <ChevronLeft size={15} className="sm:hidden" />
-          <ChevronLeft size={18} className="hidden sm:block" />
-        </button>
-        <button
-          onClick={() => go(current + 1, "right")}
-          className="absolute right-1 sm:right-3 lg:right-5 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 z-20"
-          style={{
-            background: "rgba(255,255,255,0.97)",
-            border: `1px solid ${accent}22`,
-            color: accent,
-            boxShadow: `0 4px 20px ${accent}25`,
-          }}
-        >
-          <ChevronRight size={15} className="sm:hidden" />
-          <ChevronRight size={18} className="hidden sm:block" />
-        </button>
       </div>
 
-      {/* ── Bottom dot bar ── */}
+      {/* ── Bottom nav bar ── */}
       <div
-        className="flex items-center justify-center px-5 sm:px-8 lg:px-14 py-3 sm:py-4 transition-all duration-700"
+        className="flex items-center justify-center gap-3 px-5 py-3.5 transition-all duration-700"
         style={{
-          background: `linear-gradient(135deg, ${bg}88, white)`,
-          borderTop: `1px solid ${accent}12`,
+          background: `linear-gradient(135deg, ${bg}55, white)`,
+          borderTop: `1px solid ${accent}0e`,
         }}
       >
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        {/* Prev */}
+        <button
+          onClick={() => go(current - 1, "left")}
+          className="flex items-center gap-1 text-[11px] font-semibold transition-all duration-200 hover:opacity-60 shrink-0"
+          style={{ color: accent }}
+          aria-label="Previous product"
+        >
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <span className="hidden sm:inline">Prev</span>
+        </button>
+
+        {/* Compact pill progress dots */}
+        <div className="flex items-center gap-1">
           {products.map((_, i) => (
             <button
               key={i}
               onClick={() => go(i, i > current ? "right" : "left")}
-              className="rounded-full transition-all duration-300"
+              className="relative rounded-full overflow-hidden transition-all duration-300"
               style={{
                 width: i === current ? 24 : 6,
                 height: 6,
-                background: i === current
-                  ? `linear-gradient(90deg, ${accent}, ${accent}88)`
-                  : `${accent}28`,
+                flexShrink: 0,
+                background: i < current ? accent : `${accent}22`,
               }}
-            />
+              aria-label={`Go to product ${i + 1}`}
+            >
+              {i === current && (
+                <span
+                  className="absolute inset-y-0 left-0 rounded-full"
+                  style={{
+                    width: `${progress * 100}%`,
+                    background: accent,
+                    transition: "width 0.05s linear",
+                  }}
+                />
+              )}
+            </button>
           ))}
         </div>
-      </div>
 
-      {/* ── Progress bar ── */}
-      <div className="h-[3px] relative overflow-hidden" style={{ background: `${accent}12` }}>
-        <div
-          key={current}
-          className="absolute inset-y-0 left-0 h-full"
-          style={{
-            background: `linear-gradient(90deg, ${accent}, ${accent}88)`,
-            animation: "slideProgress 5.5s linear forwards",
-            transformOrigin: "left",
-          }}
-        />
+        {/* Next */}
+        <button
+          onClick={() => go(current + 1, "right")}
+          className="flex items-center gap-1 text-[11px] font-semibold transition-all duration-200 hover:opacity-60 shrink-0"
+          style={{ color: accent }}
+          aria-label="Next product"
+        >
+          <span className="hidden sm:inline">Next</span>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
       </div>
-
-      <style>{`
-        @keyframes slideProgress {
-          from { transform: scaleX(0); }
-          to   { transform: scaleX(1); }
-        }
-        @keyframes shimmerAccent {
-          0%   { transform: translateX(-100%); opacity: 0.6; }
-          50%  { opacity: 1; }
-          100% { transform: translateX(100%); opacity: 0.6; }
-        }
-      `}</style>
     </section>
   );
 }

@@ -14,21 +14,18 @@ const companyLinks = [
 
 const brandPartners = ["Anbio", "Seamaty", "Bioelab", "Keylights", "Fapon"];
 
+const phoneNumbers = [
+  { label: "+977 9819425801", href: "tel:+9779819425801" },
+  { label: "+977 9840259379", href: "tel:+9779840259379" },
+  { label: "+977 9801213666", href: "tel:+9779801213666" },
+];
+
 const contactItems = [
   {
     icon: MapPin,
     label: "Tinkune, Kathmandu, Nepal",
     href: "https://maps.google.com/?q=Tinkune,Kathmandu",
     external: true,
-    color: "#7c3aed",
-    bg: "rgba(124,58,237,0.08)",
-    border: "rgba(124,58,237,0.18)",
-  },
-  {
-    icon: Phone,
-    label: "+977 9819425801",
-    href: "tel:+9779819425801",
-    external: false,
     color: "#7c3aed",
     bg: "rgba(124,58,237,0.08)",
     border: "rgba(124,58,237,0.18)",
@@ -130,11 +127,38 @@ export default function Footer() {
             </Link>
 
             <p className="text-sm leading-[1.85] text-[#6b7280] max-w-[280px]">
-              Nepal&apos;s premier biomedical diagnostic equipment supplier,
-              bridging advanced technology with accessible healthcare since 2019.
+              Nepal&apos;s biomedical diagnostic equipment supplier,
+              bridging advanced technology with accessible healthcare since 2080 BS.
             </p>
 
             <ul className="space-y-2.5">
+              {/* ── Phone numbers — single col ── */}
+              <li>
+                <div className="flex items-start gap-3">
+                  <span
+                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg mt-0.5"
+                    style={{
+                      background: "rgba(124,58,237,0.08)",
+                      border: "1px solid rgba(124,58,237,0.18)",
+                    }}
+                  >
+                    <Phone size={12} style={{ color: "#7c3aed" }} />
+                  </span>
+                  <div className="flex flex-col gap-1">
+                    {phoneNumbers.map((phone) => (
+                      <a
+                        key={phone.href}
+                        href={phone.href}
+                        className="text-sm text-[#6b7280] hover:text-[#0f0a1e] transition-colors duration-200"
+                      >
+                        {phone.label}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </li>
+
+              {/* ── Other contact items ── */}
               {contactItems.map((item) => {
                 const Icon = item.icon;
                 return (

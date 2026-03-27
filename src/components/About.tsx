@@ -1,13 +1,36 @@
 "use client";
 
-import { FlaskConical, Users, Award, Microscope } from "lucide-react";
+import { FlaskConical, Users, Award, Microscope, Wrench, BookOpen, Package, Building2 } from "lucide-react";
 import Image from "next/image";
 
 const stats = [
   { num: "50+", label: "Product Lines", icon: FlaskConical },
-  { num: "200+", label: "Institutions Served", icon: Users },
+  { num: "100+", label: "Hospitals Reached", icon: Building2 },
   { num: "5+", label: "Global Brand Partners", icon: Award },
   { num: "70+", label: "Test Parameters", icon: Microscope },
+];
+
+const services = [
+  {
+    icon: Package,
+    title: "Supply and Distribution",
+    desc: "From analyzers to reagents, we get the right products to your facility — whether you are in Kathmandu or a clinic three hills away.",
+  },
+  {
+    icon: Wrench,
+    title: "Machine Installation",
+    desc: "We come to you. Our team sets everything up on-site and does not leave until the machine is working exactly as it should.",
+  },
+  {
+    icon: Users,
+    title: "Staff Training",
+    desc: "We sit with your team and walk through everything hands-on. No manuals, no guesswork, just clear practical guidance at your pace.",
+  },
+  {
+    icon: BookOpen,
+    title: "After Sales Support",
+    desc: "Questions come up after the sale too. We pick up the phone and help you sort things out, however long it takes.",
+  },
 ];
 
 export default function About() {
@@ -19,7 +42,6 @@ export default function About() {
         padding: "100px 24px",
         background: "#f4f1fb",
         overflow: "hidden",
-        fontFamily: "'DM Sans', sans-serif",
       }}
     >
       {/* Soft background blobs */}
@@ -38,7 +60,7 @@ export default function About() {
 
       <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto" }}>
 
-        {/* Eyebrow — "Who We Are" inside a solid purple pill */}
+        {/* Eyebrow */}
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 52 }}>
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 8,
@@ -157,7 +179,7 @@ export default function About() {
               color: "rgb(20, 8, 48)",
               marginBottom: 20,
             }} className="text-5xl">
-              Pioneering Biomedical <span style={{ color: "#7c3aed" }}>Diagnostics</span>
+              We bring the right <span style={{ color: "#7c3aed" }}>diagnostic tools</span> to every hospital in Nepal
             </h2>
 
             <p style={{
@@ -165,10 +187,11 @@ export default function About() {
               color: "#4b3f6b", lineHeight: 1.85,
               marginBottom: 14,
             }}>
-              <strong style={{ color: "#140830", fontWeight: 700 }}>Cognidx Enterprises Pvt. Ltd.</strong> is
-              headquartered in Kathmandu, Nepal — bridging advanced diagnostic technology with accessible
-              healthcare across South Asia. We partner with CE &amp; NMPA certified global manufacturers
-              to deliver state-of-the-art analyzers to hospitals, clinics, and labs nationwide.
+              <strong style={{ color: "#140830", fontWeight: 700 }}>Cognidx Enterprises Pvt. Ltd.</strong> started
+              with a simple idea <br /> "Good diagnostic equipment should not be hard to find in Nepal." We work as a
+              supplier and distributor of medical instruments with a strong focus on
+              In Vitro Diagnostics, alongside the reagents, consumables, and other medical supplies that
+              labs and hospitals use every day.
             </p>
 
             <p style={{
@@ -176,8 +199,11 @@ export default function About() {
               color: "#7c6fa0", lineHeight: 1.8,
               marginBottom: 40,
             }}>
-              From remote mountain clinics to urban tertiary hospitals — accurate, fast, and affordable
-              diagnostics reach wherever healthcare is delivered.
+              Since we started in 2080 B.S., we have worked with over 100 hospitals across the country.
+              From small clinics tucked away in the hills to large urban hospitals and reference labs,
+              we make sure the right equipment reaches the people who need it most. Our products are
+              available for all grades of healthcare facilities, because we believe the quality of care
+              should not depend on where you are located.
             </p>
 
             {/* Stats 2×2 */}
@@ -257,16 +283,125 @@ export default function About() {
           </div>
 
         </div>
-      </div>
 
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
-        @media (max-width: 768px) {
-          #about > div > div:last-child {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
+        {/* ── Services section ── */}
+        <div style={{ marginTop: 96 }}>
+
+          {/* Header */}
+          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 52, flexWrap: "wrap", gap: 16 }}>
+            <div>
+              <div style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                padding: "6px 16px", borderRadius: 100,
+                background: "rgba(124,58,237,0.08)",
+                border: "1px solid rgba(124,58,237,0.18)",
+                marginBottom: 16,
+              }}>
+                <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#7c3aed" }} />
+                <span style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "#7c3aed", fontWeight: 700 }}>
+                  What We Offer
+                </span>
+              </div>
+              <h3 style={{
+                fontSize: "clamp(1.6rem, 2.8vw, 2.2rem)",
+                fontWeight: 700, color: "rgb(20,8,48)",
+                letterSpacing: "-0.02em", lineHeight: 1.15, margin: 0,
+              }}>
+                We stay with you<br />
+                <span style={{ color: "#7c3aed" }}>long after delivery</span>
+              </h3>
+            </div>
+            <p style={{
+              fontSize: "clamp(0.88rem, 1.2vw, 0.97rem)",
+              color: "#7c6fa0", lineHeight: 1.8,
+              maxWidth: 300, margin: 0,
+            }}>
+              Getting the equipment is just the start. We install it, train your staff, and are a call away whenever you need us.
+            </p>
+          </div>
+
+          {/* Cards — uniform 4-col horizontal row */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: 16,
+          }}>
+            {services.map((svc, i) => {
+              const Icon = svc.icon;
+              return (
+                <div
+                  key={svc.title}
+                  style={{
+                    background: "#fff",
+                    border: "1px solid rgba(124,58,237,0.10)",
+                    borderRadius: 22,
+                    padding: "32px 26px 28px",
+                    position: "relative",
+                    overflow: "hidden",
+                    transition: "transform 0.22s, box-shadow 0.22s, border-color 0.22s",
+                    cursor: "default",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-5px)";
+                    e.currentTarget.style.boxShadow = "0 16px 40px rgba(109,40,217,0.13)";
+                    e.currentTarget.style.borderColor = "rgba(124,58,237,0.25)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "none";
+                    e.currentTarget.style.borderColor = "rgba(124,58,237,0.10)";
+                  }}
+                >
+                  {/* Subtle top accent line */}
+                  <div style={{
+                    position: "absolute", top: 0, left: 24, right: 24, height: 2,
+                    borderRadius: "0 0 4px 4px",
+                    background: "linear-gradient(90deg, rgba(124,58,237,0.0), rgba(124,58,237,0.35), rgba(124,58,237,0.0))",
+                  }} />
+
+                  {/* Step number */}
+                  <div style={{
+                    fontSize: 14, fontWeight: 700, letterSpacing: "0.2em",
+                    color: "rgba(106, 6, 213, 0.66)", marginBottom: 18,
+                    textTransform: "uppercase",
+                  }}>
+                    0{i + 1}
+                  </div>
+
+                  {/* Icon box */}
+                  <div style={{
+                    width: 46, height: 46, borderRadius: 13, marginBottom: 22,
+                    background: "#f5f3ff",
+                    border: "1px solid rgba(124,58,237,0.12)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    flexShrink: 0,
+                  }}>
+                    <Icon size={19} style={{ color: "#7c3aed" }} />
+                  </div>
+
+                  {/* Title */}
+                  <div style={{
+                    fontSize: 15, fontWeight: 700, color: "#140830",
+                    marginBottom: 10, lineHeight: 1.3,
+                  }}>
+                    {svc.title}
+                  </div>
+
+                  {/* Desc */}
+                  <div style={{
+                    fontSize: 13, color: "#7c6fa0", lineHeight: 1.75, flexGrow: 1,
+                  }}>
+                    {svc.desc}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+      </div>
     </section>
   );
 }
