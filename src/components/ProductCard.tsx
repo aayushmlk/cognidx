@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Eye, Zap, ChevronDown, ChevronUp, TestTube2, FlaskConical, MessageCircle } from "lucide-react";
+import { Eye, Zap, ChevronDown, ChevronUp, TestTube2, FlaskConical, MessageCircle, HeartPulse, ClipboardPlus } from "lucide-react";
 import type { Product } from "@/data/products";
 
 interface Props {
@@ -113,14 +113,20 @@ export default function ProductRow({ product, highlight }: Props) {
           {/* Category + Name + Description */}
           <div>
             <div className="flex items-center gap-2 mb-3 flex-wrap">
-              <span className="text-[10px] font-bold tracking-[0.18em] uppercase px-3 py-1.5 rounded-full" style={{ background: `${accent}12`, color: accent, border: `1px solid ${accent}28` }}>
-                {product.category}
-              </span>
-            </div>
-            <h3 className="text-xl lg:text-2xl font-bold leading-snug mb-2.5 text-[#111827]">
+  <span
+    className="inline-flex items-center text-[10px] font-bold tracking-[0.18em] uppercase px-3 py-1.5 rounded-full shadow-sm"
+    style={{
+      background: accent || "#22c55e",
+      color: "#ffffff",
+    }}
+  >
+    {product.category}
+  </span>
+</div>
+            <h3 className="text-xl lg:text-3xl font-bold leading-snug mb-2.5 text-[#111827]">
               {product.name}
             </h3>
-            <p className="text-sm text-[#6b7280] leading-relaxed">
+            <p className="text-base text-gray-700 text-justify leading-relaxed">
               {product.description}
             </p>
           </div>
@@ -128,19 +134,27 @@ export default function ProductRow({ product, highlight }: Props) {
           {/* ── Tests Covered ── */}
           {enrich && product.testsCovered.length > 0 && (
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <TestTube2 size={13} style={{ color: accent }} />
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: accent }}>Tests Covered</p>
-              </div>
-              <div className="space-y-2.5">
+           <div
+  className="inline-flex items-center gap-2 mb-3 px-3 py-1.5 rounded-full"
+  style={{
+    background: accent || "#22c55e", // green fill
+    color: "#ffffff",
+  }}
+>
+  <TestTube2 size={13} style={{ color: "#fff" }} />
+  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+    Tests Covered
+  </p>
+</div>
+              <div className="space-y-3">
                 {(showAllTests ? product.testsCovered : product.testsCovered.slice(0, 3)).map((group) => (
                   <div key={group.label}>
-                    <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5" style={{ color: `${accent}99` }}>{group.label}</p>
+                    <p className="text-[11px] font-bold uppercase tracking-wider mb-1.5 "  style={{ color: accent }}>{group.label}</p>
                     <div className="flex flex-wrap gap-1">
                       {group.items.map((item) => (
                         <span
                           key={item}
-                          className="text-[10px] font-medium px-2 py-0.5 rounded-md"
+                          className="text-[11px] font-semibold px-2.5 py-1 rounded-md"
                           style={{ background: `${accent}0d`, color: accent, border: `1px solid ${accent}1e` }}
                         >
                           {item}
@@ -153,8 +167,8 @@ export default function ProductRow({ product, highlight }: Props) {
               {product.testsCovered.length > 3 && (
                 <button
                   onClick={() => setShowAllTests(v => !v)}
-                  className="mt-2.5 flex items-center gap-1 text-[11px] font-semibold transition-colors"
-                  style={{ color: accent }}
+                  className="mt-2.5 flex items-center gap-1 text-[12px] font-semibold transition-colors border  border-3 rounded-full py-1 px-2"
+                  style={{ color: accent, borderColor: `${accent}`, }}
                 >
                   {showAllTests ? <><ChevronUp size={12} /> Show less</> : <><ChevronDown size={12} /> Show {product.testsCovered.length - 3} more groups</>}
                 </button>
@@ -164,59 +178,95 @@ export default function ProductRow({ product, highlight }: Props) {
 
           {/* ── Key Highlights ── */}
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <Zap size={13} style={{ color: accent }} />
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: accent }}>Key Highlights</p>
-            </div>
+           <div
+  className="inline-flex items-center gap-2 mb-3 px-3 py-1.5 rounded-full"
+  style={{
+    background: accent || "#22c55e", // green fill
+    color: "#ffffff",
+  }}
+>
+  <Zap size={13} style={{ color: "#fff" }} />
+  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+   Key Highlights
+  </p>
+</div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {(product.highlights).map((h) => (
                 <div key={h} className="flex items-start gap-2">
                   <span className="w-4 h-4 rounded-full flex items-center justify-center shrink-0 mt-0.5" style={{ background: `${accent}12`, border: `1.5px solid ${accent}28` }}>
                     <span className="w-1.5 h-1.5 rounded-full" style={{ background: accent }} />
                   </span>
-                  <span className="text-[0.78rem] text-[#374151] leading-snug font-medium">{h}</span>
+                  <span className="text-[0.8rem] text-[#374151] leading-snug font-medium">{h}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* ── Specs Table ── */}
-          <div className="rounded-2xl overflow-hidden" style={{ border: `1px solid ${accent}18` }}>
-            <div className="px-4 py-2.5 flex items-center gap-2" style={{ background: `${accent}0c` }}>
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: accent }}>Technical Specifications</span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2">
-              {product.specs.map((s, i) => (
-                <div
-                  key={s.key}
-                  className="flex gap-3 px-4 py-2.5 border-b text-xs"
-                  style={{
-                    background: i % 2 === 0 ? "white" : `${accent}04`,
-                    borderColor: `${accent}10`,
-                  }}
-                >
-                  <span className="font-semibold shrink-0 min-w-[90px]" style={{ color: accent }}>{s.key}</span>
-                  <span className="text-[#4b5563]">{s.value}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+       <div className="rounded-2xl overflow-hidden" style={{ border: `1px solid ${accent}18` }}>
+  <div className="px-4 py-3 flex items-center gap-2" style={{ background: `${accent}0c` }}>
+    <span
+      className="text-sm font-bold uppercase tracking-wider"
+      style={{ color: accent }}
+    >
+      Technical Specifications
+    </span>
+  </div>
+
+  <div className="grid grid-cols-1 sm:grid-cols-2">
+    {product.specs.map((s, i) => (
+      <div
+        key={s.key}
+        className="flex gap-3 px-4 py-3 border-b text-sm"
+        style={{
+          background: i % 2 === 0 ? "white" : `${accent}04`,
+          borderColor: `${accent}10`,
+        }}
+      >
+        <span
+          className="font-semibold shrink-0 min-w-[110px] text-sm"
+          style={{ color: accent }}
+        >
+          {s.key}
+        </span>
+
+        <span className="text-gray-600 text-sm leading-relaxed">
+          {s.value}
+        </span>
+      </div>
+    ))}
+  </div>
+</div>
 
           {/* ── Application scenarios + CTA ── */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1" style={{ borderTop: `1px solid ${accent}12` }}>
             {enrich && (
               <div>
-                <p className="text-[9px] font-bold uppercase tracking-widest mb-1.5" style={{ color: `${accent}88` }}>Used In</p>
+               <div
+  className="inline-flex items-center gap-2 mb-3 px-3 py-1.5 rounded-full"
+  style={{
+    background: accent || "#22c55e", // green fill
+    color: "#ffffff",
+  }}
+>
+  <ClipboardPlus size={13} style={{ color: "#fff" }} />
+  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+   Used In
+  </p>
+</div>
                 <div className="flex flex-wrap gap-1">
                   {product.applicationScenarios.map((s) => (
-                    <span key={s} className="text-[10px] font-semibold px-2 py-0.5 rounded-lg" style={{ background: `${accent}0e`, color: accent, border: `1px solid ${accent}1e` }}>
+                    <span key={s} className="text-[11px] font-semibold px-2.5 py-1 rounded-lg" style={{ background: `${accent}0e`, color: accent, border: `1px solid ${accent}1e` }}>
                       {s}
                     </span>
                   ))}
                 </div>
               </div>
             )}
-            <a
+        
+          </div>
+          <div >
+              <a
               href="https://wa.me/9779819425801?text=I'm%20interested%20in%20learning%20more%20about%20your%20products."
               target="_blank"
               rel="noopener noreferrer"
@@ -227,7 +277,7 @@ export default function ProductRow({ product, highlight }: Props) {
               }}
             >
               <MessageCircle size={13} />
-              WhatsApp to Know More
+              Enquire
             </a>
           </div>
         </div>

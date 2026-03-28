@@ -398,80 +398,90 @@ export default function About() {
           </div>
 
           {/* Cards */}
-          <div className="about-services-grid">
-            {services.map((svc, i) => {
-              const Icon = svc.icon;
-              return (
-                <div
-                  key={svc.title}
-                  style={{
-                    background: "#fff",
-                    border: "1px solid rgba(124,58,237,0.10)",
-                    borderRadius: 22,
-                    padding: "28px 22px 24px",
-                    position: "relative",
-                    overflow: "hidden",
-                    transition: "transform 0.22s, box-shadow 0.22s, border-color 0.22s",
-                    cursor: "default",
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-5px)";
-                    e.currentTarget.style.boxShadow = "0 16px 40px rgba(109,40,217,0.13)";
-                    e.currentTarget.style.borderColor = "rgba(124,58,237,0.25)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow = "none";
-                    e.currentTarget.style.borderColor = "rgba(124,58,237,0.10)";
-                  }}
-                >
-                  {/* Subtle top accent line */}
-                  <div style={{
-                    position: "absolute", top: 0, left: 24, right: 24, height: 2,
-                    borderRadius: "0 0 4px 4px",
-                    background: "linear-gradient(90deg, rgba(124,58,237,0.0), rgba(124,58,237,0.35), rgba(124,58,237,0.0))",
-                  }} />
+         <div className="about-services-grid">
+  {services.map((svc, i) => {
+    const Icon = svc.icon;
+    return (
+      <div
+        key={svc.title}
+        className="relative flex flex-col items-center p-6 rounded-[22px] bg-white border transition-transform cursor-default text-center"
+        style={{
+          border: "1px solid rgba(124,58,237,0.10)",
+          overflow: "hidden",
+          transition: "transform 0.22s, box-shadow 0.22s, border-color 0.22s",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "translateY(-5px)";
+          e.currentTarget.style.boxShadow = "0 16px 40px rgba(109,40,217,0.13)";
+          e.currentTarget.style.borderColor = "rgba(124,58,237,0.25)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "translateY(0)";
+          e.currentTarget.style.boxShadow = "none";
+          e.currentTarget.style.borderColor = "rgba(124,58,237,0.10)";
+        }}
+      >
+        {/* Subtle top accent line */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 24,
+            right: 24,
+            height: 2,
+            borderRadius: "0 0 4px 4px",
+            background:
+              "linear-gradient(90deg, rgba(124,58,237,0.0), rgba(124,58,237,0.35), rgba(124,58,237,0.0))",
+          }}
+        />
 
-                  {/* Step number */}
-                  <div style={{
-                    fontSize: 14, fontWeight: 700, letterSpacing: "0.2em",
-                    color: "rgba(106, 6, 213, 0.66)", marginBottom: 18,
-                    textTransform: "uppercase",
-                  }}>
-                    0{i + 1}
-                  </div>
+        {/* Step number */}
+        <div
+          className="uppercase mb-4"
+          style={{
+            fontSize: 14,
+            fontWeight: 700,
+            letterSpacing: "0.2em",
+            color: "rgba(106, 6, 213, 0.66)",
+          }}
+        >
+          0{i + 1}
+        </div>
 
-                  {/* Icon box */}
-                  <div style={{
-                    width: 46, height: 46, borderRadius: 13, marginBottom: 22,
-                    background: "#f5f3ff",
-                    border: "1px solid rgba(124,58,237,0.12)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    flexShrink: 0,
-                  }}>
-                    <Icon size={19} style={{ color: "#7c3aed" }} />
-                  </div>
+        {/* Icon */}
+        <div
+          className="flex items-center justify-center mb-4 w-20 h-20 rounded-[13px]"
+          style={{
+            background: "#f5f3ff",
+            border: "1px solid rgba(124,58,237,0.12)",
+          }}
+        >
+          <Icon size={26} style={{ color: "#7c3aed" }} />
+        </div>
 
-                  {/* Title */}
-                  <div style={{
-                    fontSize: 15, fontWeight: 700, color: "#140830",
-                    marginBottom: 10, lineHeight: 1.3,
-                  }}>
-                    {svc.title}
-                  </div>
+        {/* Title */}
+        <div
+          className="font-bold mb-3"
+          style={{
+            fontSize: 16,
+            color: "#7c3aed",
+            lineHeight: 1.3,
+          }}
+        >
+          {svc.title}
+        </div>
 
-                  {/* Desc */}
-                  <div style={{
-                    fontSize: 13, color: "#7c6fa0", lineHeight: 1.75, flexGrow: 1,
-                  }}>
-                    {svc.desc}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+        {/* Description */}
+        <div
+          className="text-sm text-[#7c6fa0] leading-relaxed"
+          style={{ lineHeight: 1.75 }}
+        >
+          {svc.desc}
+        </div>
+      </div>
+    );
+  })}
+</div>
         </div>
 
       </div>

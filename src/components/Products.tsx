@@ -5,6 +5,8 @@ import { products, categories } from "@/data/products";
 import ProductRow from "./ProductCard";
 import { ArrowLeft, FlaskConical, ChevronLeft, ChevronRight, Activity } from "lucide-react";
 import Link from "next/link";
+import { FaThLarge } from "react-icons/fa";
+import { FaBoxOpen, FaEye } from "react-icons/fa6";
 
 export default function Products() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -153,7 +155,7 @@ export default function Products() {
             </Link>
 
             <div
-              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full"
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 mt-2 rounded-full"
               style={{
                 background: "rgba(167,139,250,0.10)",
                 border: "1px solid rgba(167,139,250,0.25)",
@@ -167,51 +169,53 @@ export default function Products() {
           </div>
 
           {/* Main hero content — horizontal layout */}
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
 
-            {/* Title block */}
-            <div className="flex-1">
-              <h1
-                className="font-bold text-white leading-[1.1] mb-3"
-                style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)" }}
-              >
-                Biomedical{" "}
-                <span
-                  style={{
-                    background: "linear-gradient(135deg, #c4b5fd 0%, #a78bfa 40%, #7c3aed 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  Diagnostic
-                </span>
-                <br />Equipment
-              </h1>
-              <p className="text-white/45 text-sm leading-relaxed max-w-sm">
-                CE-certified diagnostic instruments from globally trusted manufacturers — built for precision, designed for clinicians.
-              </p>
-            </div>
+  {/* Title block */}
+  <div className="flex-1 flex flex-col justify-center">
+    <h1
+      className="font-bold text-white leading-[1.1] mb-3"
+      style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)" }}
+    >
+      Biomedical{" "}
+      <span
+        style={{
+          background: "linear-gradient(135deg, #c4b5fd 0%, #a78bfa 40%, #7c3aed 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+        }}
+      >
+        Diagnostic
+      </span>
+      <br />Equipment
+    </h1>
 
-            {/* Stats row */}
-            <div className="flex flex-col items-center gap-3 flex-wrap">
+    <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+      CE-certified diagnostic instruments from globally trusted manufacturers — built for precision, designed for clinicians.
+    </p>
+  </div>
+
+  {/* Stats */}
+    <div className="flex flex-col items-center gap-3 flex-wrap mb-2">
               {[
-                { num: totalVisitors.toLocaleString(), label: "👁 Total Views" },
-                { num: products.length, label: "Products" },
-                { num: categories.length, label: "Categories" },
+                { num: totalVisitors.toLocaleString(), label: " Total Views",icon: <FaEye size={14} />  },
+                { num: products.length, label: "Products", icon: <FaBoxOpen size={14}/>  },
+                { num: categories.length, label: "Categories",icon: <FaThLarge size={14}/> },
 
 
               ].map((s) => (
                 <div
-                  key={s.label}
-                  className="flex flex-col items-center px-5 py-3 rounded-2xl"
-                  style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.10)",
-                    backdropFilter: "blur(12px)",
-                    minWidth: 150,
-                  }}
-                >
+  key={s.label}
+  className="flex flex-col items-center px-5 py-3 rounded-2xl"
+  style={{
+    background: "rgba(255,255,255,0.05)",
+    border: "1px solid #6b21a8",        // dark purple border
+    backdropFilter: "blur(12px)",
+    minWidth: 150,
+    boxShadow: "0 0 4px #6b21a8, 0 0 8px #6b21a8", // subtle tight glow
+  }}
+>
                   <span
                     className=" font-bold leading-none mb-1"
                     style={{
@@ -224,9 +228,15 @@ export default function Products() {
                   >
                     {s.num}
                   </span>
+                  <div className="flex items-center justify-center gap-2">
+                      {/* Icon */}
+      <div className="mb-2 text-xl text-purple-300 mt-1">
+        {s.icon}
+      </div>
                   <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)" }}>
                     {s.label}
                   </span>
+                  </div>
                 </div>
               ))}
             </div>
