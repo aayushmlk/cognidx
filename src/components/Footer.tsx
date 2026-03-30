@@ -2,15 +2,16 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect } from "react";
 import { MapPin, Phone, Mail, MessageCircle, ArrowUpRight } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { categories } from "@/data/products";
+import { useRouter } from "next/navigation";
 
 const companyLinks = [
-  { label: "About Us", href: "./#about" },
-  { label: "Our Products", href: "#products" },
-  { label: "Donate", href: "./#donate" },
-  { label: "Contact", href: "./#contact" },
+  { label: "About Us", href: "/#about" },
+  { label: "Our Products", href: "/products" },
+  { label: "Donate", href: "/#donate" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 const brandPartners = ["Anbio", "Seamaty", "Bioelab", "DiyaLab", "Fapon", "Rayto"];
@@ -51,26 +52,39 @@ const contactItems = [
   },
 ];
 
-const h4Style: React.CSSProperties = {
-  fontFamily: "Raleway, system-ui, sans-serif",
-  background: "linear-gradient(90deg, #9333ea, #c026d3)",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor: "transparent",
-  backgroundClip: "text",
-};
-
 export default function Footer() {
   const router = useRouter();
+  useEffect(() => {
+    const scrollToHash = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (!hash) return;
+
+      const el = document.getElementById(hash);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+
+    const timeout = setTimeout(scrollToHash, 300); // ⬅️ increased delay
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   const handleCatClick = (catId: string) => {
-    // Store the target so the products page can scroll to it after mount
-    sessionStorage.setItem("scrollTo", catId);
-    router.push(`/products#${catId}`);
+    if (window.location.pathname === "/products") {
+      window.location.hash = catId;
+
+      const el = document.getElementById("product-section");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+
+    } else {
+      router.push(`/products#${catId}`);
+    }
   };
 
   return (
     <footer
-      id="contactsss"
+      id="contact"
       className="relative overflow-hidden"
       style={{
         background: "linear-gradient(135deg, #f3eeff 0%, #ffffff 50%, #ede9fe 100%)",
@@ -208,7 +222,13 @@ export default function Footer() {
           <div className="lg:col-span-3">
             <h4
               className="text-[10px] uppercase tracking-[0.25em] font-bold mb-5"
-              style={h4Style}
+              style={{
+                background: "linear-gradient(90deg, #9333ea, #c026d3)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                fontFamily: "Raleway, system-ui, sans-serif"
+              }}
             >
               Products
             </h4>
@@ -236,7 +256,13 @@ export default function Footer() {
           <div className="lg:col-span-3">
             <h4
               className="text-[10px] uppercase tracking-[0.25em] font-bold mb-5"
-              style={h4Style}
+              style={{
+                background: "linear-gradient(90deg, #9333ea, #c026d3)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                fontFamily: "Raleway, system-ui, sans-serif"
+              }}
             >
               Company
             </h4>
@@ -261,7 +287,13 @@ export default function Footer() {
 
             <h4
               className="text-[10px] uppercase tracking-[0.25em] font-bold mb-4"
-              style={h4Style}
+              style={{
+                background: "linear-gradient(90deg, #9333ea, #c026d3)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                fontFamily: "Raleway, system-ui, sans-serif"
+              }}
             >
               Partners
             </h4>

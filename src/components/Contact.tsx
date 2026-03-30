@@ -96,7 +96,7 @@ export const Contact = () => {
   };
 
   return (
-    <section className="relative py-32 bg-gray-50 overflow-hidden">
+    <section id="contact" className="relative py-32 bg-gray-50 overflow-hidden">
       {/* Top accent bar */}
       <div
         style={{
