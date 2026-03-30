@@ -2,15 +2,26 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Eye, Zap, ChevronDown, ChevronUp, TestTube2, FlaskConical, MessageCircle, HeartPulse, ClipboardPlus } from "lucide-react";
+import {
+  Eye,
+  Zap,
+  ChevronDown,
+  ChevronUp,
+  TestTube2,
+  FlaskConical,
+  MessageCircle,
+  ClipboardPlus,
+  ZapIcon,
+  EyeOff,
+  NotebookTabs,
+  ReceiptText,
+} from "lucide-react";
 import type { Product } from "@/data/products";
 
 interface Props {
   product: Product;
   highlight?: boolean;
 }
-
-
 
 export default function ProductRow({ product, highlight }: Props) {
   const [visitors, setVisitors] = useState(product.baseVisitors);
@@ -24,7 +35,7 @@ export default function ProductRow({ product, highlight }: Props) {
       const next = count + 1;
       localStorage.setItem(`visitors_${product.id}`, String(next));
       setVisitors(next);
-    } catch { }
+    } catch {}
   }, [product.id, product.baseVisitors]);
 
   const accent = product.accentColor;
@@ -34,107 +45,160 @@ export default function ProductRow({ product, highlight }: Props) {
   return (
     <div
       id={`product-${product.id}`}
-      className="group relative rounded-3xl overflow-hidden transition-all duration-500"
+      className="rounded-3xl p-4 sm:p-6 flex flex-col gap-6"
       style={{
-        background: "white",
-        border: `1px solid ${accent}1e`,
-        boxShadow: highlight
-          ? `0 0 0 2px ${accent}, 0 20px 60px ${accent}28`
-          : `0 2px 20px ${accent}0e`,
+        background: "#f9fafb",
       }}
     >
-      {/* Top accent stripe */}
-      <div className="h-[3px] w-full" style={{ background: `linear-gradient(90deg, ${accent}, ${accent}44, transparent)` }} />
-
-      <div className="flex flex-col lg:flex-row">
-
-        {/* ── LEFT: Image Panel ── */}
+      {/* ───────────────── IMAGE CARD ───────────────── */}
+      <div
+        className="relative rounded-3xl overflow-hidden"
+        style={{
+          background: `linear-gradient(145deg, ${bg} 0%, ${bg}cc 60%, ${bg}88 100%)`,
+          border: `1px solid ${accent}22`,
+          boxShadow: `0 10px 40px ${accent}20`,
+          padding: "28px",
+        }}
+      >
+        {/* Decorations */}
         <div
-          className="lg:w-[38%] relative flex flex-col items-center justify-between shrink-0 overflow-hidden"
-          style={{
-            background: `linear-gradient(145deg, ${bg} 0%, ${bg}cc 60%, ${bg}88 100%)`,
-            minHeight: 360,
-            padding: "40px 36px 28px",
-          }}
-        >
-          {/* Decorative circles */}
-          <div className="absolute -bottom-20 -right-20 w-72 h-72 rounded-full opacity-[0.16] transition-all duration-700 group-hover:opacity-[0.26] group-hover:scale-110" style={{ background: accent }} />
-          <div className="absolute -top-8 -left-8 w-36 h-36 rounded-full opacity-[0.09]" style={{ background: accent }} />
-          <div className="absolute inset-0 opacity-30 transition-opacity duration-700 group-hover:opacity-50" style={{ background: `radial-gradient(ellipse 65% 55% at 55% 50%, ${accent}20 0%, transparent 70%)` }} />
+          className="absolute -bottom-20 -right-20 w-72 h-72 rounded-full opacity-[0.50]"
+          style={{ background: accent }}
+        />
+        <div
+          className="absolute -top-10 -left-10 w-40 h-40 rounded-full opacity-[0.40]"
+          style={{ background: accent }}
+        />
 
-          {/* Top badges */}
-          <div className="w-full flex items-start justify-between z-10 relative">
-            <div className="text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-lg" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}bb)`, boxShadow: `0 4px 14px ${accent}48` }}>
-              {product.brand === "—" ? "Generic" : product.brand.split(" ")[0]}
-            </div>
-            <div className="text-[10px]  font-bold px-2.5 py-1.5 rounded-lg" style={{ background: "rgba(255,255,255,0.80)", color: accent, border: `1px solid ${accent}22` }}>
-              {product.model}
-            </div>
-          </div>
+        {/* Badges */}
+        <div className="flex justify-between mb-4 relative z-10">
+          <span
+            className="text-white text-xs font-bold px-3 py-1 rounded-full"
+            style={{ background: accent }}
+          >
+            {product.brand === "—" ? "Generic" : product.brand}
+          </span>
 
-          {/* Image */}
-          <div className="relative z-10 w-full flex items-center justify-center flex-1 py-4">
-            {!imgError ? (
-              <Image
-                src={product.image}
-                alt={product.name}
-                width={420}
-                height={320}
-                className="object-contain w-full transition-transform duration-700 group-hover:scale-[1.05]"
-                style={{ maxHeight: 260, filter: `drop-shadow(0 16px 48px ${accent}58)` }}
-                onError={() => setImgError(true)}
-              />
-            ) : (
-              <div className="flex flex-col items-center justify-center h-48 opacity-30">
-                <FlaskConical size={48} style={{ color: accent }} />
-                <span className="text-xs mt-2 font-semibold uppercase tracking-wider" style={{ color: accent }}>Image Coming Soon</span>
-              </div>
-            )}
-          </div>
-
-          {/* Bottom: views + tagline */}
-          <div className="w-full z-10 relative">
-            {enrich && (
-              <p className="text-center text-[13px] font-semibold mb-3 leading-snug" style={{ color: `${accent}cc` }}>
-                {product.tagline}
-              </p>
-            )}
-            <div className="flex items-center justify-center gap-1.5 text-[13px] font-semibold px-3 py-1.5 rounded-full mx-auto w-fit" style={{ background: "rgba(255,255,255,0.85)", color: accent, border: `1px solid ${accent}25` }}>
-              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: accent }} />
-              <Eye size={10} />
-              {visitors.toLocaleString()} views
-            </div>
-          </div>
+          <span
+            className="text-xs font-semibold px-3 py-1 rounded-lg"
+            style={{
+              background: "#fff",
+              color: accent,
+              border: `1px solid ${accent}22`,
+            }}
+          >
+            {product.model}
+          </span>
         </div>
 
-        {/* ── RIGHT: Info Panel ── */}
-        <div className="lg:w-[62%] flex flex-col p-7 lg:p-9 gap-6">
+        {/* Image */}
+        <div className="flex justify-center items-center relative z-10">
+          {!imgError ? (
+            <Image
+              src={product.image}
+              alt={product.name}
+              width={420}
+              height={320}
+              className="object-contain w-full max-h-[260px] sm:max-h-[300px]"
+              style={{
+                filter: `drop-shadow(0 20px 50px ${accent}50)`,
+              }}
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center h-48 opacity-40">
+              <FlaskConical size={48} style={{ color: accent }} />
+              <span className="text-xs mt-2">Image Coming Soon</span>
+            </div>
+          )}
+        </div>
 
-          {/* Category + Name + Description */}
-          <div>
-            <div className="flex items-center gap-2 mb-3 flex-wrap">
-  <span
-    className="inline-flex items-center text-[10px] font-bold tracking-[0.18em] uppercase px-3 py-1.5 rounded-full shadow-sm"
-    style={{
-      background: accent || "#22c55e",
-      color: "#ffffff",
-    }}
-  >
-    {product.category}
-  </span>
-</div>
-            <h3 className="text-xl lg:text-3xl font-bold leading-snug mb-2.5 text-[#111827]">
-              {product.name}
-            </h3>
-            <p className="text-base text-gray-700 text-justify leading-relaxed">
-              {product.description}
+        {/* Tagline + Views */}
+        <div className="mt-4 text-center relative z-10">
+          {enrich && (
+            <p
+              className="text-sm font-semibold mb-2"
+              style={{ color: accent }}
+            >
+              {product.tagline}
             </p>
-          </div>
+          )}
 
-          {/* ── Tests Covered ── */}
-          {enrich && product.testsCovered.length > 0 && (
-            <div>
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs"
+            style={{
+              background: "#fff",
+              color: accent,
+              border: `1px solid ${accent}22`,
+            }}
+          >
+            <Eye size={12} />
+            {visitors.toLocaleString()} views
+          </div>
+        </div>
+      </div>
+
+      {/* ───────────────── CONTENT CARD ───────────────── */}
+      <div
+        className="rounded-3xl p-5 sm:p-7 flex flex-col gap-7"
+        style={{
+          background: "white",
+          border: `1px solid ${accent}1e`,
+          boxShadow: `0 10px 40px ${accent}10`,
+        }}
+      >
+        {/* Title */}
+        <div>
+          <span
+            className="text-xs font-bold px-3 py-2 rounded-full text-white"
+            style={{ background: accent }}
+          >
+            {product.category}
+          </span>
+
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mt-3">
+            {product.name}
+          </h2>
+
+          <p className="text-gray-600 mt-3 text-justify leading-relaxed text-sm sm:text-base">
+            {product.description}
+          </p>
+        </div>
+
+        {/* Highlights */}
+        <div>
            <div
+  className="inline-flex items-center gap-2 mb-3 px-3 py-1.5 rounded-full"
+  style={{
+    background: accent || "#22c55e", // green fill
+    color: "#ffffff",
+  }}
+>
+  <Zap size={13} style={{ color: "#fff" }} />
+  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+    Key Highlights
+  </p>
+</div>
+
+          <div className="grid sm:grid-cols-2 gap-3">
+  {product.highlights.map((h) => (
+    <div key={h} className="flex items-start gap-2 text-sm text-gray-700">
+      {/* Thicker bullet */}
+      <span
+        className="w-1 h-1 rounded-full flex-shrink-0 mt-2"
+        style={{ backgroundColor: accent }}
+      />
+      {/* Highlight text */}
+      <span className="leading-snug">{h}</span>
+    </div>
+  ))}
+</div>
+        </div>
+
+        {/* Tests Covered */}
+        {enrich && product.testsCovered.length > 0 && (
+          <div>
+            <div
   className="inline-flex items-center gap-2 mb-3 px-3 py-1.5 rounded-full"
   style={{
     background: accent || "#22c55e", // green fill
@@ -146,38 +210,57 @@ export default function ProductRow({ product, highlight }: Props) {
     Tests Covered
   </p>
 </div>
-              <div className="space-y-3">
-                {(showAllTests ? product.testsCovered : product.testsCovered.slice(0, 3)).map((group) => (
-                  <div key={group.label}>
-                    <p className="text-[11px] font-bold uppercase tracking-wider mb-1.5 "  style={{ color: accent }}>{group.label}</p>
-                    <div className="flex flex-wrap gap-1">
-                      {group.items.map((item) => (
-                        <span
-                          key={item}
-                          className="text-[11px] font-semibold px-2.5 py-1 rounded-md"
-                          style={{ background: `${accent}0d`, color: accent, border: `1px solid ${accent}1e` }}
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {product.testsCovered.length > 3 && (
-                <button
-                  onClick={() => setShowAllTests(v => !v)}
-                  className="mt-2.5 flex items-center gap-1 text-[12px] font-semibold transition-colors border  border-3 rounded-full py-1 px-2"
-                  style={{ color: accent, borderColor: `${accent}`, }}
-                >
-                  {showAllTests ? <><ChevronUp size={12} /> Show less</> : <><ChevronDown size={12} /> Show {product.testsCovered.length - 3} more groups</>}
-                </button>
-              )}
-            </div>
-          )}
 
-          {/* ── Key Highlights ── */}
-          <div>
+            <div className="space-y-3">
+              {(showAllTests
+                ? product.testsCovered
+                : product.testsCovered.slice(0, 3)
+              ).map((group) => (
+                <div key={group.label}>
+                  <p className="text-xs font-semibold mb-1 text-gray-700">
+                    {group.label}
+                  </p>
+
+                  <div className="flex flex-wrap gap-2">
+                    {group.items.map((item) => (
+                      <span
+                        key={item}
+                        className="text-xs px-2 py-1 rounded-md"
+                        style={{
+                          background: `${accent}10`,
+                          color: accent,
+                        }}
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {product.testsCovered.length > 3 && (
+              <button
+                onClick={() => setShowAllTests((v) => !v)}
+                className="mt-3 flex items-center gap-1 text-xs font-semibold underline"
+                style={{ color: accent }}
+              >
+                {showAllTests ? (
+                  <>
+                    <ChevronUp size={12} /> Show less
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown size={12} /> Show more
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Specs */}
+        <div>
            <div
   className="inline-flex items-center gap-2 mb-3 px-3 py-1.5 rounded-full"
   style={{
@@ -185,64 +268,43 @@ export default function ProductRow({ product, highlight }: Props) {
     color: "#ffffff",
   }}
 >
-  <Zap size={13} style={{ color: "#fff" }} />
+  <ReceiptText size={13} style={{ color: "#fff" }} />
   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
-   Key Highlights
+    Technical Specifications
   </p>
 </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {(product.highlights).map((h) => (
-                <div key={h} className="flex items-start gap-2">
-                  <span className="w-4 h-4 rounded-full flex items-center justify-center shrink-0 mt-0.5" style={{ background: `${accent}12`, border: `1.5px solid ${accent}28` }}>
-                    <span className="w-1.5 h-1.5 rounded-full" style={{ background: accent }} />
-                  </span>
-                  <span className="text-[0.8rem] text-[#374151] leading-snug font-medium">{h}</span>
-                </div>
-              ))}
-            </div>
+
+          <div
+            className="rounded-xl overflow-hidden border"
+            style={{ borderColor: `${accent}22` }}
+          >
+            {product.specs.map((s, i) => (
+              <div
+                key={s.key}
+                className="flex justify-between px-4 py-3 text-sm"
+                style={{
+                  background: i % 2 === 0 ? "#fff" : `${accent}40`,
+                }}
+              >
+                <span
+                  className="font-semibold"
+                  style={{ color: accent }}
+                >
+                  {s.key}
+                </span>
+
+                <span className="text-gray-600 font-semibold text-right">
+                  {s.value}
+                </span>
+              </div>
+            ))}
           </div>
+        </div>
 
-          {/* ── Specs Table ── */}
-       <div className="rounded-2xl overflow-hidden" style={{ border: `1px solid ${accent}18` }}>
-  <div className="px-4 py-3 flex items-center gap-2" style={{ background: `${accent}0c` }}>
-    <span
-      className="text-sm font-bold uppercase tracking-wider"
-      style={{ color: accent }}
-    >
-      Technical Specifications
-    </span>
-  </div>
-
-  <div className="grid grid-cols-1 sm:grid-cols-2">
-    {product.specs.map((s, i) => (
-      <div
-        key={s.key}
-        className="flex gap-3 px-4 py-3 border-b text-sm"
-        style={{
-          background: i % 2 === 0 ? "white" : `${accent}04`,
-          borderColor: `${accent}10`,
-        }}
-      >
-        <span
-          className="font-semibold shrink-0 min-w-[110px] text-sm"
-          style={{ color: accent }}
-        >
-          {s.key}
-        </span>
-
-        <span className="text-gray-600 text-sm leading-relaxed">
-          {s.value}
-        </span>
-      </div>
-    ))}
-  </div>
-</div>
-
-          {/* ── Application scenarios + CTA ── */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1" style={{ borderTop: `1px solid ${accent}12` }}>
-            {enrich && (
-              <div>
-               <div
+        {/* Applications */}
+        {enrich && (
+          <div>
+            <div
   className="inline-flex items-center gap-2 mb-3 px-3 py-1.5 rounded-full"
   style={{
     background: accent || "#22c55e", // green fill
@@ -251,35 +313,44 @@ export default function ProductRow({ product, highlight }: Props) {
 >
   <ClipboardPlus size={13} style={{ color: "#fff" }} />
   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
-   Used In
-  </p>
+    Used In
+  </p> 
 </div>
-                <div className="flex flex-wrap gap-1">
-                  {product.applicationScenarios.map((s) => (
-                    <span key={s} className="text-[11px] font-semibold px-2.5 py-1 rounded-lg" style={{ background: `${accent}0e`, color: accent, border: `1px solid ${accent}1e` }}>
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-        
+            <div className="flex flex-wrap gap-2">
+              {product.applicationScenarios.map((s) => (
+                <span
+                  key={s}
+                  className="text-sm px-3 py-1 rounded-lg"
+                  style={{
+                    background: `${accent}20`,
+                    color: accent,
+                  }}
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
           </div>
-          <div >
-              <a
-              href="https://wa.me/9779819425801?text=I'm%20interested%20in%20learning%20more%20about%20your%20products."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl text-white transition-all duration-200 hover:scale-[1.02] hover:opacity-90 shrink-0"
-              style={{
-                background: `linear-gradient(135deg, ${accent}, ${accent}cc)`,
-                boxShadow: `0 4px 18px ${accent}38`,
-              }}
-            >
-              <MessageCircle size={13} />
-              Enquire
-            </a>
-          </div>
+        )}
+
+  
+
+        {/* CTA */}
+        <div className="pt-4 border-t" style={{ borderColor: `${accent}20` }}>
+          <p className="text-[12px] text-gray-600 mb-2" style={{ color: accent }}>
+    Please feel free to contact us for more information or any inquiries — we’re happy to assist you!
+  </p>
+          <a
+            href="https://wa.me/9779819425801?text=I'm%20interested%20in%20learning%20more%20about%20your%20products."
+            target="_blank"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-white text-sm font-semibold"
+            style={{
+              background: `linear-gradient(135deg, ${accent}, ${accent}cc)`,
+            }}
+          >
+            <MessageCircle size={14} />
+            Enquire
+          </a>
         </div>
       </div>
     </div>
