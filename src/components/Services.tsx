@@ -35,6 +35,8 @@ const Services = () => {
         .services-shell {
           position: relative;
           background: linear-gradient(135deg, #f3eeff 0%, #ffffff 50%, #ede9fe 100%);
+          overflow: hidden;
+          width: 100%;
         }
         .services-top-bar {
           height: 3px;
@@ -44,6 +46,7 @@ const Services = () => {
         .services-wrapper {
           padding: 0 240px 80px;
           position: relative;
+          box-sizing: border-box;
         }
         .services-orb-1 {
           pointer-events: none;
@@ -100,8 +103,6 @@ const Services = () => {
         }
 
         @media (max-width: 768px) {
-          .services-shell {
-          }
           .services-wrapper {
             padding: 0 20px 60px;
           }

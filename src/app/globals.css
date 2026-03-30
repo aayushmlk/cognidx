@@ -5,12 +5,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
 
 @keyframes vibrate {
-  0%   { transform: rotate(0deg); }
-  20%  { transform: rotate(-15deg); }
-  40%  { transform: rotate(15deg); }
-  60%  { transform: rotate(-10deg); }
-  80%  { transform: rotate(10deg); }
-  100% { transform: rotate(0deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  20% {
+    transform: rotate(-15deg);
+  }
+
+  40% {
+    transform: rotate(15deg);
+  }
+
+  60% {
+    transform: rotate(-10deg);
+  }
+
+  80% {
+    transform: rotate(10deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
 .vibrate-hover:hover .icon-vibrate {
@@ -19,21 +36,23 @@
 
 :root {
   --font-heading: "Cormorant Garamond", Georgia, serif;
-  --font-body:    "DM Sans", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
 
   /* keep old vars as aliases so existing components don't break */
-  --font-raleway:     var(--font-body);
-  --font-space-mono:  var(--font-body);
+  --font-raleway: var(--font-body);
+  --font-space-mono: var(--font-body);
 
-  --purple-deep:  #2d1b69;
-  --purple-mid:   #5b2d8e;
+  --purple-deep: #2d1b69;
+  --purple-mid: #5b2d8e;
   --purple-light: #8b5cf6;
-  --purple-pale:  #ede9fe;
-  --gold:         #f59e0b;
+  --purple-pale: #ede9fe;
+  --gold: #f59e0b;
 }
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  /* FIX: prevent horizontal scroll from absolutely positioned elements */
 }
 
 body {
@@ -48,26 +67,43 @@ body {
 }
 
 /* h1 & h2 keep Raleway (previous font) */
-h1, h2 {
+h1,
+h2 {
   font-family: "Raleway", system-ui, sans-serif;
   letter-spacing: -0.02em;
   font-weight: 700;
 }
 
 /* h3–h6 use Cormorant Garamond */
-h3, h4, h5, h6 {
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   letter-spacing: -0.02em;
   font-weight: 600;
 }
 
 /* Custom scrollbar */
-::-webkit-scrollbar       { width: 6px; }
-::-webkit-scrollbar-track { background: #f5f3ff; }
-::-webkit-scrollbar-thumb { background: #8b5cf6; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #5b2d8e; }
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f3ff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8b5cf6;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5b2d8e;
+}
 
 @layer utilities {
+
   /* heading utility — Cormorant Garamond */
   .font-heading {
     font-family: var(--font-heading);
@@ -93,6 +129,7 @@ h3, h4, h5, h6 {
     font-family: var(--font-heading);
     font-weight: 700;
   }
+
   .font-mono-custom {
     font-family: var(--font-body);
     font-weight: 500;
@@ -124,31 +161,72 @@ h3, h4, h5, h6 {
 }
 
 @keyframes bannerShift {
-  0%, 100% { background-position: 0% 50%; }
-  50%       { background-position: 100% 50%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-12px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
 }
 
 @keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(1.4); }
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.4);
+  }
 }
 
-.animate-fade-in-up { animation: fadeInUp 0.7s ease forwards; }
-.animate-float      { animation: float 6s ease-in-out infinite; }
-.animate-pulse-dot  { animation: pulse-dot 2s ease infinite; }
+.animate-fade-in-up {
+  animation: fadeInUp 0.7s ease forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease infinite;
+}
 
 /* Nav underline effect */
-.nav-link-hover { position: relative; }
+.nav-link-hover {
+  position: relative;
+}
+
 .nav-link-hover::after {
   content: '';
   position: absolute;
@@ -159,4 +237,7 @@ h3, h4, h5, h6 {
   background: #f59e0b;
   transition: width 0.25s ease;
 }
-.nav-link-hover:hover::after { width: 100%; }
+
+.nav-link-hover:hover::after {
+  width: 100%;
+}
