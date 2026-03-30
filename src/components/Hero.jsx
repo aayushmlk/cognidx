@@ -99,7 +99,7 @@ export default function Hero() {
           <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-violet-500 flex-shrink-0"
             style={{ boxShadow: "0 0 8px rgba(167,139,250,0.8)", animation: "heroPulse 2s ease-in-out infinite" }} />
           <span className="text-[9px] sm:text-[11px] tracking-[0.12em] sm:tracking-[0.16em] uppercase font-semibold text-violet-400 text-center leading-snug">
-            Kathmandu, Nepal &nbsp;·&nbsp; Est. 2080 BS &nbsp;·&nbsp; CE &amp; NMPA Certified
+            Kathmandu, Nepal &nbsp;·&nbsp; Est. 2080 BS &nbsp;
           </span>
         </div>
 

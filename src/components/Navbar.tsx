@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, PhoneCall, Heart, ArrowRight } from "lucide-react";
 import { categories } from "@/data/products";
 
-type Section = "home" | "about" | "";
+type Section = "home" | "about"  | "contact" | "";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -55,6 +55,7 @@ export default function Navbar() {
   const isProductsPage = pathname.startsWith("/products");
   const homeActive = pathname === "/" && activeSection === "home";
   const aboutActive = pathname === "/" && activeSection === "about";
+  const contactActive = pathname === "/" && activeSection === "contact";
 
   const handleCatClick = (catId: string) => {
     window.location.href = `/products#${catId}`;
@@ -85,6 +86,7 @@ export default function Navbar() {
           <div className="hidden lg:flex items-center">
             <NavItem href="/" label="Home" active={homeActive} />
             <NavItem href="/#about" label="About" active={aboutActive} />
+            <NavItem href="/#contact" label="Contacts" active={contactActive} />
 
             {/* Products — CSS group-hover dropdown */}
             <div className="group relative mx-1">
@@ -159,7 +161,7 @@ export default function Navbar() {
 
           {/* ── Desktop right ── */}
           <div className="hidden lg:flex items-center gap-3">
-            <Link href="#contact"
+            <Link href="/#contact"
               className="vibrate-hover inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               style={{ background: "linear-gradient(135deg, #7c3aed, #6d28d9)", boxShadow: "0 4px 16px rgba(124,58,237,0.30)" }}>
               <PhoneCall size={14} className="icon-vibrate" />
@@ -321,7 +323,7 @@ export default function Navbar() {
             Donate Now
           </Link>
           <p className="text-center text-[11px] text-[#9ca3af] pt-1  tracking-wide">
-            Cognidx Enterprises · Est. 2019
+            Cognidx Enterprises · Est. 2080 BS
           </p>
         </div>
       </div>

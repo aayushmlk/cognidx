@@ -39,6 +39,19 @@ export default function Donate() {
         background: "linear-gradient(160deg, #faf8ff 0%, #f3f0ff 40%, #fdf4ff 70%, #f8f7ff 100%)",
       }}
     >
+      {/* Top accent bar */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 3,
+          background: "linear-gradient(90deg, transparent, #7c3aed66, #7c3aed, #7c3aed66, transparent)",
+        }}
+      />
+
+
       {/* ── Background atmosphere ── */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {/* Large soft violet bloom center */}
@@ -260,7 +273,7 @@ export default function Donate() {
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <div className="inline-flex items-center gap-1.5 mb-2 bg-[#a855f7] border-[#a855f7] px-2 py-2 rounded-full">
-                      <Sparkles size={11}  className="text-white"/>
+                      <Sparkles size={11} className="text-white" />
                       <span className="text-[9px] tracking-[0.2em] uppercase text-white">
                         eSewa Payment
                       </span>

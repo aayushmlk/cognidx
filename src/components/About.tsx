@@ -47,6 +47,17 @@ export default function About() {
         overflow: "hidden",
       }}
     >
+      {/* Top accent bar */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 3,
+          background: "linear-gradient(90deg, transparent, #7c3aed66, #7c3aed, #7c3aed66, transparent)",
+        }}
+      />
       {/* Soft background blobs */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
         <div style={{
@@ -153,6 +164,7 @@ export default function About() {
 
       <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto" }}>
 
+
         {/* Eyebrow */}
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 52 }}>
           <div style={{
@@ -216,34 +228,6 @@ export default function About() {
                 style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
               />
             </div>
-
-            {/* Floating cert badges */}
-            <div className="about-cert-badges">
-              {[
-                { label: "CE", sub: "EU Standards", bg: "linear-gradient(135deg,#f59e0b,#fbbf24)", shadow: "rgba(245,158,11,0.35)" },
-                { label: "NMPA", sub: "CN Standards", bg: "linear-gradient(135deg,#059669,#10b981)", shadow: "rgba(5,150,105,0.3)" },
-              ].map((cert) => (
-                <div key={cert.label} style={{
-                  display: "flex", alignItems: "center", gap: 10,
-                  background: "rgba(255,255,255,0.92)", backdropFilter: "blur(14px)",
-                  border: "1px solid rgba(124,58,237,0.12)",
-                  borderRadius: 14, padding: "8px 14px",
-                  boxShadow: "0 4px 20px rgba(109,40,217,0.12)",
-                }}>
-                  <div style={{
-                    width: 34, height: 34, borderRadius: 9, flexShrink: 0,
-                    background: cert.bg, boxShadow: `0 4px 10px ${cert.shadow}`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>
-                    <span style={{ fontSize: 9, fontWeight: 800, color: "#fff" }}>{cert.label}</span>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: "#1e0a3c", lineHeight: 1.2 }}>{cert.label} Certified</div>
-                    <div style={{ fontSize: 11, color: "#7c3aed" }}>{cert.sub}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* RIGHT — Text + Stats */}
@@ -263,54 +247,54 @@ export default function About() {
             </h2>
 
             <p className="text-justify" style={{
-  fontSize: "clamp(0.92rem, 1.4vw, 1.05rem)",
-  color: "#4b3f6b", lineHeight: 1.85,
-  marginBottom: 14,
-}}>
-  <strong style={{ color: "#140830", fontWeight: 700 }}>Cognidx Enterprises Pvt. Ltd.</strong> began with a simple goal: to make quality diagnostic equipment easily accessible in Nepal. We supply and distribute medical instruments, reagents, and consumables used by labs and hospitals daily.
-</p>
+              fontSize: "clamp(0.92rem, 1.4vw, 1.05rem)",
+              color: "#4b3f6b", lineHeight: 1.85,
+              marginBottom: 14,
+            }}>
+              <strong style={{ color: "#140830", fontWeight: 700 }}>Cognidx Enterprises Pvt. Ltd.</strong> began with a simple goal: to make quality diagnostic equipment easily accessible in Nepal. We supply and distribute medical instruments, reagents, and consumables used by labs and hospitals daily.
+            </p>
 
-<p className="text-justify" style={{
-  fontSize: "clamp(0.88rem, 1.3vw, 1rem)",
-  color: "#4b3f6b", lineHeight: 1.8,
-  marginBottom: 40,
-}}>
-  Since 2080 B.S., we’ve partnered with over 100 hospitals, from small hill clinics to large urban labs, ensuring the right equipment reaches every healthcare facility, so quality care is available everywhere.
-</p>
+            <p className="text-justify" style={{
+              fontSize: "clamp(0.88rem, 1.3vw, 1rem)",
+              color: "#4b3f6b", lineHeight: 1.8,
+              marginBottom: 40,
+            }}>
+              Since 2080 B.S., we’ve partnered with over 100 hospitals, from small hill clinics to large urban labs, ensuring the right equipment reaches every healthcare facility, so quality care is available everywhere.
+            </p>
 
             {/* Stats 2×2 */}
-        <div className="about-stats-grid">
-          {stats.map((s, idx) => {
-            const Icon = s.icon;
-            return (
-              <div
-                key={s.label}
-                style={{
-                  background: "#fff",
-                  border: "1px solid rgba(124,58,237,0.12)",
-                  borderRadius: 18,
-                  padding: "20px 18px 16px",
-                  boxShadow: "0 2px 16px rgba(109,40,217,0.07)",
-                  transition: "transform 0.2s, box-shadow 0.2s",
-                  cursor: "default",
-                  textAlign: "center",
-                }}
-              >
-                <Icon size={26} style={{ color: "#a78bfa", marginBottom: 10 }} />
-                <div style={{
-                  fontSize: "clamp(1.5rem, 2.8vw, 2.4rem)",
-                  fontWeight: 800, lineHeight: 1,
-                  color: "#7c3aed", marginBottom: 6, letterSpacing: "-0.02em",
-                }}>
-                  {animatedNums[idx]}{s.num.includes("+") ? "+" : ""}
-                </div>
-                <div style={{ fontSize: 13, color: "#7c6fa0", fontWeight: 500 }}>
-                  {s.label}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+            <div className="about-stats-grid">
+              {stats.map((s, idx) => {
+                const Icon = s.icon;
+                return (
+                  <div
+                    key={s.label}
+                    style={{
+                      background: "#fff",
+                      border: "1px solid rgba(124,58,237,0.12)",
+                      borderRadius: 18,
+                      padding: "20px 18px 16px",
+                      boxShadow: "0 2px 16px rgba(109,40,217,0.07)",
+                      transition: "transform 0.2s, box-shadow 0.2s",
+                      cursor: "default",
+                      textAlign: "center",
+                    }}
+                  >
+                    <Icon size={26} style={{ color: "#a78bfa", marginBottom: 10 }} />
+                    <div style={{
+                      fontSize: "clamp(1.5rem, 2.8vw, 2.4rem)",
+                      fontWeight: 800, lineHeight: 1,
+                      color: "#7c3aed", marginBottom: 6, letterSpacing: "-0.02em",
+                    }}>
+                      {animatedNums[idx]}{s.num.includes("+") ? "+" : ""}
+                    </div>
+                    <div style={{ fontSize: 13, color: "#7c6fa0", fontWeight: 500 }}>
+                      {s.label}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
             {/* Brand partners */}
             <div style={{ marginTop: 28 }}>
@@ -321,7 +305,7 @@ export default function About() {
                 Brand Partners
               </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {["Anbio", "Seamaty", "Bioelab", "Keylights", "Fapon"].map((b) => (
+                {["Anbio", "Seamaty", "Bioelab", "DiyaLab", "Fapon", "Rayto"].map((b) => (
                   <span key={b} style={{
                     fontSize: 13, fontWeight: 600,
                     padding: "6px 16px", borderRadius: 100,

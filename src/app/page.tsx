@@ -7,6 +7,7 @@ import Donate from "@/components/Donate";
 import GenzBanner from "@/components/GenzBanner";
 import Footer from "@/components/Footer";
 import Services from "@/components/Services";
+import {Contact} from "@/components/Contact";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       <Services/>
       <ProductSlideshow />
       <Donate />
+      <Contact />
       <Footer />
     </main>
   );
