@@ -2,6 +2,7 @@
 
 import { FlaskConical, Users, Award, Microscope, Wrench, BookOpen, Package, Building2 } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const stats = [
   { num: "50+", label: "Product Lines", icon: FlaskConical },
@@ -10,30 +11,32 @@ const stats = [
   { num: "70+", label: "Test Parameters", icon: Microscope },
 ];
 
-const services = [
-  {
-    icon: Package,
-    title: "Supply and Distribution",
-    desc: "From analyzers to reagents, we get the right products to your facility — whether you are in Kathmandu or a clinic three hills away.",
-  },
-  {
-    icon: Wrench,
-    title: "Machine Installation",
-    desc: "We come to you. Our team sets everything up on-site and does not leave until the machine is working exactly as it should.",
-  },
-  {
-    icon: Users,
-    title: "Staff Training",
-    desc: "We sit with your team and walk through everything hands-on. No manuals, no guesswork, just clear practical guidance at your pace.",
-  },
-  {
-    icon: BookOpen,
-    title: "After Sales Support",
-    desc: "Questions come up after the sale too. We pick up the phone and help you sort things out, however long it takes.",
-  },
-];
-
 export default function About() {
+  const [animatedNums, setAnimatedNums] = useState(stats.map(() => 0));
+
+  useEffect(() => {
+    const durations = stats.map((s) => 2000); // 2 seconds for each number
+    const targets = stats.map((s) => parseInt(s.num.replace("+", ""), 10));
+
+    const startTime = Date.now();
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const elapsed = now - startTime;
+
+      const newNums = targets.map((target, idx) => {
+        const progress = Math.min(elapsed / durations[idx], 1);
+        return Math.floor(progress * target);
+      });
+
+      setAnimatedNums(newNums);
+
+      if (newNums.every((val, idx) => val >= targets[idx])) {
+        clearInterval(interval);
+      }
+    }, 30);
+
+    return () => clearInterval(interval);
+  }, []);
   return (
     <section
       id="about"
@@ -259,70 +262,55 @@ export default function About() {
               We bring the right <span style={{ color: "#7c3aed" }}>diagnostic tools</span> to every hospital in Nepal
             </h2>
 
-            <p style={{
-              fontSize: "clamp(0.92rem, 1.4vw, 1.05rem)",
-              color: "#4b3f6b", lineHeight: 1.85,
-              marginBottom: 14,
-            }}>
-              <strong style={{ color: "#140830", fontWeight: 700 }}>Cognidx Enterprises Pvt. Ltd.</strong> started
-              with a simple idea <br /> &ldquo;Good diagnostic equipment should not be hard to find in Nepal.&rdquo; We work as a
-              supplier and distributor of medical instruments with a strong focus on
-              In Vitro Diagnostics, alongside the reagents, consumables, and other medical supplies that
-              labs and hospitals use every day.
-            </p>
+            <p className="text-justify" style={{
+  fontSize: "clamp(0.92rem, 1.4vw, 1.05rem)",
+  color: "#4b3f6b", lineHeight: 1.85,
+  marginBottom: 14,
+}}>
+  <strong style={{ color: "#140830", fontWeight: 700 }}>Cognidx Enterprises Pvt. Ltd.</strong> began with a simple goal: to make quality diagnostic equipment easily accessible in Nepal. We supply and distribute medical instruments, reagents, and consumables used by labs and hospitals daily.
+</p>
 
-            <p style={{
-              fontSize: "clamp(0.88rem, 1.3vw, 1rem)",
-              color: "#7c6fa0", lineHeight: 1.8,
-              marginBottom: 40,
-            }}>
-              Since we started in 2080 B.S., we have worked with over 100 hospitals across the country.
-              From small clinics tucked away in the hills to large urban hospitals and reference labs,
-              we make sure the right equipment reaches the people who need it most. Our products are
-              available for all grades of healthcare facilities, because we believe the quality of care
-              should not depend on where you are located.
-            </p>
+<p className="text-justify" style={{
+  fontSize: "clamp(0.88rem, 1.3vw, 1rem)",
+  color: "#4b3f6b", lineHeight: 1.8,
+  marginBottom: 40,
+}}>
+  Since 2080 B.S., we’ve partnered with over 100 hospitals, from small hill clinics to large urban labs, ensuring the right equipment reaches every healthcare facility, so quality care is available everywhere.
+</p>
 
             {/* Stats 2×2 */}
-            <div className="about-stats-grid">
-              {stats.map((s) => {
-                const Icon = s.icon;
-                return (
-                  <div
-                    key={s.num}
-                    style={{
-                      background: "#fff",
-                      border: "1px solid rgba(124,58,237,0.12)",
-                      borderRadius: 18,
-                      padding: "20px 18px 16px",
-                      boxShadow: "0 2px 16px rgba(109,40,217,0.07)",
-                      transition: "transform 0.2s, box-shadow 0.2s",
-                      cursor: "default",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translateY(-3px)";
-                      e.currentTarget.style.boxShadow = "0 8px 32px rgba(109,40,217,0.15)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow = "0 2px 16px rgba(109,40,217,0.07)";
-                    }}
-                  >
-                    <Icon size={18} style={{ color: "#a78bfa", marginBottom: 10 }} />
-                    <div style={{
-                      fontSize: "clamp(1.5rem, 2.8vw, 2.4rem)",
-                      fontWeight: 800, lineHeight: 1,
-                      color: "#7c3aed", marginBottom: 6, letterSpacing: "-0.02em",
-                    }}>
-                      {s.num}
-                    </div>
-                    <div style={{ fontSize: 13, color: "#7c6fa0", fontWeight: 500 }}>
-                      {s.label}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+        <div className="about-stats-grid">
+          {stats.map((s, idx) => {
+            const Icon = s.icon;
+            return (
+              <div
+                key={s.label}
+                style={{
+                  background: "#fff",
+                  border: "1px solid rgba(124,58,237,0.12)",
+                  borderRadius: 18,
+                  padding: "20px 18px 16px",
+                  boxShadow: "0 2px 16px rgba(109,40,217,0.07)",
+                  transition: "transform 0.2s, box-shadow 0.2s",
+                  cursor: "default",
+                  textAlign: "center",
+                }}
+              >
+                <Icon size={26} style={{ color: "#a78bfa", marginBottom: 10 }} />
+                <div style={{
+                  fontSize: "clamp(1.5rem, 2.8vw, 2.4rem)",
+                  fontWeight: 800, lineHeight: 1,
+                  color: "#7c3aed", marginBottom: 6, letterSpacing: "-0.02em",
+                }}>
+                  {animatedNums[idx]}{s.num.includes("+") ? "+" : ""}
+                </div>
+                <div style={{ fontSize: 13, color: "#7c6fa0", fontWeight: 500 }}>
+                  {s.label}
+                </div>
+              </div>
+            );
+          })}
+        </div>
 
             {/* Brand partners */}
             <div style={{ marginTop: 28 }}>
@@ -359,129 +347,6 @@ export default function About() {
             </div>
           </div>
 
-        </div>
-
-        {/* ── Services section ── */}
-        <div style={{ marginTop: 80 }}>
-
-          {/* Header */}
-          <div className="about-services-header">
-            <div>
-              <div style={{
-                display: "inline-flex", alignItems: "center", gap: 8,
-                padding: "6px 16px", borderRadius: 100,
-                background: "rgba(124,58,237,0.08)",
-                border: "1px solid rgba(124,58,237,0.18)",
-                marginBottom: 16,
-              }}>
-                <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#7c3aed" }} />
-                <span style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "#7c3aed", fontWeight: 700 }}>
-                  What We Offer
-                </span>
-              </div>
-              <h3 style={{
-                fontSize: "clamp(1.4rem, 2.8vw, 2.2rem)",
-                fontWeight: 700, color: "rgb(20,8,48)",
-                letterSpacing: "-0.02em", lineHeight: 1.15, margin: 0,
-              }}>
-                We stay with you<br />
-                <span style={{ color: "#7c3aed" }}>long after delivery</span>
-              </h3>
-            </div>
-            <p style={{
-              fontSize: "clamp(0.85rem, 1.2vw, 0.97rem)",
-              color: "#7c6fa0", lineHeight: 1.8,
-              maxWidth: 300, margin: 0,
-            }}>
-              Getting the equipment is just the start. We install it, train your staff, and are a call away whenever you need us.
-            </p>
-          </div>
-
-          {/* Cards */}
-         <div className="about-services-grid">
-  {services.map((svc, i) => {
-    const Icon = svc.icon;
-    return (
-      <div
-        key={svc.title}
-        className="relative flex flex-col items-center p-6 rounded-[22px] bg-white border transition-transform cursor-default text-center"
-        style={{
-          border: "1px solid rgba(124,58,237,0.10)",
-          overflow: "hidden",
-          transition: "transform 0.22s, box-shadow 0.22s, border-color 0.22s",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "translateY(-5px)";
-          e.currentTarget.style.boxShadow = "0 16px 40px rgba(109,40,217,0.13)";
-          e.currentTarget.style.borderColor = "rgba(124,58,237,0.25)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "translateY(0)";
-          e.currentTarget.style.boxShadow = "none";
-          e.currentTarget.style.borderColor = "rgba(124,58,237,0.10)";
-        }}
-      >
-        {/* Subtle top accent line */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 24,
-            right: 24,
-            height: 2,
-            borderRadius: "0 0 4px 4px",
-            background:
-              "linear-gradient(90deg, rgba(124,58,237,0.0), rgba(124,58,237,0.35), rgba(124,58,237,0.0))",
-          }}
-        />
-
-        {/* Step number */}
-        <div
-          className="uppercase mb-4"
-          style={{
-            fontSize: 14,
-            fontWeight: 700,
-            letterSpacing: "0.2em",
-            color: "rgba(106, 6, 213, 0.66)",
-          }}
-        >
-          0{i + 1}
-        </div>
-
-        {/* Icon */}
-        <div
-          className="flex items-center justify-center mb-4 w-20 h-20 rounded-[13px]"
-          style={{
-            background: "#f5f3ff",
-            border: "1px solid rgba(124,58,237,0.12)",
-          }}
-        >
-          <Icon size={26} style={{ color: "#7c3aed" }} />
-        </div>
-
-        {/* Title */}
-        <div
-          className="font-bold mb-3"
-          style={{
-            fontSize: 16,
-            color: "#7c3aed",
-            lineHeight: 1.3,
-          }}
-        >
-          {svc.title}
-        </div>
-
-        {/* Description */}
-        <div
-          className="text-sm text-[#7c6fa0] leading-relaxed"
-          style={{ lineHeight: 1.75 }}
-        >
-          {svc.desc}
-        </div>
-      </div>
-    );
-  })}
-</div>
         </div>
 
       </div>

@@ -259,13 +259,13 @@ export default function Donate() {
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <div className="inline-flex items-center gap-1.5 mb-2">
-                      <Sparkles size={11} style={{ color: "#a855f7" }} />
-                      <span className="text-[10px] tracking-[0.2em] uppercase text-violet-400">
+                    <div className="inline-flex items-center gap-1.5 mb-2 bg-[#a855f7] border-[#a855f7] px-2 py-2 rounded-full">
+                      <Sparkles size={11}  className="text-white"/>
+                      <span className="text-[9px] tracking-[0.2em] uppercase text-white">
                         eSewa Payment
                       </span>
                     </div>
-                    <h3 className=" text-2xl font-bold text-[#0f0a1e]">
+                    <h3 className=" text-2xl -mt-1 font-bold text-[#0f0a1e]">
                       Scan to Donate
                     </h3>
                   </div>

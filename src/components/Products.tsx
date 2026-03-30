@@ -328,7 +328,7 @@ export default function Products() {
           <div className="w-[3px] h-7 rounded-full" style={{ background: "linear-gradient(180deg, #7c3aed, #a855f7)" }} />
           <div>
             <h2 className="text-lg font-bold text-[#0f0a1e]">{activeCat?.label}</h2>
-            <p className="text-xs text-[#9ca3af]">{filtered.length} product{filtered.length !== 1 ? "s" : ""} available</p>
+            <p className="text-xs font-semibold text-[#9ca3af]">{filtered.length} product{filtered.length !== 1 ? "s" : ""} available</p>
           </div>
         </div>
 

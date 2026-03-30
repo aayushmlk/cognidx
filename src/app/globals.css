@@ -53,7 +53,9 @@ body {
   background: #ffffff;
   color: #1a1a2e;
   overflow-x: hidden;
+  @apply scrollbar-hide;
 }
+
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
