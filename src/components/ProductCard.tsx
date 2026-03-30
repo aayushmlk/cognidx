@@ -11,9 +11,6 @@ import {
   FlaskConical,
   MessageCircle,
   ClipboardPlus,
-  ZapIcon,
-  EyeOff,
-  NotebookTabs,
   ReceiptText,
 } from "lucide-react";
 import type { Product } from "@/data/products";
@@ -349,7 +346,7 @@ export default function ProductRow({ product, highlight }: Props) {
             }}
           >
             <MessageCircle size={14} />
-            Enquire
+            WhatsApp Us
           </a>
         </div>
       </div>

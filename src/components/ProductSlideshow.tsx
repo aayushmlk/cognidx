@@ -13,150 +13,250 @@ const SLIDESHOW_CSS = `
 .ss-section { width:100%; overflow:hidden; position:relative; user-select:none; background:#f8f7ff; }
 .ss-top-bar { height:3px; width:100%; position:relative; overflow:hidden; }
 
-/* slide must be a strict flex column so children fill it completely */
 .ss-slide {
-  overflow:hidden; position:relative; transition:background 0.7s;
-  display:flex; flex-direction:column;
+  overflow: hidden;
+  position: relative;
+  transition: background 0.7s;
+  display: flex;
+  flex-direction: column;
 }
 
-/* inner stretches to fill the slide */
 .ss-inner {
-  display:flex; flex-direction:column;
-  max-width:72rem; margin:0 auto;
-  flex:1; min-height:0;
-  width:100%;
+  display: flex;
+  flex-direction: column;
+  max-width: 72rem;
+  margin: 0 auto;
+  width: 100%;
+  flex: 1;
 }
 
-/* two-col fills remaining space after eyebrow */
-.ss-two-col { display:flex; flex:1; min-height:0; }
+.ss-two-col { display: flex; }
 
 /* ── Desktop ≥768px ── */
-@media (min-width:768px) {
-  .ss-slide  { height:740px; }
-  .ss-inner  { padding:0 3.5rem; }
-  .ss-eyebrow { padding-top:1.75rem; flex-shrink:0; display:flex; align-items:center; gap:12px; }
-  .ss-two-col { flex-direction:row; gap:3.5rem; padding:2rem 0; }
-  .ss-img-col { width:40%; flex-shrink:0; display:flex; align-items:center; justify-content:center; position:relative; }
-  .ss-product-img { max-height:380px; }
-  .ss-text-col {
-    flex:1; min-width:0;
-    display:flex; flex-direction:column;
-    justify-content:space-between;
+@media (min-width: 768px) {
+  .ss-slide  { min-height: 740px; height: 740px; }
+  .ss-inner  { padding: 0 3.5rem; }
+
+  .ss-eyebrow {
+    padding-top: 1.75rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
-  .ss-text-inner { display:flex; flex-direction:column; flex:1; min-height:0; }
-  .ss-category-row { margin-bottom:1rem; }
-  .ss-cat-chip   { font-size:10px; padding:6px 14px; }
-  .ss-model-chip { font-size:10px; padding:6px 10px; }
-  .ss-name { font-size:clamp(1.5rem,3vw,2.5rem); -webkit-line-clamp:3; margin-bottom:0.75rem; }
-  .ss-tests-box  { padding:14px 16px; margin-bottom:1.25rem; border-radius:16px; }
-  .ss-tests-label-row { margin-bottom:10px; }
-  .ss-tests-scroll { display:flex; flex-wrap:wrap; gap:6px; }
-  .ss-tests-scroll span { font-size:10px; padding:4px 10px; }
-  .ss-desc  { font-size:0.9rem; line-height:1.9; margin-bottom:1.25rem; -webkit-line-clamp:4; }
-  .ss-divider { margin-bottom:1.25rem; }
-  .ss-highlights { display:flex; flex-direction:column; gap:10px; margin-bottom:1.75rem; }
-  /* always show header on desktop too */
-  .ss-highlights-header { display:flex; align-items:center; gap:6px; margin-bottom:6px; }
-  .ss-highlights-title  { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.18em; }
-  .ss-highlight-dot  { width:20px; height:20px; }
-  .ss-highlight-text { font-size:0.82rem; }
-  .ss-cta-row { gap:12px; flex-shrink:0; }
-  .ss-cta-primary   { font-size:0.78rem; padding:0.65rem 1.4rem; }
-  .ss-cta-secondary { font-size:0.78rem; padding:0.65rem 1.4rem; }
-  .ss-nav { padding:14px 20px; }
+
+  .ss-two-col {
+    flex-direction: row;
+    gap: 3.5rem;
+    padding: 2rem 0 1.5rem;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .ss-img-col {
+    width: 40%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ss-product-img { max-height: 380px; }
+
+  .ss-text-col {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .ss-anim-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* Scrollable text area on desktop */
+  .ss-text-inner {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 6px;
+    /* Custom scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,0.15) transparent;
+  }
+  .ss-text-inner::-webkit-scrollbar { width: 4px; }
+  .ss-text-inner::-webkit-scrollbar-track { background: transparent; }
+  .ss-text-inner::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 4px; }
+
+  .ss-category-row { margin-bottom: 0.9rem; flex-shrink: 0; }
+  .ss-cat-chip   { font-size: 10px; padding: 6px 14px; }
+  .ss-model-chip { font-size: 10px; padding: 6px 10px; }
+
+  .ss-name {
+    font-size: clamp(1.4rem, 2.8vw, 2.3rem);
+    margin-bottom: 0.8rem;
+    flex-shrink: 0;
+    /* No line clamping — show full name */
+    display: block;
+  }
+
+  .ss-tests-box  { padding: 14px 16px; margin-bottom: 1.1rem; border-radius: 16px; flex-shrink: 0; }
+  .ss-tests-label-row { margin-bottom: 10px; }
+  .ss-tests-scroll { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ss-tests-scroll span { font-size: 10px; padding: 4px 10px; }
+
+  .ss-desc {
+    font-size: 0.875rem;
+    line-height: 1.85;
+    margin-bottom: 1.1rem;
+    flex-shrink: 0;
+    /* No clamping — show full description */
+    display: block;
+  }
+
+  .ss-divider { margin-bottom: 1.1rem; flex-shrink: 0; }
+
+  .ss-highlights { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; flex-shrink: 0; }
+  .ss-highlights-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .ss-highlights-title  { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; }
+  .ss-highlight-dot  { width: 20px; height: 20px; }
+  .ss-highlight-text { font-size: 0.82rem; }
+
+  .ss-cta-row { gap: 12px; flex-shrink: 0; padding-bottom: 2px; }
+  .ss-cta-primary   { font-size: 0.78rem; padding: 0.65rem 1.4rem; }
+  .ss-cta-secondary { font-size: 0.78rem; padding: 0.65rem 1.4rem; }
+  .ss-nav { padding: 14px 20px; }
 }
 
 /* ── Mobile <768px ── */
-@media (max-width:767px) {
-  .ss-slide  { height:510px; }
-  .ss-inner  { padding:0 14px; }
-  .ss-eyebrow { padding-top:7px; padding-bottom:4px; flex-shrink:0; display:flex; align-items:center; gap:8px; }
-  .ss-two-col { flex-direction:column; gap:0; padding:0; }
+@media (max-width: 767px) {
+  /*
+    Key fix: no fixed height — use min-height so the card can grow.
+    The nav bar stays at the bottom naturally.
+    The slide shows ALL content — no clipping.
+  */
+  .ss-slide  { min-height: 540px; }
+  .ss-inner  { padding: 0 18px; }
+
+  .ss-eyebrow {
+    padding-top: 14px;
+    padding-bottom: 6px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ss-two-col {
+    flex-direction: column;
+    gap: 0;
+    padding: 0 0 16px;
+  }
 
   .ss-img-col {
-    width:100%; flex-shrink:0;
-    height:180px;
-    display:flex; align-items:center; justify-content:center; position:relative;
+    width: 100%;
+    flex-shrink: 0;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 14px;
   }
-  .ss-product-img { max-height:115px; width:auto; }
 
-  /* text col: strict flex column, fills remaining height */
+  .ss-product-img { max-height: 130px; width: auto; }
+
   .ss-text-col {
-    flex:1; min-height:0;
-    display:flex; flex-direction:column;
-    overflow:hidden;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
   }
 
-  /* animated wrapper must also be a flex column filling the text col */
   .ss-anim-wrapper {
-    display:flex; flex-direction:column;
-    flex:1; min-height:0;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
 
-  /* scrollable area grows, cta stays pinned */
+  /* On mobile, text inner is NOT scrollable — shows everything, slide grows */
   .ss-text-inner {
-    display:flex; flex-direction:column;
-    flex:1; min-height:0;
-    overflow:hidden;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
 
-  .ss-category-row { margin-bottom:3px; flex-shrink:0; }
-  .ss-cat-chip   { font-size:9px; padding:2px 9px; }
-  .ss-model-chip { font-size:9px; padding:2px 8px; }
+  .ss-category-row { margin-bottom: 8px; flex-shrink: 0; }
+  .ss-cat-chip   { font-size: 9.5px; padding: 4px 11px; }
+  .ss-model-chip { font-size: 9.5px; padding: 4px 10px; }
 
-  .ss-name { font-size:0.92rem; -webkit-line-clamp:2; margin-bottom:3px; flex-shrink:0; }
+  /* Full product name — no clamping */
+  .ss-name {
+    font-size: 1.05rem;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+    display: block;
+  }
 
-  .ss-tests-box { padding:5px 9px; margin-bottom:3px; border-radius:10px; flex-shrink:0; }
-  .ss-tests-label-row { margin-bottom:3px; }
+  .ss-tests-box {
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+  .ss-tests-label-row { margin-bottom: 6px; }
   .ss-tests-scroll {
-  display:flex;
-  flex-wrap:wrap;
-  gap:3px;
-  overflow: hidden;
-  max-height: 32px; /* ~2 rows */
-}
-.ss-tests-scroll span {
-  font-size:8px;                /* smaller text */
-  padding:1.5px 6px;            /* tighter pills */
-  border-radius:6px;
-  line-height:1.2;
-  font-weight:600;
-  white-space:nowrap;           /* cleaner look like desktop */
-}
-
-.ss-desc {
-  font-size:0.68rem;
-  line-height:1.4;
-  margin-bottom:4px;
-  flex-shrink:0;
-
-  display:-webkit-box;
-  -webkit-line-clamp: 5;        /* ✅ limit to 5 lines */
-  -webkit-box-orient: vertical;
-  overflow:flex;
-
-  word-break: break-word;       /* ✅ prevent ugly cuts */
-}
-
- 
-
-  .ss-highlights { display:flex; flex-direction:column; gap:0; flex-shrink:0; margin-bottom:0; }
-  /* show header on mobile */
-  .ss-highlights-header { display:flex; align-items:center; gap:5px; margin-bottom:3px; }
-  .ss-highlights-title  { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.18em; }
-  .ss-highlight-row  { margin-bottom:2px; }
-  .ss-highlight-dot  { width:14px; height:14px; }
-  .ss-highlight-text { font-size:0.665rem; line-height:1.35; }
-
-  /* CTAs: flex-shrink:0 keeps them at the bottom, no gap above */
-  .ss-cta-row {
-    gap:5px; flex-shrink:0;
-    padding-top:5px; padding-bottom:4px;
-    margin-top:auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
   }
-  .ss-cta-primary   { font-size:0.595rem; padding:0.33rem 0.75rem; }
-  .ss-cta-secondary { font-size:0.595rem; padding:0.33rem 0.75rem; }
-  .ss-nav { padding:7px 14px; }
+  .ss-tests-scroll span {
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 7px;
+    line-height: 1.3;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Full description — no clamping */
+  .ss-desc {
+    font-size: 0.78rem;
+    line-height: 1.65;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+    display: block;
+    color: #4b5563;
+  }
+
+  .ss-divider { margin-bottom: 10px; flex-shrink: 0; }
+
+  .ss-highlights { display: flex; flex-direction: column; gap: 7px; flex-shrink: 0; margin-bottom: 14px; }
+  .ss-highlights-header { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+  .ss-highlights-title  { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; }
+  .ss-highlight-row  { margin-bottom: 0; }
+  .ss-highlight-dot  { width: 16px; height: 16px; }
+  .ss-highlight-text { font-size: 0.74rem; line-height: 1.5; }
+
+  .ss-cta-row {
+    gap: 8px;
+    flex-shrink: 0;
+    padding-bottom: 4px;
+  }
+  .ss-cta-primary   { font-size: 0.7rem; padding: 0.48rem 1rem; }
+  .ss-cta-secondary { font-size: 0.7rem; padding: 0.48rem 1rem; }
+  .ss-nav { padding: 10px 18px; }
 }
 `;
 
@@ -285,7 +385,6 @@ export default function ProductSlideshow() {
           </>
         )}
 
-        {/* ss-inner: flex col, fills slide */}
         <div className="ss-inner">
 
           {/* ── Eyebrow ── */}
@@ -333,15 +432,11 @@ export default function ProductSlideshow() {
               </div>
             </div>
 
-            {/* Text col — flex col, fills remaining height */}
+            {/* Text col */}
             <div className="ss-text-col">
+              <div className="ss-anim-wrapper" style={slideContentAnim}>
 
-              {/* Animated wrapper — MUST be flex col + fill */}
-              <div
-                className="ss-anim-wrapper"
-                style={slideContentAnim}
-              >
-                {/* Scrollable content area */}
+                {/* Scrollable (desktop) / full-height (mobile) content */}
                 <div className="ss-text-inner">
 
                   {/* Category + model */}
@@ -357,9 +452,9 @@ export default function ProductSlideshow() {
                     </span>
                   </div>
 
-                  {/* Name */}
+                  {/* Full name — never clamped */}
                   <h3 className="ss-name font-bold text-[#0f0a1e] leading-tight"
-                    style={{ display: "-webkit-box", WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                    style={{ fontFamily: "Raleway, system-ui, sans-serif" }}>
                     {p.name}
                   </h3>
 
@@ -383,9 +478,8 @@ export default function ProductSlideshow() {
                     </div>
                   </div>
 
-                  {/* Description */}
-                  <p className="ss-desc text-[#5a6070]"
-                    style={{ display: "-webkit-box", WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                  {/* Full description — never clamped */}
+                  <p className="ss-desc text-[#5a6070]">
                     {p.description}
                   </p>
 
@@ -393,10 +487,9 @@ export default function ProductSlideshow() {
                   <div className="ss-divider h-px"
                     style={{ background: mounted ? `linear-gradient(90deg,${accent}22,transparent 65%)` : "rgba(0,0,0,0.06)" }} />
 
-                  {/* Highlights — header always visible on both mobile & desktop */}
+                  {/* All highlights — no .slice(0,3) limit */}
                   <div className="ss-highlights">
                     <div className="ss-highlights-header">
-                      {/* Star icon */}
                       <svg width="12" height="12" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
                         <path
                           d="M7 1.5L8.5 5.5H12.5L9.5 8L10.5 12L7 9.5L3.5 12L4.5 8L1.5 5.5H5.5L7 1.5Z"
@@ -407,7 +500,7 @@ export default function ProductSlideshow() {
                     </div>
                     {p.highlights.slice(0, 3).map((h, i) => (
                       <div key={h} className="ss-highlight-row flex items-start gap-2"
-                        style={{ opacity: animating ? 0 : 1, transform: animating ? "translateY(5px)" : "translateY(0)", transition: `opacity 0.4s ease ${i * 70}ms,transform 0.4s ease ${i * 70}ms` }}>
+                        style={{ opacity: animating ? 0 : 1, transform: animating ? "translateY(5px)" : "translateY(0)", transition: `opacity 0.4s ease ${i * 60}ms,transform 0.4s ease ${i * 60}ms` }}>
                         <span className="ss-highlight-dot rounded-full flex items-center justify-center shrink-0 mt-0.5"
                           style={{ background: mounted ? `${accent}12` : "rgba(0,0,0,0.04)", border: mounted ? `1.5px solid ${accent}28` : "1.5px solid rgba(0,0,0,0.08)" }}>
                           <span className="w-1 h-1 rounded-full" style={{ background: accentColor }} />
@@ -419,7 +512,7 @@ export default function ProductSlideshow() {
 
                 </div>{/* end ss-text-inner */}
 
-                {/* CTAs — pinned to bottom via margin-top:auto */}
+                {/* CTAs — always at bottom */}
                 <div className="ss-cta-row flex flex-nowrap">
                   <button
                     onClick={() => router.push(`/products#${p.categoryId}`)}
@@ -436,7 +529,7 @@ export default function ProductSlideshow() {
                     style={{ color: accentColor, background: accentBg10, border: accentBd26 }}
                   >
                     <MessageCircle size={12} />
-                    WhatsApp
+                    WhatsApp Us
                   </a>
                 </div>
 

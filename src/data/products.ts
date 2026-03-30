@@ -424,7 +424,7 @@ export const products: Product[] = [
     category: "Fluorescence Immunoassay",
     categoryId: "fia",
     tagline: "Autoimmune Antibody Results in 15 Minutes.",
-    description: "A Time-Resolved Fluoroimmunoassay (TRFIA) platform for rapid quantitative detection of autoantibodies in human serum. Single-packing, no reagent consumption, and a quantitative result in just 15 minutes. Available in three models: the single-channel DL300, the 6-channel M6, and the high-throughput TFL2000 at 150 tests/hour — covering the full range from point-of-care to busy lab settings.",
+    description: "A Time-Resolved Fluoroimmunoassay (TRFIA) platform for rapid quantitative detection of autoantibodies in human serum. Single-packing and a quantitative result in just 15 minutes. Available in three models: the single-channel DL300, the 6-channel M6, and the high-throughput TFL2000 at 150 tests/hour.",
     tests: ["Autoimmune Antibodies (ANA, Anti-dsDNA)", "Connective Tissue Disease Markers", "Rheumatoid Arthritis (RF, Anti-CCP)", "Thyroid Antibodies", "Cardiac Markers", "Infection Markers"],
     specs: [
       { key: "Principle", value: "Time-Resolved Fluoroimmunoassay (TRFIA)" },

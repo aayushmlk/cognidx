@@ -2,17 +2,18 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Phone, Mail, MessageCircle, ArrowUpRight, Heart } from "lucide-react";
+import { MapPin, Phone, Mail, MessageCircle, ArrowUpRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { categories } from "@/data/products";
 
 const companyLinks = [
-  { label: "About Us", href: "#about" },
+  { label: "About Us", href: "./#about" },
   { label: "Our Products", href: "#products" },
-  { label: "Donate", href: "#donate" },
-  { label: "Contact", href: "#contact" },
+  { label: "Donate", href: "./#donate" },
+  { label: "Contact", href: "./#contact" },
 ];
 
-const brandPartners = ["Anbio", "Seamaty", "Bioelab", "Keylights", "Fapon"];
+const brandPartners = ["Anbio", "Seamaty", "Bioelab", "DiyaLab", "Fapon", "Rayto"];
 
 const phoneNumbers = [
   { label: "+977 9819425801", href: "tel:+9779819425801" },
@@ -50,20 +51,41 @@ const contactItems = [
   },
 ];
 
+const h4Style: React.CSSProperties = {
+  fontFamily: "Raleway, system-ui, sans-serif",
+  background: "linear-gradient(90deg, #9333ea, #c026d3)",
+  WebkitBackgroundClip: "text",
+  WebkitTextFillColor: "transparent",
+  backgroundClip: "text",
+};
+
 export default function Footer() {
+  const router = useRouter();
+
   const handleCatClick = (catId: string) => {
-    window.location.href = `/products#${catId}`;
+    // Store the target so the products page can scroll to it after mount
+    sessionStorage.setItem("scrollTo", catId);
+    router.push(`/products#${catId}`);
   };
 
   return (
     <footer
-      id="contact"
+      id="contactsss"
       className="relative overflow-hidden"
       style={{
-        background: "linear-gradient(175deg, #faf8ff 0%, #f3f0ff 30%, #fdf4ff 65%, #f5f3ff 100%)",
+        background: "linear-gradient(135deg, #f3eeff 0%, #ffffff 50%, #ede9fe 100%)",
       }}
     >
-      {/* ── Background atmosphere ── */}
+      {/* Top accent bar */}
+      <div
+        style={{
+          height: 3,
+          width: "100%",
+          background: "linear-gradient(90deg, transparent, #7c3aed66, #7c3aed, #7c3aed66, transparent)",
+        }}
+      />
+
+      {/* Background atmosphere */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
           className="absolute -bottom-24 -left-24 w-[500px] h-[400px] rounded-full"
@@ -95,25 +117,11 @@ export default function Footer() {
         />
       </div>
 
-      {/* ── Top shimmer border ── */}
-      <div className="relative h-px w-full">
-        <div
-          className="absolute inset-0"
-          style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(167,139,250,0.6) 25%, rgba(232,121,249,0.5) 50%, rgba(167,139,250,0.6) 75%, transparent 100%)",
-          }}
-        />
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px"
-          style={{ boxShadow: "0 0 24px 4px rgba(167,139,250,0.3)" }}
-        />
-      </div>
-
-      {/* ── Main content ── */}
+      {/* Main content */}
       <div className="relative max-w-6xl mx-auto px-6 pt-16 pb-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-12">
 
-          {/* ── Brand col ── */}
+          {/* Brand col */}
           <div className="lg:col-span-5 flex flex-col gap-7">
             <Link href="/" className="inline-block w-fit group">
               <div className="relative h-10 w-44 transition-opacity duration-200 group-hover:opacity-80">
@@ -132,7 +140,6 @@ export default function Footer() {
             </p>
 
             <ul className="space-y-2.5">
-              {/* ── Phone numbers — single col ── */}
               <li>
                 <div className="flex items-start gap-3">
                   <span
@@ -160,7 +167,6 @@ export default function Footer() {
                 </div>
               </li>
 
-              {/* ── Other contact items ── */}
               {contactItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -198,16 +204,11 @@ export default function Footer() {
           {/* Spacer */}
           <div className="hidden lg:block lg:col-span-1" />
 
-          {/* ── Products col ── */}
+          {/* Products col */}
           <div className="lg:col-span-3">
             <h4
-              className=" text-[10px] uppercase tracking-[0.25em] font-bold mb-5"
-              style={{
-                background: "linear-gradient(90deg, #9333ea, #c026d3)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
+              className="text-[10px] uppercase tracking-[0.25em] font-bold mb-5"
+              style={h4Style}
             >
               Products
             </h4>
@@ -231,16 +232,11 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* ── Company col ── */}
+          {/* Company col */}
           <div className="lg:col-span-3">
             <h4
               className="text-[10px] uppercase tracking-[0.25em] font-bold mb-5"
-              style={{
-                background: "linear-gradient(90deg, #9333ea, #c026d3)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
+              style={h4Style}
             >
               Company
             </h4>
@@ -264,13 +260,8 @@ export default function Footer() {
             </ul>
 
             <h4
-              className=" text-[10px] uppercase tracking-[0.25em] font-bold mb-4"
-              style={{
-                background: "linear-gradient(90deg, #9333ea, #c026d3)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
+              className="text-[10px] uppercase tracking-[0.25em] font-bold mb-4"
+              style={h4Style}
             >
               Partners
             </h4>
@@ -291,10 +282,11 @@ export default function Footer() {
               ))}
             </div>
           </div>
+
         </div>
       </div>
 
-      {/* ── Divider ── */}
+      {/* Divider */}
       <div
         className="h-px w-full"
         style={{
@@ -302,7 +294,7 @@ export default function Footer() {
         }}
       />
 
-      {/* ── Bottom bar ── */}
+      {/* Bottom bar */}
       <div className="relative max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-center gap-3">
         <p className="text-xs text-[#9ca3af] text-center sm:text-left">
           © {new Date().getFullYear()}{" "}
