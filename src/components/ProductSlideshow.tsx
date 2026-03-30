@@ -47,7 +47,7 @@ const SLIDESHOW_CSS = `
   .ss-category-row { margin-bottom:1rem; }
   .ss-cat-chip   { font-size:10px; padding:6px 14px; }
   .ss-model-chip { font-size:10px; padding:6px 10px; }
-  .ss-name { font-size:clamp(1.5rem,3vw,2.5rem); -webkit-line-clamp:2; margin-bottom:0.75rem; }
+  .ss-name { font-size:clamp(1.5rem,3vw,2.5rem); -webkit-line-clamp:3; margin-bottom:0.75rem; }
   .ss-tests-box  { padding:14px 16px; margin-bottom:1.25rem; border-radius:16px; }
   .ss-tests-label-row { margin-bottom:10px; }
   .ss-tests-scroll { display:flex; flex-wrap:wrap; gap:6px; }
@@ -68,14 +68,14 @@ const SLIDESHOW_CSS = `
 
 /* ── Mobile <768px ── */
 @media (max-width:767px) {
-  .ss-slide  { height:500px; }
+  .ss-slide  { height:510px; }
   .ss-inner  { padding:0 14px; }
   .ss-eyebrow { padding-top:7px; padding-bottom:4px; flex-shrink:0; display:flex; align-items:center; gap:8px; }
   .ss-two-col { flex-direction:column; gap:0; padding:0; }
 
   .ss-img-col {
     width:100%; flex-shrink:0;
-    height:130px;
+    height:180px;
     display:flex; align-items:center; justify-content:center; position:relative;
   }
   .ss-product-img { max-height:115px; width:auto; }
