@@ -87,7 +87,7 @@ export default function Footer() {
       id="contact"
       className="relative overflow-hidden"
       style={{
-        background: "linear-gradient(135deg, #f3eeff 0%, #ffffff 50%, #ede9fe 100%)",
+        background: "linear-gradient(135deg, #ede9fe 0%, #e9d5ff 40%, #ebe9fc 100%)",
       }}
     >
       {/* Top accent bar */}
@@ -104,14 +104,14 @@ export default function Footer() {
         <div
           className="absolute -bottom-24 -left-24 w-[500px] h-[400px] rounded-full"
           style={{
-            background: "radial-gradient(ellipse, rgba(167,139,250,0.22) 0%, transparent 68%)",
+            background: "radial-gradient(ellipse, rgba(109,40,217,0.25) 0%, transparent 68%)",
             filter: "blur(40px)",
           }}
         />
         <div
           className="absolute -top-16 -right-16 w-[380px] h-[320px] rounded-full"
           style={{
-            background: "radial-gradient(ellipse, rgba(232,121,249,0.12) 0%, transparent 65%)",
+            background: "radial-gradient(ellipse, rgba(192,132,252,0.18) 0%, transparent 65%)",
             filter: "blur(50px)",
           }}
         />
@@ -138,17 +138,18 @@ export default function Footer() {
           {/* Brand col */}
           <div className="lg:col-span-5 flex flex-col gap-7">
             <Link href="/" className="inline-block w-fit group">
-              <div className="relative h-10 w-44 transition-opacity duration-200 group-hover:opacity-80">
+              <div className="relative h-10 w-64 transition-opacity duration-200 group-hover:opacity-80">
                 <Image
                   src="/cognidx_logo.png"
                   alt="Cognidx"
-                  fill
+                  width={195}
+                  height={40}
                   className="object-contain object-left"
                 />
               </div>
             </Link>
 
-            <p className="text-sm leading-[1.85] text-[#6b7280] max-w-[280px]">
+            <p className="text-[15px] leading-[1.85] text-[#3E424A] max-w-[280px] text-middle">
               Nepal&apos;s biomedical diagnostic equipment supplier,
               bridging advanced technology with accessible healthcare since 2080 BS.
             </p>
@@ -170,7 +171,7 @@ export default function Footer() {
                       <a
                         key={phone.href}
                         href={phone.href}
-                        className="text-sm text-[#6b7280] hover:text-[#0f0a1e] transition-colors duration-200"
+                        className="text-[15px] text-[#3E424A] hover:text-[#0f0a1e] transition-colors duration-200"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -189,7 +190,7 @@ export default function Footer() {
                       href={item.href}
                       target={item.external ? "_blank" : undefined}
                       rel={item.external ? "noopener noreferrer" : undefined}
-                      className="group flex items-center gap-3 text-sm text-[#6b7280] hover:text-[#0f0a1e] transition-colors duration-200"
+                      className="group flex items-center gap-3 text-[15px] text-[#3E424A] hover:text-[#0f0a1e] transition-colors duration-200"
                     >
                       <span
                         className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-all duration-200 group-hover:scale-110"
@@ -221,7 +222,7 @@ export default function Footer() {
           {/* Products col */}
           <div className="lg:col-span-3">
             <h4
-              className="text-[10px] uppercase tracking-[0.25em] font-bold mb-5"
+              className="text-[13px] uppercase tracking-[0.25em] font-bold mb-5"
               style={{
                 background: "linear-gradient(90deg, #9333ea, #c026d3)",
                 WebkitBackgroundClip: "text",
@@ -237,7 +238,7 @@ export default function Footer() {
                 <li key={cat.id}>
                   <button
                     onClick={() => handleCatClick(cat.id)}
-                    className="group flex items-center gap-2.5 text-sm text-[#6b7280] hover:text-[#0f0a1e] transition-all duration-200 text-left"
+                    className="group flex items-center gap-2.5 text-[15px] text-[#3E424A] hover:text-[#0f0a1e] transition-all duration-200 text-left"
                   >
                     <span
                       className="h-1 w-1 shrink-0 rounded-full transition-all duration-300 group-hover:scale-150"
@@ -255,7 +256,7 @@ export default function Footer() {
           {/* Company col */}
           <div className="lg:col-span-3">
             <h4
-              className="text-[10px] uppercase tracking-[0.25em] font-bold mb-5"
+              className="text-[13px] uppercase tracking-[0.25em] font-bold mb-5"
               style={{
                 background: "linear-gradient(90deg, #9333ea, #c026d3)",
                 WebkitBackgroundClip: "text",
@@ -271,7 +272,7 @@ export default function Footer() {
                 <li key={l.label}>
                   <Link
                     href={l.href}
-                    className="group flex items-center gap-2.5 text-sm text-[#6b7280] hover:text-[#0f0a1e] transition-all duration-200"
+                    className="group flex items-center gap-2.5 text-[15px] text-[#3E424A] hover:text-[#0f0a1e] transition-all duration-200"
                   >
                     <span
                       className="h-1 w-1 shrink-0 rounded-full transition-all duration-300 group-hover:scale-150"
@@ -286,7 +287,7 @@ export default function Footer() {
             </ul>
 
             <h4
-              className="text-[10px] uppercase tracking-[0.25em] font-bold mb-4"
+              className="text-[13px] uppercase tracking-[0.25em] font-bold mb-4"
               style={{
                 background: "linear-gradient(90deg, #9333ea, #c026d3)",
                 WebkitBackgroundClip: "text",
@@ -301,7 +302,7 @@ export default function Footer() {
               {brandPartners.map((b) => (
                 <span
                   key={b}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-full cursor-default transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+                  className="text-[13px] font-semibold px-3 py-1.5 rounded-full cursor-default transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
                   style={{
                     background: "white",
                     color: "#7c3aed",
@@ -328,9 +329,9 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div className="relative max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-center gap-3">
-        <p className="text-xs text-[#9ca3af] text-center sm:text-left">
+        <p className="text-xs text-[#3E424A] text-center sm:text-left">
           © {new Date().getFullYear()}{" "}
-          <span className="text-[#374151] font-semibold">Cognidx Enterprises Pvt. Ltd.</span>{" "}
+          <span className="text-[#2D3036] font-bold">Cognidx Enterprises Pvt. Ltd.</span>{" "}
           All rights reserved.
         </p>
       </div>

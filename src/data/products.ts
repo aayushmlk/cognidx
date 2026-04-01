@@ -424,7 +424,7 @@ export const products: Product[] = [
     category: "Fluorescence Immunoassay",
     categoryId: "fia",
     tagline: "Autoimmune Antibody Results in 15 Minutes.",
-    description: "A Time-Resolved Fluoroimmunoassay (TRFIA) platform for rapid quantitative detection of autoantibodies in human serum. Single-packing and a quantitative result in just 15 minutes. Available in three models: the single-channel DL300, the 6-channel M6, and the high-throughput TFL2000 at 150 tests/hour.",
+    description: "A TRFIA platform for rapid quantitative autoantibody detection in human serum, with results in just 15 minutes. It is available as the DL300, 6-channel M6, and high-throughput TFL2000 (150 tests/hour).",
     tests: ["Autoimmune Antibodies (ANA, Anti-dsDNA)", "Connective Tissue Disease Markers", "Rheumatoid Arthritis (RF, Anti-CCP)", "Thyroid Antibodies", "Cardiac Markers"],
     specs: [
       { key: "Principle", value: "Time-Resolved Fluoroimmunoassay (TRFIA)" },
@@ -471,13 +471,13 @@ export const products: Product[] = [
 
   {
     id: "rayto-chemray330",
-    name: "Chemray 330 Automated Chemistry Analyzer",
+    name: "Chemray 330 Automated Analyzer",
     model: "Chemray 330",
     brand: "Rayto Life and Analytical Sciences",
     category: "Biochemistry",
     categoryId: "biochem",
     tagline: "200 Tests/Hour. Random Access. Real Walk-Away Operation.",
-    description: "A fully automated, random-access biochemistry analyzer delivering a constant 200 tests per hour. It handles clinical chemistry and immunoturbidimetric assays with reagent pre-heating, 8-step auto-washing, 24-hour non-stop reagent cooling, and an open reagent system. Built for labor-saving, walk-away operation with Windows-based software and bidirectional LIS connectivity.",
+    description: "A Automated analyzer delivering 200 tests/hour across chemistry and immunoturbidimetric assays, with auto-washing, 24-hour reagent cooling, open reagent system, and LIS connectivity.",
     tests: ["Liver Function (ALT, AST, ALP, GGT)", "Kidney Function (Urea, Creatinine)", "Lipid Profile", "Blood Glucose", "Immunoturbidimetric Assays", "Electrolytes"],
     specs: [
       { key: "Throughput", value: "Constant speed 200 tests/hour" },

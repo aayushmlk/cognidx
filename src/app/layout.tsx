@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: "%s | Cognidx Enterprises",
   },
   description:
-    "Nepal's premier biomedical diagnostic equipment supplier. World-class analyzers for immunoassay, haematology, blood gas, chemiluminescence, urine analysis, and biochemistry — serving hospitals and clinics across South Asia.",
+    "Nepal's premier biomedical diagnostic equipment supplier. World-class analyzers for serving hospitals and clinics across South Asia.",
   keywords: [
     "biomedical diagnostics Nepal",
     "immunoassay analyzer",
