@@ -14,29 +14,6 @@ const stats = [
 export default function About() {
   const [animatedNums, setAnimatedNums] = useState(stats.map(() => 0));
 
-  useEffect(() => {
-    const durations = stats.map((s) => 2000); // 2 seconds for each number
-    const targets = stats.map((s) => parseInt(s.num.replace("+", ""), 10));
-
-    const startTime = Date.now();
-    const interval = setInterval(() => {
-      const now = Date.now();
-      const elapsed = now - startTime;
-
-      const newNums = targets.map((target, idx) => {
-        const progress = Math.min(elapsed / durations[idx], 1);
-        return Math.floor(progress * target);
-      });
-
-      setAnimatedNums(newNums);
-
-      if (newNums.every((val, idx) => val >= targets[idx])) {
-        clearInterval(interval);
-      }
-    }, 30);
-
-    return () => clearInterval(interval);
-  }, []);
   return (
     <section
       id="about"
@@ -173,7 +150,7 @@ export default function About() {
             background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
             boxShadow: "0 4px 18px rgba(109,40,217,0.30)",
           }}>
-            <span style={{
+            <span className="animate-pulse" style={{
               width: 6, height: 6, borderRadius: "50%",
               background: "rgba(255,255,255,0.7)",
               boxShadow: "0 0 6px rgba(255,255,255,0.9)",
@@ -286,7 +263,7 @@ export default function About() {
                       fontWeight: 800, lineHeight: 1,
                       color: "#7c3aed", marginBottom: 6, letterSpacing: "-0.02em",
                     }}>
-                      {animatedNums[idx]}{s.num.includes("+") ? "+" : ""}
+                      {s.num}
                     </div>
                     <div style={{ fontSize: 13, color: "#7c6fa0", fontWeight: 500 }}>
                       {s.label}
@@ -298,12 +275,31 @@ export default function About() {
 
             {/* Brand partners */}
             <div style={{ marginTop: 28 }}>
-              <p style={{
-                fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase",
-                color: "#a78bfa", marginBottom: 12, fontWeight: 600,
-              }}>
-                Brand Partners
-              </p>
+         <div style={{ display: "flex", alignItems: "center", gap: 10 , marginBottom:12}}>
+  {/* Vertical Gradient Line */}
+  <div
+    style={{
+      width: 3,
+      height: 18,
+      borderRadius: 2,
+      background: "linear-gradient(180deg, #6a5cff, #b46cff)", // adjust to your gradient
+    }}
+  />
+
+  {/* Text */}
+  <p
+    style={{
+      fontSize: 11,
+      letterSpacing: "0.2em",
+      textTransform: "uppercase",
+      color: "#997bf3",
+      marginBottom: 0,
+      fontWeight: 600,
+    }}
+  >
+    Brand Partners
+  </p>
+</div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {["Anbio", "Seamaty", "Bioelab", "DiyaLab", "Fapon", "Rayto"].map((b) => (
                   <span key={b} style={{
@@ -312,8 +308,8 @@ export default function About() {
                     background: "#ede9fe",
                     border: "1px solid rgba(124,58,237,0.18)",
                     color: "#5b21b6",
-                    cursor: "default",
                     transition: "background 0.2s, transform 0.2s",
+                    cursor:"pointer"
                   }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.background = "#ddd6fe";

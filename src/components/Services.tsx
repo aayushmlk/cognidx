@@ -161,58 +161,71 @@ const Services = () => {
 
           {/* Header */}
           <div className="about-services-header">
-            <div>
-              {/* Eyebrow */}
-              <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 52 }}>
-                <div style={{
-                  display: "inline-flex", alignItems: "center", gap: 8,
-                  padding: "8px 20px", borderRadius: 100,
-                  background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
-                  boxShadow: "0 4px 18px rgba(109,40,217,0.30)",
-                }}>
-                  <span style={{
-                    width: 6, height: 6, borderRadius: "50%",
-                    background: "rgba(255,255,255,0.7)",
-                    boxShadow: "0 0 6px rgba(255,255,255,0.9)",
-                  }} />
-                  <span style={{
-                    fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase",
-                    color: "#fff", fontWeight: 700,
-                  }}>
-                    What We Offer
-                  </span>
-                </div>
-                <div style={{ height: 1, width: 48, background: "linear-gradient(90deg, #a78bfa, transparent)" }} />
-              </div>
-              <h3
-                style={{
-                  fontFamily: "Raleway, system-ui, sans-serif",
-                  fontSize: "clamp(1.4rem, 2.8vw, 2.2rem)",
-                  fontWeight: 700,
-                  color: "rgb(20,8,48)",
-                  letterSpacing: "-0.02em",
-                  lineHeight: 1.15,
-                  margin: 0,
-                }}
-              >
-                We stay with you
-                <br />
-                <span style={{ color: "#7c3aed" }}>long after delivery</span>
-              </h3>
-            </div>
-            <p
-              style={{
-                fontSize: "clamp(0.85rem, 1.2vw, 0.97rem)",
-                color: "#7c6fa0",
-                lineHeight: 1.8,
-                maxWidth: 300,
-                margin: 0,
-              }}
-            >
-              Getting the equipment is just the start. We install it, train your
-              staff, and are a call away whenever you need us.
-            </p>
-          </div>
+  <div>
+    {/* Eyebrow */}
+    <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 52 }}>
+      <div style={{
+        display: "inline-flex", alignItems: "center", gap: 8,
+        padding: "8px 20px", borderRadius: 100,
+        background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
+        boxShadow: "0 4px 18px rgba(109,40,217,0.30)",
+      }}>
+        <span style={{
+          width: 6, height: 6, borderRadius: "50%",
+          background: "rgba(255,255,255,0.7)",
+          boxShadow: "0 0 6px rgba(255,255,255,0.9)",
+        }} className="animate-pulse"/>
+        <span style={{
+          fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase",
+          color: "#fff", fontWeight: 700,
+        }}>
+          What We Offer
+        </span>
+      </div>
+      <div style={{ height: 1, width: 48, background: "linear-gradient(90deg, #a78bfa, transparent)" }} />
+    </div>
+
+    <h3
+      style={{
+        fontFamily: "Raleway, system-ui, sans-serif",
+        fontSize: "clamp(1.4rem, 2.8vw, 2.2rem)",
+        fontWeight: 700,
+        color: "rgb(20,8,48)",
+        letterSpacing: "-0.02em",
+        lineHeight: 1.15,
+        margin: 0,
+      }}
+    >
+      We stay with you
+      <br />
+      <span style={{ color: "#7c3aed" }}>long after delivery</span>
+    </h3>
+  </div>
+
+ <div style={{ display: "flex", alignItems: "stretch", gap: "12px" }}>
+  {/* Vertical Gradient Line */}
+  <div
+    style={{
+      width: "4px",
+      background: "linear-gradient(180deg, #7c3aed, #c084fc)",
+      borderRadius: "4px",
+    }}
+  />
+
+  <p
+    style={{
+      fontSize: "clamp(0.85rem, 1.2vw, 0.97rem)",
+      color: "#7c6fa0",
+      lineHeight: 1.8,
+      maxWidth: 300,
+      margin: 0,
+    }}
+  >
+    Getting the equipment is just the start. We install it, train your
+    staff, and are a call away whenever you need us.
+  </p>
+</div>
+</div>
 
           {/* Cards */}
           <div className="about-services-grid">
@@ -221,7 +234,7 @@ const Services = () => {
               return (
                 <div
                   key={svc.title}
-                  className="service-card relative flex flex-col items-center p-6 rounded-[22px] cursor-default text-center"
+                  className="service-card relative flex flex-col items-center p-6 rounded-[22px] cursor-default text-center cursor-pointer"
                   style={{
                     background: "rgba(255,255,255,0.75)",
                     backdropFilter: "blur(12px)",
@@ -257,7 +270,7 @@ const Services = () => {
                   <div
                     className="service-step uppercase mb-4"
                     style={{
-                      fontSize: 14,
+                      fontSize: 18,
                       fontWeight: 700,
                       letterSpacing: "0.2em",
                       color: "rgba(106, 6, 213, 0.66)",
@@ -282,7 +295,7 @@ const Services = () => {
                     <div
                       className="font-bold mb-3"
                       style={{
-                        fontSize: 16,
+                        fontSize: 18,
                         color: "#7c3aed",
                         lineHeight: 1.3,
                       }}
