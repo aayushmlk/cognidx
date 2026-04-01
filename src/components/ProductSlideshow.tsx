@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight, MessageCircle, TestTube2, Zap } from "lucide-react";
 import { products } from "@/data/products";
 import { useRouter } from "next/navigation";
 
@@ -61,27 +61,35 @@ const SLIDESHOW_CSS = `
     align-items: center;
     justify-content: center;
     position: relative;
+    margin-left: 12px;
   }
 
   .ss-product-img { max-height: 380px; }
 
+  /*
+    KEY FIX: text-col must be a proper flex column that distributes space
+    between the scrollable content area and the always-visible CTA row.
+  */
   .ss-text-col {
     flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    /* No overflow:hidden here — let children manage themselves */
   }
 
   .ss-anim-wrapper {
     display: flex;
     flex-direction: column;
     flex: 1;
-    min-height: 0;
-    overflow: hidden;
+    min-height: 0; /* Critical: allows flex children to shrink below natural size */
   }
 
-  /* Scrollable text area on desktop */
+  /*
+    KEY FIX: ss-text-inner is the scrollable area. It must have flex:1 and
+    min-height:0 so it takes remaining space after CTAs claim their space.
+    The CTAs live OUTSIDE this div so they are never scrolled away.
+  */
   .ss-text-inner {
     display: flex;
     flex-direction: column;
@@ -90,7 +98,6 @@ const SLIDESHOW_CSS = `
     overflow-y: auto;
     overflow-x: hidden;
     padding-right: 6px;
-    /* Custom scrollbar */
     scrollbar-width: thin;
     scrollbar-color: rgba(0,0,0,0.15) transparent;
   }
@@ -106,33 +113,43 @@ const SLIDESHOW_CSS = `
     font-size: clamp(1.4rem, 2.8vw, 2.3rem);
     margin-bottom: 0.8rem;
     flex-shrink: 0;
-    /* No line clamping — show full name */
     display: block;
   }
 
   .ss-tests-box  { padding: 14px 16px; margin-bottom: 1.1rem; border-radius: 16px; flex-shrink: 0; }
   .ss-tests-label-row { margin-bottom: 10px; }
   .ss-tests-scroll { display: flex; flex-wrap: wrap; gap: 6px; }
-  .ss-tests-scroll span { font-size: 10px; padding: 4px 10px; }
+  .ss-tests-scroll span { font-size: 11px; padding: 4px 10px; }
 
   .ss-desc {
-    font-size: 0.875rem;
+    font-size: 1rem;
     line-height: 1.85;
     margin-bottom: 1.1rem;
     flex-shrink: 0;
-    /* No clamping — show full description */
     display: block;
   }
 
   .ss-divider { margin-bottom: 1.1rem; flex-shrink: 0; }
 
-  .ss-highlights { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; flex-shrink: 0; }
-  .ss-highlights-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .ss-highlights { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.2rem; flex-shrink: 0; }
+  .ss-highlights-header { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
   .ss-highlights-title  { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; }
   .ss-highlight-dot  { width: 20px; height: 20px; }
-  .ss-highlight-text { font-size: 0.82rem; }
+  .ss-highlight-text { font-size: 1rem; }
 
-  .ss-cta-row { gap: 12px; flex-shrink: 0; padding-bottom: 2px; }
+  /*
+    KEY FIX: CTA row is flex-shrink:0 and sits OUTSIDE ss-text-inner.
+    It always occupies its natural height and is never pushed offscreen.
+    A top border + padding visually separates it from the scrollable content.
+  */
+  .ss-cta-row {
+    gap: 12px;
+    flex-shrink: 0;
+    padding-top: 14px;
+    padding-bottom: 4px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    margin-top: 2px;
+  }
   .ss-cta-primary   { font-size: 0.78rem; padding: 0.65rem 1.4rem; }
   .ss-cta-secondary { font-size: 0.78rem; padding: 0.65rem 1.4rem; }
   .ss-nav { padding: 14px 20px; }
@@ -140,13 +157,13 @@ const SLIDESHOW_CSS = `
 
 /* ── Mobile <768px ── */
 @media (max-width: 767px) {
-  /*
-    Key fix: no fixed height — use min-height so the card can grow.
-    The nav bar stays at the bottom naturally.
-    The slide shows ALL content — no clipping.
-  */
-  .ss-slide  { min-height: 540px; }
-  .ss-inner  { padding: 0 18px; }
+  .ss-slide {
+    height: auto;
+    min-height: unset;
+    overflow: visible;
+  }
+
+  .ss-inner { padding: 0 18px; }
 
   .ss-eyebrow {
     padding-top: 14px;
@@ -161,6 +178,7 @@ const SLIDESHOW_CSS = `
     flex-direction: column;
     gap: 0;
     padding: 0 0 16px;
+    height: auto;
   }
 
   .ss-img-col {
@@ -177,30 +195,28 @@ const SLIDESHOW_CSS = `
   .ss-product-img { max-height: 130px; width: auto; }
 
   .ss-text-col {
-    flex: 1;
-    min-height: 0;
     display: flex;
     flex-direction: column;
+    height: auto;
   }
 
   .ss-anim-wrapper {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    height: auto;
   }
 
-  /* On mobile, text inner is NOT scrollable — shows everything, slide grows */
   .ss-text-inner {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    height: auto;
+    overflow: visible;
   }
 
   .ss-category-row { margin-bottom: 8px; flex-shrink: 0; }
   .ss-cat-chip   { font-size: 9.5px; padding: 4px 11px; }
   .ss-model-chip { font-size: 9.5px; padding: 4px 10px; }
 
-  /* Full product name — no clamping */
   .ss-name {
     font-size: 1.05rem;
     line-height: 1.4;
@@ -230,7 +246,6 @@ const SLIDESHOW_CSS = `
     white-space: nowrap;
   }
 
-  /* Full description — no clamping */
   .ss-desc {
     font-size: 0.78rem;
     line-height: 1.65;
@@ -238,11 +253,22 @@ const SLIDESHOW_CSS = `
     flex-shrink: 0;
     display: block;
     color: #4b5563;
+    overflow: visible;
+    height: auto;
+    max-height: none;
   }
 
   .ss-divider { margin-bottom: 10px; flex-shrink: 0; }
 
-  .ss-highlights { display: flex; flex-direction: column; gap: 7px; flex-shrink: 0; margin-bottom: 14px; }
+  .ss-highlights {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    flex-shrink: 0;
+    margin-bottom: 14px;
+    overflow: visible;
+    height: auto;
+  }
   .ss-highlights-header { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
   .ss-highlights-title  { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; }
   .ss-highlight-row  { margin-bottom: 0; }
@@ -252,11 +278,14 @@ const SLIDESHOW_CSS = `
   .ss-cta-row {
     gap: 8px;
     flex-shrink: 0;
-    padding-bottom: 4px;
+    padding-bottom: 16px;
+    padding-top: 12px;
   }
   .ss-cta-primary   { font-size: 0.7rem; padding: 0.48rem 1rem; }
   .ss-cta-secondary { font-size: 0.7rem; padding: 0.48rem 1rem; }
   .ss-nav { padding: 10px 18px; }
+
+  .ss-orb { display: none; }
 }
 `;
 
@@ -376,11 +405,11 @@ export default function ProductSlideshow() {
         {/* Decorative orbs */}
         {mounted && (
           <>
-            <div className="pointer-events-none absolute -right-40 top-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full"
+            <div className="ss-orb pointer-events-none absolute -right-40 top-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full"
               style={{ background: `radial-gradient(circle,${accent}0e 0%,${accent}03 40%,transparent 70%)`, filter: "blur(60px)" }} />
-            <div className="pointer-events-none absolute -left-24 -top-12 w-[380px] h-[380px] rounded-full"
+            <div className="ss-orb pointer-events-none absolute -left-24 -top-12 w-[380px] h-[380px] rounded-full"
               style={{ background: `radial-gradient(circle,${accent}08 0%,transparent 70%)`, filter: "blur(44px)" }} />
-            <div className="pointer-events-none absolute inset-0 opacity-[0.015]"
+            <div className="ss-orb pointer-events-none absolute inset-0 opacity-[0.015]"
               style={{ backgroundImage: `radial-gradient(circle,${accent} 1px,transparent 1px)`, backgroundSize: "34px 34px" }} />
           </>
         )}
@@ -395,8 +424,8 @@ export default function ProductSlideshow() {
               background: mounted ? `linear-gradient(135deg,${accent}18,${accent}0a)` : "rgba(0,0,0,0.04)",
               border: mounted ? `1px solid ${accent}2e` : "1px solid rgba(0,0,0,0.08)",
             }}>
-              <span style={{ width: 5, height: 5, borderRadius: "50%", background: accentColor, boxShadow: mounted ? `0 0 7px ${accent}` : "none" }} />
-              <span style={{ fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: accentColor, fontWeight: 700 }}>
+              <span style={{ width: 5, height: 5, borderRadius: "50%", background: accentColor, boxShadow: mounted ? `0 0 7px ${accent}` : "none" }} className="animate-pulse"/>
+              <span style={{ fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: accentColor, fontWeight: 700 }}>
                 Products
               </span>
             </div>
@@ -433,10 +462,16 @@ export default function ProductSlideshow() {
             </div>
 
             {/* Text col */}
-            <div className="ss-text-col">
+            <div className="ss-text-col pb-4">
+              {/*
+                ss-anim-wrapper is a flex column that fills the text col.
+                It contains:
+                  1. ss-text-inner  → flex:1, scrollable — absorbs all extra height
+                  2. ss-cta-row     → flex-shrink:0 — always visible at the bottom
+              */}
               <div className="ss-anim-wrapper" style={slideContentAnim}>
 
-                {/* Scrollable (desktop) / full-height (mobile) content */}
+                {/* Scrollable content area */}
                 <div className="ss-text-inner">
 
                   {/* Category + model */}
@@ -446,31 +481,46 @@ export default function ProductSlideshow() {
                       <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: accentColor }} />
                       {p.category}
                     </span>
-                    <span className="ss-model-chip font-semibold rounded-lg"
-                      style={{ background: "rgba(0,0,0,0.035)", color: "#6b7280", border: "1px solid #e5e7eb" }}>
+                    <span className="ss-model-chip font-semibold rounded-full"
+                      style={{ background: accentBg10, color: accentColor, border: "1px solid #e5e7eb", borderColor: mounted ? `${accent}10` : "1px solid rgba(0,0,0,0.06)" }}>
                       {p.model}
                     </span>
                   </div>
 
-                  {/* Full name — never clamped */}
-                  <h3 className="ss-name font-bold text-[#0f0a1e] leading-tight"
-                    style={{ fontFamily: "Raleway, system-ui, sans-serif" }}>
-                    {p.name}
-                  </h3>
+                  {/* Full name */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 8, marginBottom: 12 }}>
+                    <div
+                      style={{
+                        width: 4,
+                        height: "100%",
+                        minHeight: 22,
+                        borderRadius: 4,
+                        background: `linear-gradient(180deg, ${accent}, ${accent}66)`,
+                        opacity: 0.9,
+                      }}
+                    />
+                    <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold">
+                      {p.name}
+                    </h2>
+                  </div>
 
                   {/* Tests card */}
                   <div className="ss-tests-box"
                     style={{ background: mounted ? `linear-gradient(135deg,${accent}0c,${accent}05)` : "rgba(0,0,0,0.02)", border: mounted ? `1px solid ${accent}1e` : "1px solid rgba(0,0,0,0.06)" }}>
                     <div className="ss-tests-label-row flex items-center gap-1.5">
-                      <span className="w-[3px] h-3.5 rounded-full shrink-0"
-                        style={{ background: mounted ? `linear-gradient(180deg,${accent},${accent}44)` : "#ccc" }} />
-                      <p className="text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: accentColor }}>
-                        Tests Covered
-                      </p>
+                      <div
+                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full"
+                        style={{ background: accent || "#22c55e", color: "#ffffff" }}
+                      >
+                        <TestTube2 size={13} style={{ color: "#fff" }} />
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+                          Test Covered
+                        </p>
+                      </div>
                     </div>
                     <div className="ss-tests-scroll">
                       {p.tests.map((test) => (
-                        <span key={test} className="rounded-lg font-semibold leading-snug"
+                        <span key={test} className="rounded-full font-semibold leading-snug"
                           style={{ background: accentBg10, color: accentColor, border: mounted ? `1px solid ${accent}22` : "1px solid rgba(0,0,0,0.06)" }}>
                           {test}
                         </span>
@@ -478,8 +528,8 @@ export default function ProductSlideshow() {
                     </div>
                   </div>
 
-                  {/* Full description — never clamped */}
-                  <p className="ss-desc text-[#5a6070]">
+                  {/* Full description */}
+                  <p className="ss-desc text-justify text-[#374151]">
                     {p.description}
                   </p>
 
@@ -487,16 +537,18 @@ export default function ProductSlideshow() {
                   <div className="ss-divider h-px"
                     style={{ background: mounted ? `linear-gradient(90deg,${accent}22,transparent 65%)` : "rgba(0,0,0,0.06)" }} />
 
-                  {/* All highlights — no .slice(0,3) limit */}
+                  {/* Highlights */}
                   <div className="ss-highlights">
                     <div className="ss-highlights-header">
-                      <svg width="12" height="12" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
-                        <path
-                          d="M7 1.5L8.5 5.5H12.5L9.5 8L10.5 12L7 9.5L3.5 12L4.5 8L1.5 5.5H5.5L7 1.5Z"
-                          fill={accentColor} opacity="0.9"
-                        />
-                      </svg>
-                      <span className="ss-highlights-title" style={{ color: accentColor }}>Highlights</span>
+                      <div
+                        className="inline-flex items-center gap-2 mb-3 px-3 py-1.5 rounded-full"
+                        style={{ background: accent || "#22c55e", color: "#ffffff" }}
+                      >
+                        <Zap size={13} style={{ color: "#fff" }} />
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+                          Highlights
+                        </p>
+                      </div>
                     </div>
                     {p.highlights.slice(0, 3).map((h, i) => (
                       <div key={h} className="ss-highlight-row flex items-start gap-2"
@@ -512,8 +564,14 @@ export default function ProductSlideshow() {
 
                 </div>{/* end ss-text-inner */}
 
-                {/* CTAs — always at bottom */}
-                <div className="ss-cta-row flex flex-nowrap">
+                {/*
+                  CTAs live OUTSIDE ss-text-inner so they are never scrolled
+                  away. flex-shrink:0 on .ss-cta-row guarantees they always
+                  occupy their natural height at the bottom of the column.
+                */}
+                <div className="ss-cta-row flex flex-nowrap"
+                  style={{ borderTopColor: mounted ? `${accent}18` : "rgba(0,0,0,0.06)" }}
+                >
                   <button
                     onClick={() => router.push(`/products#${p.categoryId}`)}
                     className="ss-cta-primary group inline-flex items-center gap-1.5 rounded-xl font-bold text-white transition-all duration-300 hover:-translate-y-0.5"
@@ -529,7 +587,7 @@ export default function ProductSlideshow() {
                     style={{ color: accentColor, background: accentBg10, border: accentBd26 }}
                   >
                     <MessageCircle size={12} />
-                    WhatsApp Us
+                    Enquire
                   </a>
                 </div>
 
@@ -541,7 +599,7 @@ export default function ProductSlideshow() {
 
       {/* ── Nav bar ── */}
       <div
-        className="ss-nav flex items-center justify-center gap-3"
+        className="ss-nav flex items-center justify-center gap-3 mt-6"
         style={{
           background: mounted ? `linear-gradient(135deg,${bg}55,white)` : "white",
           borderTop: mounted ? `1px solid ${accent}12` : "1px solid rgba(0,0,0,0.06)",
@@ -553,7 +611,7 @@ export default function ProductSlideshow() {
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
             <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span className="hidden sm:inline">Prev</span>
+          <span className="hidden sm:inline text-base">Prev</span>
         </button>
 
         <div className="flex items-center gap-1.5">
@@ -575,7 +633,7 @@ export default function ProductSlideshow() {
         <button onClick={() => goTo(current + 1, "right")}
           className="flex items-center gap-1 text-[11px] font-semibold hover:opacity-60 shrink-0 transition-opacity"
           style={{ color: accentColor }} aria-label="Next product">
-          <span className="hidden sm:inline">Next</span>
+          <span className="hidden sm:inline text-base">Next</span>
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
             <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>

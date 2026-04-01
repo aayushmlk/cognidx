@@ -122,16 +122,49 @@ export default function ProductRow({ product, highlight }: Props) {
           )}
 
           <div
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs"
-            style={{
-              background: "#fff",
-              color: accent,
-              border: `1px solid ${accent}22`,
-            }}
-          >
-            <Eye size={12} />
-            {visitors.toLocaleString()} views
-          </div>
+  className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs"
+  style={{
+    position: "relative",
+    borderRadius: "999px",
+    padding: "1px", // important for border thickness
+    background: `linear-gradient(135deg, ${accent}, ${accent}66)`,
+  }}
+>
+  <div
+  style={{
+    position: "relative",
+    display: "inline-block",
+    borderRadius: "999px",
+  }}
+>
+  {/* Glow Layer */}
+  <div
+    style={{
+      position: "absolute",
+      inset: 0,
+      borderRadius: "999px",
+      background: `linear-gradient(135deg, ${accent}, ${accent}66)`,
+      filter: "blur(8px)", // 👈 makes it glow instead of line
+      opacity: 0.6,
+      zIndex: 0,
+    }}
+  />
+
+  {/* Content */}
+  <div
+    className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs"
+    style={{
+      position: "relative",
+      background: "#fff",
+      color: accent,
+      zIndex: 1,
+    }}
+  >
+    <Eye size={12} />
+    {visitors.toLocaleString()} views
+  </div>
+</div>
+</div>
         </div>
       </div>
 
@@ -147,17 +180,32 @@ export default function ProductRow({ product, highlight }: Props) {
         {/* Title */}
         <div>
           <span
-            className="text-xs font-bold px-3 py-2 rounded-full text-white"
+            className="text-sm font-bold px-3 py-1 rounded-full text-white"
             style={{ background: accent }}
           >
             {product.category}
           </span>
 
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mt-3">
-            {product.name}
-          </h2>
+         <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 8 }}>
+  {/* Gradient Glow Line */}
+  <div
+    style={{
+      width: 4,
+      height: "100%",
+      minHeight: 28,
+      borderRadius: 4,
+      background: `linear-gradient(180deg, ${accent}, ${accent}66)`,
+      opacity: 0.9,
+    }}
+  />
 
-          <p className="text-gray-600 mt-3 text-justify leading-relaxed text-sm sm:text-base">
+  {/* Title */}
+  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold">
+    {product.name}
+  </h2>
+</div>
+
+          <p className="text-gray-600 mt-3 px-1 text-justify leading-relaxed text-[13px] sm:text-base">
             {product.description}
           </p>
         </div>
@@ -172,14 +220,14 @@ export default function ProductRow({ product, highlight }: Props) {
   }}
 >
   <Zap size={13} style={{ color: "#fff" }} />
-  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+  <p className="text-[8px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-white">
     Key Highlights
   </p>
 </div>
 
-          <div className="grid sm:grid-cols-2 gap-3">
+          <div className="grid  sm:grid-cols-2 gap-3">
   {product.highlights.map((h) => (
-    <div key={h} className="flex items-start gap-2 text-sm text-gray-700">
+    <div key={h} className="flex items-start gap-2 text-justify text-[12px] sm:text-[14px] text-gray-700">
       {/* Thicker bullet */}
       <span
         className="w-1 h-1 rounded-full flex-shrink-0 mt-2"
@@ -203,7 +251,7 @@ export default function ProductRow({ product, highlight }: Props) {
   }}
 >
   <TestTube2 size={13} style={{ color: "#fff" }} />
-  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+  <p className="text-[8px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-white">
     Tests Covered
   </p>
 </div>
@@ -214,7 +262,7 @@ export default function ProductRow({ product, highlight }: Props) {
                 : product.testsCovered.slice(0, 3)
               ).map((group) => (
                 <div key={group.label}>
-                  <p className="text-xs font-semibold mb-1 text-gray-700">
+                  <p className="text-[10px] sm:text-sm font-semibold mb-1 text-gray-700">
                     {group.label}
                   </p>
 
@@ -222,7 +270,7 @@ export default function ProductRow({ product, highlight }: Props) {
                     {group.items.map((item) => (
                       <span
                         key={item}
-                        className="text-xs px-2 py-1 rounded-md"
+                        className="text-[9px] sm:text-sm px-2 py-1 rounded-md"
                         style={{
                           background: `${accent}10`,
                           color: accent,
@@ -266,7 +314,7 @@ export default function ProductRow({ product, highlight }: Props) {
   }}
 >
   <ReceiptText size={13} style={{ color: "#fff" }} />
-  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+  <p className="text-[8px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-white">
     Technical Specifications
   </p>
 </div>
@@ -278,7 +326,7 @@ export default function ProductRow({ product, highlight }: Props) {
             {product.specs.map((s, i) => (
               <div
                 key={s.key}
-                className="flex justify-between px-4 py-3 text-sm"
+                className="flex justify-between px-4 py-3 text-[10px] sm:text-[14px]"
                 style={{
                   background: i % 2 === 0 ? "#fff" : `${accent}40`,
                 }}
@@ -309,7 +357,7 @@ export default function ProductRow({ product, highlight }: Props) {
   }}
 >
   <ClipboardPlus size={13} style={{ color: "#fff" }} />
-  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+  <p className="text-[8px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-white">
     Used In
   </p> 
 </div>
@@ -317,7 +365,7 @@ export default function ProductRow({ product, highlight }: Props) {
               {product.applicationScenarios.map((s) => (
                 <span
                   key={s}
-                  className="text-sm px-3 py-1 rounded-lg"
+                  className="text-[10px] sm:text-[13px] px-3 py-1 rounded-lg"
                   style={{
                     background: `${accent}20`,
                     color: accent,
@@ -334,19 +382,19 @@ export default function ProductRow({ product, highlight }: Props) {
 
         {/* CTA */}
         <div className="pt-4 border-t" style={{ borderColor: `${accent}20` }}>
-          <p className="text-[12px] text-gray-600 mb-2" style={{ color: accent }}>
+          <p className="text-[10px] sm:text-[14px] text-gray-600 mb-2" style={{ color: accent }}>
     Please feel free to contact us for more information or any inquiries — we’re happy to assist you!
   </p>
           <a
             href="https://wa.me/9779819425801?text=I'm%20interested%20in%20learning%20more%20about%20your%20products."
             target="_blank"
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-white text-sm font-semibold"
+            className="inline-flex items-center gap-2 px-3 py-2.5 sm:px-6 sm:py-2.5 rounded-xl text-white text-sm font-semibold text-[9px] sm:text-sm"
             style={{
               background: `linear-gradient(135deg, ${accent}, ${accent}cc)`,
             }}
           >
             <MessageCircle size={14} />
-            WhatsApp Us
+            Enquire
           </a>
         </div>
       </div>

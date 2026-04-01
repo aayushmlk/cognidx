@@ -55,7 +55,7 @@ export default function Navbar() {
   const isProductsPage = pathname.startsWith("/products");
   const homeActive = pathname === "/" && activeSection === "home";
   const aboutActive = pathname === "/" && activeSection === "about";
-  const contactActive = pathname === "/" && activeSection === "contact";
+  const contactActive = pathname === "/contacts";
 
   const handleCatClick = (catId: string) => {
     window.location.href = `/products#${catId}`;
@@ -86,7 +86,7 @@ export default function Navbar() {
           <div className="hidden lg:flex items-center">
             <NavItem href="/" label="Home" active={homeActive} />
             <NavItem href="/#about" label="About" active={aboutActive} />
-            <NavItem href="/#contact" label="Contacts" active={contactActive} />
+            
 
             {/* Products — CSS group-hover dropdown */}
             <div className="group relative mx-1">
@@ -157,11 +157,13 @@ export default function Navbar() {
                 </div>
               </div>
             </div>
+
+            <NavItem href="/contacts" label="Contacts" active={contactActive} />
           </div>
 
           {/* ── Desktop right ── */}
           <div className="hidden lg:flex items-center gap-3">
-            <Link href="/#contact"
+            <Link href="/contacts"
               className="vibrate-hover inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               style={{ background: "linear-gradient(135deg, #7c3aed, #6d28d9)", boxShadow: "0 4px 16px rgba(124,58,237,0.30)" }}>
               <PhoneCall size={14} className="icon-vibrate" />
@@ -305,12 +307,14 @@ export default function Navbar() {
               </div>
             </div>
           </div>
+
+           <MobileNavItem href="/contacts" label="Contacts" active={contactActive} onClick={() => setOpen(false)} />
         </div>
 
         {/* Footer */}
         <div className="relative px-4 pb-8 pt-4 space-y-2.5"
           style={{ borderTop: "1px solid rgba(124,58,237,0.10)" }}>
-          <Link href="/#contact" onClick={() => setOpen(false)}
+          <Link href="/contacts" onClick={() => setOpen(false)}
             className="vibrate-hover flex items-center justify-center gap-2.5 w-full py-3.5 rounded-2xl text-[15px] font-semibold text-white transition-all duration-300 hover:opacity-90"
             style={{ background: "linear-gradient(135deg, #7c3aed, #6d28d9)", boxShadow: "0 6px 24px rgba(124,58,237,0.28)" }}>
             <PhoneCall size={15} className="icon-vibrate" />

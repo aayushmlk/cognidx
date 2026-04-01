@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import FloatingCTA from "@/components/CTA Button";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: {
@@ -74,7 +76,9 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <Navbar/>
         {children}
+        <Footer/>
         <FloatingCTA />
       </body>
     </html>

@@ -11,6 +11,8 @@ import {
 
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 
 const contactInfo = [
@@ -37,7 +39,7 @@ const contactInfo = [
   },
 ];
 
-export const Contact = () => {
+const Form = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -265,3 +267,7 @@ export const Contact = () => {
     </section>
   );
 };
+
+export default function Contact() {
+    return <Form/>
+}
