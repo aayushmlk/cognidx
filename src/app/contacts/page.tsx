@@ -514,7 +514,7 @@ const Form = () => {
             <div className="card form-card">
               <div className="form-card-header">
                 <div className="form-card-label">Send a Message</div>
-                <div className="form-card-title">We'd love to hear from you</div>
+                <div className="form-card-title">We&apos;d love to hear from you</div>
               </div>
               <form onSubmit={handleSubmit}>
                 <div className="field-group">
