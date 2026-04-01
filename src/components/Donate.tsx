@@ -36,7 +36,7 @@ export default function Donate() {
       id="donate"
       className="relative py-28 px-6 overflow-hidden"
       style={{
-        background: "linear-gradient(160deg, #faf8ff 0%, #f3f0ff 40%, #fdf4ff 70%, #f8f7ff 100%)",
+        background: "linear-gradient(160deg, #eae8f1 0%, #ebe9f6 40%, #fdf4ff 70%, #f8f7ff 100%)",
       }}
     >
       {/* Top accent bar */}
@@ -278,7 +278,8 @@ export default function Donate() {
                         eSewa Payment
                       </span>
                     </div>
-                    <h3 className=" text-2xl -mt-1 font-bold text-[#0f0a1e]">
+                    <h3 style={{ fontFamily: "Raleway, system-ui, sans-serif" }}
+                      className=" text-2xl -mt-1 font-bold text-[#0f0a1e]">
                       Scan to Donate
                     </h3>
                   </div>

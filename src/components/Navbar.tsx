@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, PhoneCall, Heart, ArrowRight } from "lucide-react";
 import { categories } from "@/data/products";
 
-type Section = "home" | "about"  | "contact" | "";
+type Section = "home" | "about" | "contact" | "";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -65,7 +65,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className="sticky top-0 z-50 transition-all duration-300"
+        className="fixed top-0 left-0 w-full z-50 transition-all duration-300"
         style={{
           background: scrolled ? "rgba(255,255,255,0.97)" : "white",
           backdropFilter: "blur(20px)",
@@ -77,8 +77,8 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center shrink-0 group">
-            <div className="relative h-12 w-48 transition-opacity duration-200 group-hover:opacity-80">
-              <Image src="/cognidx_logo.png" alt="Cognidx" fill className="object-contain object-left" priority />
+            <div className="relative h-12 w-64 flex-shrink-0 transition-opacity duration-200 group-hover:opacity-80">
+              <Image src="/cognidx_logo.png" alt="Cognidx" width={195} height={40} className="object-contain object-left" priority />
             </div>
           </Link>
 
@@ -86,7 +86,7 @@ export default function Navbar() {
           <div className="hidden lg:flex items-center">
             <NavItem href="/" label="Home" active={homeActive} />
             <NavItem href="/#about" label="About" active={aboutActive} />
-            
+
 
             {/* Products — CSS group-hover dropdown */}
             <div className="group relative mx-1">
@@ -308,7 +308,7 @@ export default function Navbar() {
             </div>
           </div>
 
-           <MobileNavItem href="/contacts" label="Contacts" active={contactActive} onClick={() => setOpen(false)} />
+          <MobileNavItem href="/contacts" label="Contacts" active={contactActive} onClick={() => setOpen(false)} />
         </div>
 
         {/* Footer */}

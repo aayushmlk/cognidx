@@ -220,7 +220,7 @@ useEffect(() => {
                 </h1>
 
                 <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
-                  CE-certified diagnostic instruments from globally trusted manufacturers — built for precision, designed for clinicians.
+                  Certified diagnostic instruments from globally trusted manufacturers — built for precision, designed for clinicians.
                 </p>
               </div>
 

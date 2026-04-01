@@ -2,291 +2,361 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import { ArrowRight, MessageCircle, TestTube2, Zap } from "lucide-react";
+import { ArrowRight, MessageCircle, TestTube2, Zap, Pause, Play } from "lucide-react";
 import { products } from "@/data/products";
 import { useRouter } from "next/navigation";
 
 const DURATION = 5500;
 
-// ─── Static CSS ────────────────────────────────────────────────────────────────
-const SLIDESHOW_CSS = `
-.ss-section { width:100%; overflow:hidden; position:relative; user-select:none; background:#f8f7ff; }
-.ss-top-bar { height:3px; width:100%; position:relative; overflow:hidden; }
-
-.ss-slide {
-  overflow: hidden;
-  position: relative;
-  transition: background 0.7s;
-  display: flex;
-  flex-direction: column;
-}
-
-.ss-inner {
-  display: flex;
-  flex-direction: column;
-  max-width: 72rem;
-  margin: 0 auto;
-  width: 100%;
-  flex: 1;
-}
-
-.ss-two-col { display: flex; }
-
-/* ── Desktop ≥768px ── */
-@media (min-width: 768px) {
-  .ss-slide  { min-height: 740px; height: 740px; }
-  .ss-inner  { padding: 0 3.5rem; }
-
-  .ss-eyebrow {
-    padding-top: 1.75rem;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+const CSS = `
+  /* ── Reset & Base ── */
+  .ss { 
+    width: 100%; 
+    overflow: hidden; 
+    position: relative; 
+    user-select: none;
+    font-family: 'DM Sans', system-ui, sans-serif;
   }
 
-  .ss-two-col {
-    flex-direction: row;
-    gap: 3.5rem;
-    padding: 2rem 0 1.5rem;
-    flex: 1;
-    min-height: 0;
+  .ss-slide {
+    position: relative;
     overflow: hidden;
   }
 
-  .ss-img-col {
-    width: 40%;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    margin-left: 12px;
+  /* ── CHANGE 1: mobile height increased 582 → 680 ── */
+  @media (min-width: 768px) {
+    .ss-slide { height: 640px; }
+    .ss-nav   { height: 60px; }
+  }
+  @media (max-width: 767px) {
+    .ss-slide { height: 680px; }
+    .ss-nav   { height: 58px; }
   }
 
-  .ss-product-img { max-height: 380px; }
-
-  /*
-    KEY FIX: text-col must be a proper flex column that distributes space
-    between the scrollable content area and the always-visible CTA row.
-  */
-  .ss-text-col {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    /* No overflow:hidden here — let children manage themselves */
+  .ss-bg {
+    position: absolute; inset: 0;
+    transition: background 0.8s ease;
+    z-index: 0;
+  }
+  .ss-noise {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+  }
+  .ss-grid {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  }
+  .ss-orb-1, .ss-orb-2 {
+    position: absolute; border-radius: 50%; pointer-events: none; z-index: 1;
+    filter: blur(70px);
+  }
+  @media (min-width: 768px) {
+    .ss-orb-1 { width: 520px; height: 520px; right: -80px; top: -80px; }
+    .ss-orb-2 { width: 340px; height: 340px; left: -60px; bottom: -80px; }
+  }
+  @media (max-width: 767px) {
+    .ss-orb-1 { width: 280px; height: 280px; right: -60px; top: -40px; }
+    .ss-orb-2 { width: 200px; height: 200px; left: -40px; bottom: -40px; }
   }
 
-  .ss-anim-wrapper {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0; /* Critical: allows flex children to shrink below natural size */
+  .ss-accent-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 20;
+    transition: background 0.7s ease;
   }
 
-  /*
-    KEY FIX: ss-text-inner is the scrollable area. It must have flex:1 and
-    min-height:0 so it takes remaining space after CTAs claim their space.
-    The CTAs live OUTSIDE this div so they are never scrolled away.
-  */
-  .ss-text-inner {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-right: 6px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0,0,0,0.15) transparent;
+  .ss-inner {
+    position: relative; z-index: 10;
+    max-width: 1100px; margin: 0 auto;
+    height: 100%;
+    display: flex; flex-direction: column;
   }
-  .ss-text-inner::-webkit-scrollbar { width: 4px; }
-  .ss-text-inner::-webkit-scrollbar-track { background: transparent; }
-  .ss-text-inner::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 4px; }
-
-  .ss-category-row { margin-bottom: 0.9rem; flex-shrink: 0; }
-  .ss-cat-chip   { font-size: 10px; padding: 6px 14px; }
-  .ss-model-chip { font-size: 10px; padding: 6px 10px; }
-
-  .ss-name {
-    font-size: clamp(1.4rem, 2.8vw, 2.3rem);
-    margin-bottom: 0.8rem;
-    flex-shrink: 0;
-    display: block;
-  }
-
-  .ss-tests-box  { padding: 14px 16px; margin-bottom: 1.1rem; border-radius: 16px; flex-shrink: 0; }
-  .ss-tests-label-row { margin-bottom: 10px; }
-  .ss-tests-scroll { display: flex; flex-wrap: wrap; gap: 6px; }
-  .ss-tests-scroll span { font-size: 11px; padding: 4px 10px; }
-
-  .ss-desc {
-    font-size: 1rem;
-    line-height: 1.85;
-    margin-bottom: 1.1rem;
-    flex-shrink: 0;
-    display: block;
-  }
-
-  .ss-divider { margin-bottom: 1.1rem; flex-shrink: 0; }
-
-  .ss-highlights { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.2rem; flex-shrink: 0; }
-  .ss-highlights-header { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
-  .ss-highlights-title  { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; }
-  .ss-highlight-dot  { width: 20px; height: 20px; }
-  .ss-highlight-text { font-size: 1rem; }
-
-  /*
-    KEY FIX: CTA row is flex-shrink:0 and sits OUTSIDE ss-text-inner.
-    It always occupies its natural height and is never pushed offscreen.
-    A top border + padding visually separates it from the scrollable content.
-  */
-  .ss-cta-row {
-    gap: 12px;
-    flex-shrink: 0;
-    padding-top: 14px;
-    padding-bottom: 4px;
-    border-top: 1px solid rgba(0,0,0,0.06);
-    margin-top: 2px;
-  }
-  .ss-cta-primary   { font-size: 0.78rem; padding: 0.65rem 1.4rem; }
-  .ss-cta-secondary { font-size: 0.78rem; padding: 0.65rem 1.4rem; }
-  .ss-nav { padding: 14px 20px; }
-}
-
-/* ── Mobile <768px ── */
-@media (max-width: 767px) {
-  .ss-slide {
-    height: auto;
-    min-height: unset;
-    overflow: visible;
-  }
-
-  .ss-inner { padding: 0 18px; }
+  @media (min-width: 768px) { .ss-inner { padding: 0 3rem; } }
+  @media (max-width: 767px) { .ss-inner { padding: 0 1.1rem; } }
 
   .ss-eyebrow {
-    padding-top: 14px;
-    padding-bottom: 6px;
+    display: flex; align-items: center; gap: 10px;
     flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
   }
+  @media (min-width: 768px) { .ss-eyebrow { padding: 1.4rem 0 0; } }
+  @media (max-width: 767px) { .ss-eyebrow { padding: 0.9rem 0 0; } }
 
-  .ss-two-col {
-    flex-direction: column;
-    gap: 0;
-    padding: 0 0 16px;
-    height: auto;
+  .ss-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 100px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+    transition: background 0.5s, border-color 0.5s, color 0.5s;
+  }
+  .ss-pulse { width: 5px; height: 5px; border-radius: 50%; }
+  .ss-sep { height: 1px; width: 22px; }
+  .ss-counter { font-size: 10px; font-weight: 700; color: #94a3b8; letter-spacing: 0.1em; font-variant-numeric: tabular-nums; }
+
+  .ss-cols {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+  }
+  @media (min-width: 768px) {
+    .ss-cols { flex-direction: row; gap: 2.5rem; padding: 1.25rem 0 1.25rem; align-items: stretch; }
+  }
+  @media (max-width: 767px) {
+    .ss-cols { flex-direction: column; gap: 0; padding: 0.5rem 0 0; }
   }
 
   .ss-img-col {
-    width: 100%;
+    position: relative; display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    margin-bottom: 14px;
+  }
+  @media (min-width: 768px) {
+    .ss-img-col { width: 38%; }
+  }
+  @media (max-width: 767px) {
+    .ss-img-col { width: 100%; height: 168px; flex-shrink: 0; }
   }
 
-  .ss-product-img { max-height: 130px; width: auto; }
+  .ss-img-glow {
+    position: absolute; inset: -10%; border-radius: 50%;
+    filter: blur(36px); pointer-events: none;
+    transition: background 0.7s;
+  }
+  .ss-img {
+    position: relative; z-index: 2;
+    object-fit: contain; transition: opacity 0.4s, transform 0.4s;
+  }
+  @media (min-width: 768px) { .ss-img { max-height: 360px; width: 100%; } }
+  @media (max-width: 767px) { .ss-img { max-height: 140px; width: auto; } }
+
+  .ss-brand-pill {
+    position: absolute; top: 8px; left: 8px; z-index: 10;
+    font-size: 9px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 100px; color: #fff;
+    transition: background 0.5s, box-shadow 0.5s;
+  }
 
   .ss-text-col {
-    display: flex;
-    flex-direction: column;
-    height: auto;
+    display: flex; flex-direction: column;
+    min-width: 0; min-height: 0;
+  }
+  @media (min-width: 768px) { .ss-text-col { flex: 1; } }
+  @media (max-width: 767px) { .ss-text-col { flex: 1; min-height: 0; overflow: hidden; } }
+
+  .ss-anim {
+    display: flex; flex-direction: column;
+    height: 100%;
+    transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1);
   }
 
-  .ss-anim-wrapper {
-    display: flex;
-    flex-direction: column;
-    height: auto;
+  .ss-scroll {
+    flex: 1; min-height: 0;
+    overflow-y: auto; overflow-x: hidden;
+    padding-right: 4px;
+    scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.12) transparent;
   }
+  .ss-scroll::-webkit-scrollbar { width: 3px; }
+  .ss-scroll::-webkit-scrollbar-track { background: transparent; }
+  .ss-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 3px; }
 
-  .ss-text-inner {
-    display: flex;
-    flex-direction: column;
-    height: auto;
-    overflow: visible;
+  .ss-chips { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
+  @media (min-width: 768px) { .ss-chips { margin-bottom: 0.7rem; } }
+  @media (max-width: 767px) { .ss-chips { margin-bottom: 0.45rem; } }
+
+  .ss-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    border-radius: 100px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em;
+    transition: background 0.4s, color 0.4s, border-color 0.4s;
   }
+  @media (min-width: 768px) { .ss-chip { font-size: 9.5px; padding: 5px 12px; } }
+  @media (max-width: 767px) { .ss-chip { font-size: 9px; padding: 3.5px 9px; } }
 
-  .ss-category-row { margin-bottom: 8px; flex-shrink: 0; }
-  .ss-cat-chip   { font-size: 9.5px; padding: 4px 11px; }
-  .ss-model-chip { font-size: 9.5px; padding: 4px 10px; }
+  .ss-model-tag {
+    border-radius: 100px; font-weight: 600; font-size: 9.5px;
+    padding: 4px 10px; color: #64748b;
+    background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.08);
+  }
+  @media (max-width: 767px) { .ss-model-tag { font-size: 9px; padding: 3px 9px; } }
 
+  .ss-name-row {
+    display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+  }
+  @media (min-width: 768px) { .ss-name-row { margin-bottom: 0.9rem; } }
+  @media (max-width: 767px) { .ss-name-row { margin-bottom: 0.55rem; } }
+
+  .ss-name-bar {
+    width: 3px; border-radius: 3px; flex-shrink: 0; align-self: stretch; min-height: 20px;
+    transition: background 0.5s;
+  }
   .ss-name {
-    font-size: 1.05rem;
-    line-height: 1.4;
-    margin-bottom: 8px;
-    flex-shrink: 0;
-    display: block;
+    font-weight: 800; line-height: 1.2; color: #0f172a;
+    letter-spacing: -0.02em;
   }
+  @media (min-width: 768px) { .ss-name { font-size: clamp(1.25rem, 2.2vw, 2rem); } }
+  @media (max-width: 767px) { .ss-name { font-size: 1.05rem; } }
 
-  .ss-tests-box {
-    padding: 10px 12px;
-    margin-bottom: 10px;
-    border-radius: 12px;
-    flex-shrink: 0;
+  .ss-tests-card {
+    border-radius: 14px; flex-shrink: 0;
+    transition: background 0.5s, border-color 0.5s;
   }
-  .ss-tests-label-row { margin-bottom: 6px; }
-  .ss-tests-scroll {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
+  @media (min-width: 768px) { .ss-tests-card { padding: 12px 14px; margin-bottom: 0.9rem; } }
+  @media (max-width: 767px) { .ss-tests-card { padding: 8px 10px; margin-bottom: 0.5rem; } }
+
+  .ss-tests-header {
+    display: inline-flex; align-items: center; gap: 5px;
+    border-radius: 100px; padding: 3px 10px;
+    font-size: 9px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase;
+    color: #fff;
+    transition: background 0.5s;
   }
-  .ss-tests-scroll span {
-    font-size: 9px;
-    padding: 3px 8px;
-    border-radius: 7px;
-    line-height: 1.3;
-    font-weight: 600;
-    white-space: nowrap;
+  @media (min-width: 768px) { .ss-tests-header { margin-bottom: 8px; } }
+  @media (max-width: 767px) { .ss-tests-header { margin-bottom: 5px; } }
+
+  .ss-tests-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .ss-test-tag {
+    border-radius: 7px; font-weight: 600; white-space: nowrap;
+    transition: background 0.4s, color 0.4s, border-color 0.4s;
   }
+  @media (min-width: 768px) { .ss-test-tag { font-size: 10.5px; padding: 3px 9px; } }
+  @media (max-width: 767px) { .ss-test-tag { font-size: 8.5px; padding: 2.5px 7px; } }
+
+  /* ── CHANGE 2: description — 2-line clamp + see more ── */
+  .ss-desc-wrap { flex-shrink: 0; }
+  @media (min-width: 768px) { .ss-desc-wrap { margin-bottom: 0.9rem; } }
+  @media (max-width: 767px) { .ss-desc-wrap { margin-bottom: 0.55rem; } }
 
   .ss-desc {
-    font-size: 0.78rem;
-    line-height: 1.65;
-    margin-bottom: 10px;
-    flex-shrink: 0;
-    display: block;
-    color: #4b5563;
-    overflow: visible;
-    height: auto;
-    max-height: none;
+    color: #475569; line-height: 1.75;
+    text-align: justify;
   }
-
-  .ss-divider { margin-bottom: 10px; flex-shrink: 0; }
-
-  .ss-highlights {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    flex-shrink: 0;
-    margin-bottom: 14px;
-    overflow: visible;
-    height: auto;
+  .ss-desc.clamped {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
-  .ss-highlights-header { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
-  .ss-highlights-title  { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; }
-  .ss-highlight-row  { margin-bottom: 0; }
-  .ss-highlight-dot  { width: 16px; height: 16px; }
-  .ss-highlight-text { font-size: 0.74rem; line-height: 1.5; }
+  @media (min-width: 768px) { .ss-desc { font-size: 0.915rem; } }
+  @media (max-width: 767px) { .ss-desc { font-size: 0.73rem; line-height: 1.6; } }
+
+  /* ── CHANGE 3: see more button ── */
+  .ss-see-more {
+    display: inline-flex; align-items: center; gap: 3px;
+    background: none; border: none; cursor: pointer; padding: 2px 0;
+    font-weight: 700; letter-spacing: 0.04em;
+    transition: opacity 0.2s;
+    margin-top: 3px;
+  }
+  .ss-see-more:hover { opacity: 0.65; }
+  @media (min-width: 768px) { .ss-see-more { font-size: 0.75rem; } }
+  @media (max-width: 767px) { .ss-see-more { font-size: 0.68rem; } }
+
+  .ss-divider { height: 1px; flex-shrink: 0; transition: background 0.5s; }
+  @media (min-width: 768px) { .ss-divider { margin-bottom: 0.9rem; } }
+  @media (max-width: 767px) { .ss-divider { margin-bottom: 0.5rem; } }
+
+  .ss-highlights { flex-shrink: 0; }
+  @media (min-width: 768px) { .ss-highlights { margin-bottom: 0.5rem; } }
+  @media (max-width: 767px) { .ss-highlights { margin-bottom: 0.4rem; } }
+
+  .ss-highlights-label {
+    display: inline-flex; align-items: center; gap: 5px;
+    border-radius: 100px; padding: 3px 10px;
+    font-size: 9px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase;
+    color: #fff; margin-bottom: 8px;
+    transition: background 0.5s;
+  }
+  @media (max-width: 767px) { .ss-highlights-label { margin-bottom: 5px; } }
+
+  .ss-hl-list { display: flex; flex-direction: column; }
+  @media (min-width: 768px) { .ss-hl-list { gap: 8px; } }
+  @media (max-width: 767px) { .ss-hl-list { gap: 5px; } }
+
+  .ss-hl {
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .ss-hl-dot {
+    flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    transition: background 0.4s, border-color 0.4s;
+    margin-top: 2px;
+  }
+  @media (min-width: 768px) { .ss-hl-dot { width: 18px; height: 18px; } }
+  @media (max-width: 767px) { .ss-hl-dot { width: 14px; height: 14px; } }
+
+  .ss-hl-inner { border-radius: 50%; transition: background 0.4s; }
+  @media (min-width: 768px) { .ss-hl-inner { width: 5px; height: 5px; } }
+  @media (max-width: 767px) { .ss-hl-inner { width: 4px; height: 4px; } }
+
+  .ss-hl-text { color: #334155; font-weight: 500; }
+  @media (min-width: 768px) { .ss-hl-text { font-size: 0.9rem; line-height: 1.5; } }
+  @media (max-width: 767px) { .ss-hl-text { font-size: 0.72rem; line-height: 1.45; } }
 
   .ss-cta-row {
-    gap: 8px;
+    display: flex; align-items: center; flex-nowrap: nowrap; gap: 10px;
     flex-shrink: 0;
-    padding-bottom: 16px;
-    padding-top: 12px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    transition: border-color 0.5s;
   }
-  .ss-cta-primary   { font-size: 0.7rem; padding: 0.48rem 1rem; }
-  .ss-cta-secondary { font-size: 0.7rem; padding: 0.48rem 1rem; }
-  .ss-nav { padding: 10px 18px; }
+  @media (min-width: 768px) { .ss-cta-row { padding: 12px 0 0; margin-top: 4px; } }
+  @media (max-width: 767px) { .ss-cta-row { padding: 8px 0 0; margin-top: 2px; } }
 
-  .ss-orb { display: none; }
-}
+  .ss-cta-primary {
+    display: inline-flex; align-items: center; gap: 6px;
+    border-radius: 10px; font-weight: 700; color: #fff;
+    transition: background 0.4s, box-shadow 0.3s, transform 0.15s;
+    border: none; cursor: pointer;
+  }
+  .ss-cta-primary:hover { transform: translateY(-1px); }
+  .ss-cta-primary:active { transform: translateY(0); }
+  @media (min-width: 768px) { .ss-cta-primary { font-size: 0.77rem; padding: 0.6rem 1.3rem; } }
+  @media (max-width: 767px) { .ss-cta-primary { font-size: 0.69rem; padding: 0.45rem 1rem; } }
+
+  .ss-cta-secondary {
+    display: inline-flex; align-items: center; gap: 5px;
+    border-radius: 10px; font-weight: 600;
+    border: 1.5px solid;
+    transition: background 0.4s, color 0.4s, border-color 0.4s, transform 0.15s;
+    text-decoration: none;
+  }
+  .ss-cta-secondary:hover { transform: translateY(-1px); }
+  @media (min-width: 768px) { .ss-cta-secondary { font-size: 0.77rem; padding: 0.58rem 1.2rem; } }
+  @media (max-width: 767px) { .ss-cta-secondary { font-size: 0.69rem; padding: 0.43rem 0.9rem; } }
+
+  .ss-pause-indicator {
+    position: absolute; inset: 0; z-index: 30;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .ss-pause-badge {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(0,0,0,0.55); backdrop-filter: blur(8px);
+    border-radius: 100px; padding: 6px 14px;
+    color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  }
+
+  .ss-nav {
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    transition: background 0.7s, border-color 0.5s;
+  }
+
+  .ss-nav-btn {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 700;
+    background: none; border: none; cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    padding: 0;
+  }
+  .ss-nav-btn:hover { opacity: 0.55; transform: scale(0.95); }
+
+  .ss-dots { display: flex; align-items: center; gap: 5px; }
+  .ss-dot {
+    border-radius: 100px; overflow: hidden;
+    cursor: pointer; transition: width 0.3s cubic-bezier(0.4,0,0.2,1), background 0.4s;
+    height: 5px; flex-shrink: 0; border: none; padding: 0; position: relative;
+  }
+  .ss-dot-fill {
+    position: absolute; inset-y: 0; left: 0; border-radius: 100px;
+    transition: width 0.05s linear;
+  }
+
+  @media (max-width: 400px) { .ss-nav-label { display: none; } }
 `;
 
 export default function ProductSlideshow() {
@@ -297,13 +367,14 @@ export default function ProductSlideshow() {
   const [paused, setPaused] = useState(false);
   const [progress, setProgress] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [showPauseHint, setShowPauseHint] = useState(false);
+  const [descExpanded, setDescExpanded] = useState(false); // ← new
 
-  const touchStartX = useRef<number | null>(null);
-  const touchStartY = useRef<number | null>(null);
-  const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const progressRef = useRef<number>(0);
+  const progressRef = useRef(0);
   const pausedRef = useRef(false);
-  const lastTickRef = useRef<number>(Date.now());
+  const lastTickRef = useRef(Date.now());
+  const hintTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clickHandled = useRef(false);
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -314,9 +385,10 @@ export default function ProductSlideshow() {
       setDirection(dir);
       setAnimating(true);
       setProgress(0);
+      setDescExpanded(false); // ← reset on slide change
       progressRef.current = 0;
       lastTickRef.current = Date.now();
-      setTimeout(() => { setCurrent(next); setAnimating(false); }, 380);
+      setTimeout(() => { setCurrent(next); setAnimating(false); }, 360);
     },
     [animating]
   );
@@ -342,304 +414,310 @@ export default function ProductSlideshow() {
 
   useEffect(() => { pausedRef.current = paused; }, [paused]);
 
-  const handlePointerDown = () => { pressTimer.current = setTimeout(() => setPaused(true), 120); };
-  const handlePointerUp = () => { if (pressTimer.current) clearTimeout(pressTimer.current); setPaused(false); };
+  const handleSlideClick = () => {
+    if (clickHandled.current) { clickHandled.current = false; return; }
+    const next = !paused;
+    setPaused(next);
+    setShowPauseHint(true);
+    if (hintTimer.current) clearTimeout(hintTimer.current);
+    hintTimer.current = setTimeout(() => setShowPauseHint(false), 1200);
+  };
+
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
-    handlePointerDown();
   };
   const handleTouchEnd = (e: React.TouchEvent) => {
-    handlePointerUp();
     if (touchStartX.current === null || touchStartY.current === null) return;
     const dx = e.changedTouches[0].clientX - touchStartX.current;
     const dy = e.changedTouches[0].clientY - touchStartY.current;
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40)
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 42) {
+      clickHandled.current = true;
       goTo(dx < 0 ? current + 1 : current - 1, dx < 0 ? "right" : "left");
+    }
     touchStartX.current = null;
     touchStartY.current = null;
   };
 
   const p = products[current];
-  const accent = p.accentColor;
-  const bg = p.bgColor;
+  const accent = mounted ? p.accentColor : "#7c3aed";
+  const bg = mounted ? p.bgColor : "#f5f3ff";
 
-  const slideContentAnim: React.CSSProperties = {
+  const slideAnim: React.CSSProperties = {
     opacity: animating ? 0 : 1,
-    transform: animating ? (direction === "right" ? "translateX(32px)" : "translateX(-32px)") : "translateX(0)",
-    transition: "opacity 0.38s cubic-bezier(0.4,0,0.2,1), transform 0.38s cubic-bezier(0.4,0,0.2,1)",
+    transform: animating
+      ? direction === "right" ? "translateX(28px)" : "translateX(-28px)"
+      : "translateX(0)",
   };
   const imgAnim: React.CSSProperties = {
     opacity: animating ? 0 : 1,
-    transform: animating ? (direction === "right" ? "translateX(-40px) scale(0.9)" : "translateX(40px) scale(0.9)") : "translateX(0) scale(1)",
-    transition: "opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1)",
+    transform: animating
+      ? direction === "right" ? "translateX(-36px) scale(0.92)" : "translateX(36px) scale(0.92)"
+      : "translateX(0) scale(1)",
   };
 
-  const accentBg10 = mounted ? `${accent}10` : "rgba(0,0,0,0.04)";
-  const accentBd26 = mounted ? `1px solid ${accent}26` : "1px solid rgba(0,0,0,0.08)";
-  const accentColor = mounted ? accent : "#888";
+  const a = (op: string) => mounted ? `${accent}${op}` : `rgba(0,0,0,0.05)`;
 
   return (
-    <section
-      className="ss-section"
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUp}
-      onPointerLeave={handlePointerUp}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
-      <style dangerouslySetInnerHTML={{ __html: SLIDESHOW_CSS }} />
+    <section className="ss">
+      <style dangerouslySetInnerHTML={{ __html: CSS }} />
 
-      {/* ── Top accent bar ── */}
-      <div className="ss-top-bar">
-        {mounted && (
-          <div className="absolute inset-0" style={{ background: `linear-gradient(90deg,transparent,${accent}66,${accent},${accent}66,transparent)` }} />
-        )}
-      </div>
-
-      {/* ── Main slide ── */}
       <div
         className="ss-slide"
-        style={mounted ? { background: `linear-gradient(135deg,${bg}ee 0%,#ffffff 55%,${bg}55 100%)` } : { background: "#f8f7ff" }}
+        onClick={handleSlideClick}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        style={{ cursor: "pointer" }}
       >
-        {/* Decorative orbs */}
+        <div className="ss-accent-bar" style={{
+          background: mounted
+            ? `linear-gradient(90deg, transparent, ${accent}55, ${accent}, ${accent}55, transparent)`
+            : "transparent"
+        }} />
+
+        <div className="ss-bg" style={{
+          background: mounted
+            ? `linear-gradient(140deg, ${bg}f0 0%, #ffffff 45%, ${bg}80 100%)`
+            : "#f8f7ff"
+        }} />
+        <div className="ss-noise" />
+        <div className="ss-grid" style={{
+          backgroundImage: mounted ? `radial-gradient(circle, ${accent}16 1px, transparent 1px)` : "none",
+          backgroundSize: "30px 30px",
+        }} />
         {mounted && (
           <>
-            <div className="ss-orb pointer-events-none absolute -right-40 top-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full"
-              style={{ background: `radial-gradient(circle,${accent}0e 0%,${accent}03 40%,transparent 70%)`, filter: "blur(60px)" }} />
-            <div className="ss-orb pointer-events-none absolute -left-24 -top-12 w-[380px] h-[380px] rounded-full"
-              style={{ background: `radial-gradient(circle,${accent}08 0%,transparent 70%)`, filter: "blur(44px)" }} />
-            <div className="ss-orb pointer-events-none absolute inset-0 opacity-[0.015]"
-              style={{ backgroundImage: `radial-gradient(circle,${accent} 1px,transparent 1px)`, backgroundSize: "34px 34px" }} />
+            <div className="ss-orb-1" style={{ background: `radial-gradient(circle, ${accent}1a 0%, ${accent}05 50%, transparent 75%)` }} />
+            <div className="ss-orb-2" style={{ background: `radial-gradient(circle, ${accent}12 0%, transparent 70%)` }} />
           </>
         )}
 
-        <div className="ss-inner">
+        <div className="ss-pause-indicator" style={{ opacity: showPauseHint ? 1 : 0 }}>
+          <div className="ss-pause-badge">
+            {paused ? <Pause size={12} /> : <Play size={12} />}
+            {paused ? "Paused" : "Playing"}
+          </div>
+        </div>
 
-          {/* ── Eyebrow ── */}
+        <div className="ss-inner">
           <div className="ss-eyebrow">
-            <div style={{
-              display: "inline-flex", alignItems: "center", gap: 7,
-              padding: "5px 13px", borderRadius: 100,
-              background: mounted ? `linear-gradient(135deg,${accent}18,${accent}0a)` : "rgba(0,0,0,0.04)",
+            <div className="ss-badge" style={{
+              background: mounted ? `linear-gradient(135deg, ${accent}1a, ${accent}0a)` : "rgba(0,0,0,0.04)",
               border: mounted ? `1px solid ${accent}2e` : "1px solid rgba(0,0,0,0.08)",
+              color: accent,
             }}>
-              <span style={{ width: 5, height: 5, borderRadius: "50%", background: accentColor, boxShadow: mounted ? `0 0 7px ${accent}` : "none" }} className="animate-pulse"/>
-              <span style={{ fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: accentColor, fontWeight: 700 }}>
-                Products
-              </span>
+              <span className="ss-pulse animate-pulse" style={{ background: accent, boxShadow: mounted ? `0 0 6px ${accent}` : "none" }} />
+              Products
             </div>
-            <div style={{ height: 1, width: 26, background: mounted ? `linear-gradient(90deg,${accent}30,transparent)` : "rgba(0,0,0,0.07)" }} />
-            <span style={{ fontSize: 11, color: "#9ca3af", fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>
-              {String(current + 1).padStart(2, "0")} / {String(products.length).padStart(2, "0")}
-            </span>
+            <div className="ss-sep" style={{ background: mounted ? `linear-gradient(90deg, ${accent}30, transparent)` : "rgba(0,0,0,0.06)" }} />
+            <span className="ss-counter">{String(current + 1).padStart(2, "0")} / {String(products.length).padStart(2, "0")}</span>
+            {paused && (
+              <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: accent, opacity: 0.7, marginLeft: 2 }}>
+                · PAUSED
+              </span>
+            )}
           </div>
 
-          {/* ── Two-col layout ── */}
-          <div className="ss-two-col">
-
-            {/* Image col */}
+          <div className="ss-cols">
             <div className="ss-img-col">
-              {mounted && (
-                <div className="absolute inset-0 rounded-3xl"
-                  style={{ background: `radial-gradient(ellipse at center,${accent}1c 0%,transparent 68%)`, filter: "blur(28px)" }} />
-              )}
-              <div className="relative z-10 w-full h-full flex items-center justify-center" style={imgAnim}>
-                <Image
-                  src={p.image} alt={p.name}
-                  width={460} height={380}
-                  className="ss-product-img object-contain w-full"
-                  style={{ filter: mounted ? `drop-shadow(0 18px 44px ${accent}55)` : "none" }}
-                  priority={current === 0}
-                />
-              </div>
-              <div
-                className="absolute top-2.5 left-2.5 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider text-white z-20"
-                style={{ background: mounted ? `linear-gradient(135deg,${accent},${accent}bb)` : "#888", boxShadow: mounted ? `0 3px 12px ${accent}48` : "none" }}
-              >
+              {mounted && <div className="ss-img-glow" style={{ background: `radial-gradient(ellipse at center, ${accent}28 0%, transparent 65%)` }} />}
+              <Image
+                src={p.image} alt={p.name}
+                width={460} height={380}
+                className="ss-img"
+                style={{
+                  ...imgAnim,
+                  filter: mounted ? `drop-shadow(0 16px 40px ${accent}55)` : "none",
+                }}
+                priority={current === 0}
+              />
+              <div className="ss-brand-pill" style={{
+                background: mounted ? `linear-gradient(135deg, ${accent}, ${accent}cc)` : "#888",
+                boxShadow: mounted ? `0 3px 10px ${accent}44` : "none",
+              }}>
                 {p.brand === "—" ? "Generic" : p.brand.split(" ")[0]}
               </div>
             </div>
 
-            {/* Text col */}
-            <div className="ss-text-col pb-4">
-              {/*
-                ss-anim-wrapper is a flex column that fills the text col.
-                It contains:
-                  1. ss-text-inner  → flex:1, scrollable — absorbs all extra height
-                  2. ss-cta-row     → flex-shrink:0 — always visible at the bottom
-              */}
-              <div className="ss-anim-wrapper" style={slideContentAnim}>
+            <div className="ss-text-col">
+              <div className="ss-anim" style={slideAnim}>
+                <div className="ss-scroll">
 
-                {/* Scrollable content area */}
-                <div className="ss-text-inner">
-
-                  {/* Category + model */}
-                  <div className="ss-category-row flex items-center gap-2 flex-wrap">
-                    <span className="ss-cat-chip inline-flex items-center gap-1.5 font-bold rounded-full uppercase tracking-widest"
-                      style={{ background: accentBg10, color: accentColor, border: accentBd26 }}>
-                      <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: accentColor }} />
+                  <div className="ss-chips">
+                    <span className="ss-chip" style={{
+                      background: a("14"), color: accent, border: `1px solid ${a("28")}`,
+                    }}>
+                      <span style={{ width: 5, height: 5, borderRadius: "50%", background: accent, flexShrink: 0 }} />
                       {p.category}
                     </span>
-                    <span className="ss-model-chip font-semibold rounded-full"
-                      style={{ background: accentBg10, color: accentColor, border: "1px solid #e5e7eb", borderColor: mounted ? `${accent}10` : "1px solid rgba(0,0,0,0.06)" }}>
-                      {p.model}
-                    </span>
+                    <span className="ss-model-tag">{p.model}</span>
                   </div>
 
-                  {/* Full name */}
-                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 8, marginBottom: 12 }}>
-                    <div
-                      style={{
-                        width: 4,
-                        height: "100%",
-                        minHeight: 22,
-                        borderRadius: 4,
-                        background: `linear-gradient(180deg, ${accent}, ${accent}66)`,
-                        opacity: 0.9,
-                      }}
-                    />
-                    <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold">
-                      {p.name}
-                    </h2>
+                  <div className="ss-name-row">
+                    <div className="ss-name-bar" style={{ background: `linear-gradient(180deg, ${accent}, ${accent}55)` }} />
+                    <h2 className="ss-name">{p.name}</h2>
                   </div>
 
-                  {/* Tests card */}
-                  <div className="ss-tests-box"
-                    style={{ background: mounted ? `linear-gradient(135deg,${accent}0c,${accent}05)` : "rgba(0,0,0,0.02)", border: mounted ? `1px solid ${accent}1e` : "1px solid rgba(0,0,0,0.06)" }}>
-                    <div className="ss-tests-label-row flex items-center gap-1.5">
-                      <div
-                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full"
-                        style={{ background: accent || "#22c55e", color: "#ffffff" }}
-                      >
-                        <TestTube2 size={13} style={{ color: "#fff" }} />
-                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
-                          Test Covered
-                        </p>
-                      </div>
+                  <div className="ss-tests-card" style={{
+                    background: mounted ? `linear-gradient(135deg, ${accent}0e, ${accent}05)` : "rgba(0,0,0,0.02)",
+                    border: mounted ? `1px solid ${accent}1e` : "1px solid rgba(0,0,0,0.06)",
+                  }}>
+                    <div className="ss-tests-header" style={{ background: accent }}>
+                      <TestTube2 size={11} color="#fff" />
+                      Tests Covered
                     </div>
-                    <div className="ss-tests-scroll">
-                      {p.tests.map((test) => (
-                        <span key={test} className="rounded-full font-semibold leading-snug"
-                          style={{ background: accentBg10, color: accentColor, border: mounted ? `1px solid ${accent}22` : "1px solid rgba(0,0,0,0.06)" }}>
-                          {test}
-                        </span>
+                    <div className="ss-tests-tags">
+                      {p.tests.map((t) => (
+                        <span key={t} className="ss-test-tag" style={{
+                          background: a("10"), color: accent, border: `1px solid ${a("20")}`,
+                        }}>{t}</span>
                       ))}
                     </div>
                   </div>
 
-                  {/* Full description */}
-                  <p className="ss-desc text-justify text-[#374151]">
-                    {p.description}
-                  </p>
-
-                  {/* Divider */}
-                  <div className="ss-divider h-px"
-                    style={{ background: mounted ? `linear-gradient(90deg,${accent}22,transparent 65%)` : "rgba(0,0,0,0.06)" }} />
-
-                  {/* Highlights */}
-                  <div className="ss-highlights">
-                    <div className="ss-highlights-header">
-                      <div
-                        className="inline-flex items-center gap-2 mb-3 px-3 py-1.5 rounded-full"
-                        style={{ background: accent || "#22c55e", color: "#ffffff" }}
-                      >
-                        <Zap size={13} style={{ color: "#fff" }} />
-                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
-                          Highlights
-                        </p>
-                      </div>
-                    </div>
-                    {p.highlights.slice(0, 3).map((h, i) => (
-                      <div key={h} className="ss-highlight-row flex items-start gap-2"
-                        style={{ opacity: animating ? 0 : 1, transform: animating ? "translateY(5px)" : "translateY(0)", transition: `opacity 0.4s ease ${i * 60}ms,transform 0.4s ease ${i * 60}ms` }}>
-                        <span className="ss-highlight-dot rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                          style={{ background: mounted ? `${accent}12` : "rgba(0,0,0,0.04)", border: mounted ? `1.5px solid ${accent}28` : "1.5px solid rgba(0,0,0,0.08)" }}>
-                          <span className="w-1 h-1 rounded-full" style={{ background: accentColor }} />
-                        </span>
-                        <span className="ss-highlight-text text-[#374151] font-medium">{h}</span>
-                      </div>
-                    ))}
+                  {/* ── CHANGE: description with 2-line clamp + see more ── */}
+                  <div className="ss-desc-wrap">
+                    <p className={`ss-desc${descExpanded ? "" : " clamped"}`}>
+                      {p.description}
+                    </p>
+                    <button
+                      className="ss-see-more"
+                      style={{ color: accent }}
+                      onClick={(e) => { e.stopPropagation(); setDescExpanded((v) => !v); }}
+                    >
+                      {descExpanded ? (
+                        <>
+                          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style={{ flexShrink: 0 }}>
+                            <path d="M2 8L6 4L10 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          See less
+                        </>
+                      ) : (
+                        <>
+                          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style={{ flexShrink: 0 }}>
+                            <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          See more
+                        </>
+                      )}
+                    </button>
                   </div>
 
-                </div>{/* end ss-text-inner */}
+                  <div className="ss-divider" style={{
+                    background: mounted ? `linear-gradient(90deg, ${accent}25, transparent 60%)` : "rgba(0,0,0,0.06)",
+                  }} />
 
-                {/*
-                  CTAs live OUTSIDE ss-text-inner so they are never scrolled
-                  away. flex-shrink:0 on .ss-cta-row guarantees they always
-                  occupy their natural height at the bottom of the column.
-                */}
-                <div className="ss-cta-row flex flex-nowrap"
-                  style={{ borderTopColor: mounted ? `${accent}18` : "rgba(0,0,0,0.06)" }}
-                >
+                  <div className="ss-highlights">
+                    <div className="ss-highlights-label" style={{ background: accent }}>
+                      <Zap size={11} color="#fff" />
+                      Highlights
+                    </div>
+                    <div className="ss-hl-list">
+                      {p.highlights.slice(0, 3).map((h, i) => (
+                        <div key={h} className="ss-hl" style={{
+                          opacity: animating ? 0 : 1,
+                          transform: animating ? "translateY(6px)" : "translateY(0)",
+                          transition: `opacity 0.38s ease ${i * 55}ms, transform 0.38s ease ${i * 55}ms`,
+                        }}>
+                          <span className="ss-hl-dot" style={{
+                            background: a("12"), border: `1.5px solid ${a("28")}`,
+                          }}>
+                            <span className="ss-hl-inner" style={{ background: accent }} />
+                          </span>
+                          <span className="ss-hl-text">{h}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                </div>
+
+                <div className="ss-cta-row" style={{ borderTopColor: a("18") }}>
                   <button
-                    onClick={() => router.push(`/products#${p.categoryId}`)}
-                    className="ss-cta-primary group inline-flex items-center gap-1.5 rounded-xl font-bold text-white transition-all duration-300 hover:-translate-y-0.5"
-                    style={{ background: mounted ? `linear-gradient(135deg,${accent},${accent}cc)` : "#888", boxShadow: mounted ? `0 5px 16px ${accent}38` : "none" }}
+                    className="ss-cta-primary"
+                    onClick={(e) => { e.stopPropagation(); router.push(`/products#${p.categoryId}`); }}
+                    style={{
+                      background: mounted ? `linear-gradient(135deg, ${accent}, ${accent}cc)` : "#888",
+                      boxShadow: mounted ? `0 4px 14px ${accent}40` : "none",
+                    }}
                   >
                     View Full Specs
-                    <ArrowRight size={11} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+                    <ArrowRight size={12} />
                   </button>
                   <a
                     href="https://wa.me/9779819425801?text=I'm%20interested%20in%20learning%20more%20about%20your%20products."
                     target="_blank" rel="noopener noreferrer"
-                    className="ss-cta-secondary group inline-flex items-center gap-1.5 rounded-xl font-semibold transition-all duration-300 hover:-translate-y-0.5"
-                    style={{ color: accentColor, background: accentBg10, border: accentBd26 }}
+                    className="ss-cta-secondary"
+                    onClick={(e) => e.stopPropagation()}
+                    style={{
+                      color: accent,
+                      background: a("0e"),
+                      borderColor: a("2a"),
+                    }}
                   >
                     <MessageCircle size={12} />
                     Enquire
                   </a>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-              </div>{/* end ss-anim-wrapper */}
-            </div>{/* end ss-text-col */}
-          </div>{/* end ss-two-col */}
-        </div>{/* end ss-inner */}
-      </div>{/* end ss-slide */}
-
-      {/* ── Nav bar ── */}
-      <div
-        className="ss-nav flex items-center justify-center gap-3 mt-6"
-        style={{
-          background: mounted ? `linear-gradient(135deg,${bg}55,white)` : "white",
-          borderTop: mounted ? `1px solid ${accent}12` : "1px solid rgba(0,0,0,0.06)",
-        }}
-      >
-        <button onClick={() => goTo(current - 1, "left")}
-          className="flex items-center gap-1 text-[11px] font-semibold hover:opacity-60 shrink-0 transition-opacity"
-          style={{ color: accentColor }} aria-label="Previous product">
+      <div className="ss-nav" style={{
+        background: mounted ? `linear-gradient(135deg, ${bg}60, #ffffff)` : "#ffffff",
+        borderTopColor: a("12"),
+      }}>
+        <button
+          className="ss-nav-btn"
+          style={{ color: accent }}
+          onClick={() => goTo(current - 1, "left")}
+          aria-label="Previous"
+        >
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-            <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span className="hidden sm:inline text-base">Prev</span>
+          <span className="ss-nav-label" style={{ fontSize: 13 }}>Prev</span>
         </button>
 
-        <div className="flex items-center gap-1.5">
+        <div className="ss-dots">
           {products.map((_, i) => (
-            <button key={i}
+            <button
+              key={i}
+              className="ss-dot"
               onClick={() => goTo(i, i > current ? "right" : "left")}
-              className="relative rounded-full overflow-hidden transition-all duration-300"
-              style={{ width: i === current ? 22 : 6, height: 6, flexShrink: 0, background: mounted ? (i < current ? accent : `${accent}22`) : "rgba(0,0,0,0.1)" }}
-              aria-label={`Go to product ${i + 1}`}
+              aria-label={`Go to ${i + 1}`}
+              style={{
+                width: i === current ? 24 : 6,
+                background: mounted ? (i < current ? accent : `${accent}22`) : "rgba(0,0,0,0.10)",
+              }}
             >
               {i === current && mounted && (
-                <span className="absolute inset-y-0 left-0 rounded-full"
-                  style={{ width: `${progress * 100}%`, background: accent, transition: "width 0.05s linear" }} />
+                <span
+                  className="ss-dot-fill"
+                  style={{ width: `${progress * 100}%`, background: accent }}
+                />
               )}
             </button>
           ))}
         </div>
 
-        <button onClick={() => goTo(current + 1, "right")}
-          className="flex items-center gap-1 text-[11px] font-semibold hover:opacity-60 shrink-0 transition-opacity"
-          style={{ color: accentColor }} aria-label="Next product">
-          <span className="hidden sm:inline text-base">Next</span>
+        <button
+          className="ss-nav-btn"
+          style={{ color: accent }}
+          onClick={() => goTo(current + 1, "right")}
+          aria-label="Next"
+        >
+          <span className="ss-nav-label" style={{ fontSize: 13 }}>Next</span>
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-            <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
       </div>
-
     </section>
   );
 }
