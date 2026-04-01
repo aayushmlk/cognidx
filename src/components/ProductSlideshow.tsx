@@ -9,13 +9,11 @@ import { useRouter } from "next/navigation";
 const DURATION = 5500;
 
 const CSS = `
-  /* ── Reset & Base ── */
   .ss { 
     width: 100%; 
     overflow: hidden; 
     position: relative; 
     user-select: none;
-    font-family: 'DM Sans', system-ui, sans-serif;
   }
 
   .ss-slide {
@@ -23,7 +21,6 @@ const CSS = `
     overflow: hidden;
   }
 
-  /* ── CHANGE 1: mobile height increased 582 → 680 ── */
   @media (min-width: 768px) {
     .ss-slide { height: 640px; }
     .ss-nav   { height: 60px; }
@@ -127,7 +124,7 @@ const CSS = `
 
   .ss-brand-pill {
     position: absolute; top: 8px; left: 8px; z-index: 10;
-    font-size: 9px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+    font-size: 11px; font-weight: 650; letter-spacing: 0.14em; text-transform: uppercase;
     padding: 4px 10px; border-radius: 100px; color: #fff;
     transition: background 0.5s, box-shadow 0.5s;
   }
@@ -164,15 +161,15 @@ const CSS = `
     border-radius: 100px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em;
     transition: background 0.4s, color 0.4s, border-color 0.4s;
   }
-  @media (min-width: 768px) { .ss-chip { font-size: 9.5px; padding: 5px 12px; } }
-  @media (max-width: 767px) { .ss-chip { font-size: 9px; padding: 3.5px 9px; } }
+  @media (min-width: 768px) { .ss-chip { font-size: 11px; padding: 5px 12px; } }
+  @media (max-width: 767px) { .ss-chip { font-size: 10px; padding: 3.5px 9px; } }
 
   .ss-model-tag {
-    border-radius: 100px; font-weight: 600; font-size: 9.5px;
-    padding: 4px 10px; color: #64748b;
-    background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 100px; font-weight: 600; font-size: 13px;
+    padding: 4px 10px; color: #212022;
+    background: rgba(79, 8, 103, 0.04); border: 1px solid rgba(79, 2, 101, 0.08);
   }
-  @media (max-width: 767px) { .ss-model-tag { font-size: 9px; padding: 3px 9px; } }
+  @media (max-width: 767px) { .ss-model-tag { font-size: 13px; padding: 3px 9px; } }
 
   .ss-name-row {
     display: flex; align-items: center; gap: 10px; flex-shrink: 0;
@@ -200,8 +197,8 @@ const CSS = `
 
   .ss-tests-header {
     display: inline-flex; align-items: center; gap: 5px;
-    border-radius: 100px; padding: 3px 10px;
-    font-size: 9px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase;
+    border-radius: 100px; padding: 3px 9px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
     color: #fff;
     transition: background 0.5s;
   }
@@ -213,10 +210,9 @@ const CSS = `
     border-radius: 7px; font-weight: 600; white-space: nowrap;
     transition: background 0.4s, color 0.4s, border-color 0.4s;
   }
-  @media (min-width: 768px) { .ss-test-tag { font-size: 10.5px; padding: 3px 9px; } }
-  @media (max-width: 767px) { .ss-test-tag { font-size: 8.5px; padding: 2.5px 7px; } }
+  @media (min-width: 768px) { .ss-test-tag { font-size: 11px; padding: 3px 9px; } }
+  @media (max-width: 767px) { .ss-test-tag { font-size: 10px; padding: 2.5px 7px; } }
 
-  /* ── CHANGE 2: description — 2-line clamp + see more ── */
   .ss-desc-wrap { flex-shrink: 0; }
   @media (min-width: 768px) { .ss-desc-wrap { margin-bottom: 0.9rem; } }
   @media (max-width: 767px) { .ss-desc-wrap { margin-bottom: 0.55rem; } }
@@ -234,7 +230,6 @@ const CSS = `
   @media (min-width: 768px) { .ss-desc { font-size: 0.915rem; } }
   @media (max-width: 767px) { .ss-desc { font-size: 0.73rem; line-height: 1.6; } }
 
-  /* ── CHANGE 3: see more button ── */
   .ss-see-more {
     display: inline-flex; align-items: center; gap: 3px;
     background: none; border: none; cursor: pointer; padding: 2px 0;
@@ -267,9 +262,7 @@ const CSS = `
   @media (min-width: 768px) { .ss-hl-list { gap: 8px; } }
   @media (max-width: 767px) { .ss-hl-list { gap: 5px; } }
 
-  .ss-hl {
-    display: flex; align-items: flex-start; gap: 8px;
-  }
+  .ss-hl { display: flex; align-items: flex-start; gap: 8px; }
   .ss-hl-dot {
     flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center;
     transition: background 0.4s, border-color 0.4s;
@@ -287,7 +280,7 @@ const CSS = `
   @media (max-width: 767px) { .ss-hl-text { font-size: 0.72rem; line-height: 1.45; } }
 
   .ss-cta-row {
-    display: flex; align-items: center; flex-nowrap: nowrap; gap: 10px;
+    display: flex; align-items: center; gap: 10px;
     flex-shrink: 0;
     border-top: 1px solid rgba(0,0,0,0.06);
     transition: border-color 0.5s;
@@ -353,7 +346,7 @@ const CSS = `
   }
   .ss-dot-fill {
     position: absolute; inset-y: 0; left: 0; border-radius: 100px;
-    transition: width 0.05s linear;
+    transition: none;
   }
 
   @media (max-width: 400px) { .ss-nav-label { display: none; } }
@@ -365,52 +358,101 @@ export default function ProductSlideshow() {
   const [animating, setAnimating] = useState(false);
   const [direction, setDirection] = useState<"left" | "right">("right");
   const [paused, setPaused] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [showPauseHint, setShowPauseHint] = useState(false);
-  const [descExpanded, setDescExpanded] = useState(false); // ← new
+  const [descExpanded, setDescExpanded] = useState(false);
 
   const progressRef = useRef(0);
   const pausedRef = useRef(false);
   const lastTickRef = useRef(Date.now());
   const hintTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clickHandled = useRef(false);
+  const fillRef = useRef<HTMLSpanElement | null>(null);
+  const resetFlagRef = useRef(false);
+
+  // Callback ref so the fill span is always captured synchronously when mounted
+  const setFillRef = useCallback((el: HTMLSpanElement | null) => {
+    fillRef.current = el;
+    if (el) el.style.width = `${progressRef.current * 100}%`;
+  }, []);
 
   useEffect(() => { setMounted(true); }, []);
+
 
   const goTo = useCallback(
     (idx: number, dir: "left" | "right" = "right") => {
       if (animating) return;
+
       const next = ((idx % products.length) + products.length) % products.length;
+
       setDirection(dir);
       setAnimating(true);
-      setProgress(0);
-      setDescExpanded(false); // ← reset on slide change
+      setDescExpanded(false);
+
+      // ✅ RESET ONLY HERE (single source of truth)
       progressRef.current = 0;
       lastTickRef.current = Date.now();
-      setTimeout(() => { setCurrent(next); setAnimating(false); }, 360);
+      resetFlagRef.current = true;
+
+      requestAnimationFrame(() => {
+        if (fillRef.current) {
+          fillRef.current.style.width = "0%";
+        }
+      });
+
+      setTimeout(() => {
+        setCurrent(next);
+        setAnimating(false);
+      }, 360);
     },
     [animating]
   );
 
+  const currentRef = useRef(current);
+
+  useEffect(() => {
+    currentRef.current = current;
+  }, [current]);
+
   useEffect(() => {
     let raf: number;
+
     const tick = () => {
-      if (!pausedRef.current) {
-        const now = Date.now();
-        const delta = now - lastTickRef.current;
-        lastTickRef.current = now;
-        progressRef.current = Math.min(progressRef.current + delta / DURATION, 1);
-        setProgress(progressRef.current);
-        if (progressRef.current >= 1) goTo(current + 1, "right");
-      } else {
-        lastTickRef.current = Date.now();
-      }
-      raf = requestAnimationFrame(tick);
-    };
+  if (!pausedRef.current) {
+    const now = Date.now();
+
+    if (resetFlagRef.current) {
+      lastTickRef.current = now;
+      resetFlagRef.current = false;
+    } else {
+      const delta = now - lastTickRef.current;
+      lastTickRef.current = now;
+
+      progressRef.current = Math.min(progressRef.current + delta / DURATION, 1);
+    }
+
+    if (fillRef.current) {
+      fillRef.current.style.width = progressRef.current * 100 + "%";
+    }
+
+    if (progressRef.current >= 1) {
+      lastTickRef.current = Date.now();
+      goTo(currentRef.current + 1, "right");
+      return;
+    }
+  } else {
+    lastTickRef.current = Date.now();
+  }
+
+  raf = requestAnimationFrame(tick);
+};
+
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [current, goTo]);
+  }, []);
+
+
+
 
   useEffect(() => { pausedRef.current = paused; }, [paused]);
 
@@ -430,6 +472,7 @@ export default function ProductSlideshow() {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
   };
+
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null || touchStartY.current === null) return;
     const dx = e.changedTouches[0].clientX - touchStartX.current;
@@ -558,7 +601,7 @@ export default function ProductSlideshow() {
 
                   <div className="ss-name-row">
                     <div className="ss-name-bar" style={{ background: `linear-gradient(180deg, ${accent}, ${accent}55)` }} />
-                    <h2 className="ss-name">{p.name}</h2>
+                    <h2 style={{ fontFamily: "DM Sans, system-ui, sans-serif" }} className="ss-name">{p.name}</h2>
                   </div>
 
                   <div className="ss-tests-card" style={{
@@ -578,7 +621,6 @@ export default function ProductSlideshow() {
                     </div>
                   </div>
 
-                  {/* ── CHANGE: description with 2-line clamp + see more ── */}
                   <div className="ss-desc-wrap">
                     <p className={`ss-desc${descExpanded ? "" : " clamped"}`}>
                       {p.description}
@@ -586,19 +628,19 @@ export default function ProductSlideshow() {
                     <button
                       className="ss-see-more"
                       style={{ color: accent }}
-                      onClick={(e) => { e.stopPropagation(); setDescExpanded((v) => !v); }}
+                      onClick={(e: React.MouseEvent) => { e.stopPropagation(); setDescExpanded((v) => !v); }}
                     >
                       {descExpanded ? (
                         <>
                           <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style={{ flexShrink: 0 }}>
-                            <path d="M2 8L6 4L10 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M2 8L6 4L10 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                           See less
                         </>
                       ) : (
                         <>
                           <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style={{ flexShrink: 0 }}>
-                            <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                           See more
                         </>
@@ -638,7 +680,7 @@ export default function ProductSlideshow() {
                 <div className="ss-cta-row" style={{ borderTopColor: a("18") }}>
                   <button
                     className="ss-cta-primary"
-                    onClick={(e) => { e.stopPropagation(); router.push(`/products#${p.categoryId}`); }}
+                    onClick={(e: React.MouseEvent) => { e.stopPropagation(); router.push(`/products#${p.categoryId}`); }}
                     style={{
                       background: mounted ? `linear-gradient(135deg, ${accent}, ${accent}cc)` : "#888",
                       boxShadow: mounted ? `0 4px 14px ${accent}40` : "none",
@@ -649,9 +691,10 @@ export default function ProductSlideshow() {
                   </button>
                   <a
                     href="https://wa.me/9779819425801?text=I'm%20interested%20in%20learning%20more%20about%20your%20products."
-                    target="_blank" rel="noopener noreferrer"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="ss-cta-secondary"
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e: React.MouseEvent) => e.stopPropagation()}
                     style={{
                       color: accent,
                       background: a("0e"),
@@ -693,13 +736,28 @@ export default function ProductSlideshow() {
               aria-label={`Go to ${i + 1}`}
               style={{
                 width: i === current ? 24 : 6,
-                background: mounted ? (i < current ? accent : `${accent}22`) : "rgba(0,0,0,0.10)",
+                background: mounted
+                  ? i < current
+                    ? accent
+                    : i === current
+                      ? `${accent}30`
+                      : `${accent}22`
+                  : "rgba(0,0,0,0.10)",
               }}
             >
               {i === current && mounted && (
                 <span
+                  ref={(el) => {
+                    if (i === current) {
+                      setFillRef(el);
+                    }
+                  }}
                   className="ss-dot-fill"
-                  style={{ width: `${progress * 100}%`, background: accent }}
+                  style={{
+                    width: i === current ? `${progressRef.current * 100}%` : "0%",
+                    background: accent,
+                    opacity: i === current ? 1 : 0,
+                  }}
                 />
               )}
             </button>
