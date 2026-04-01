@@ -368,7 +368,6 @@ export default function ProductSlideshow() {
   const hintTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clickHandled = useRef(false);
   const fillRef = useRef<HTMLSpanElement | null>(null);
-  const resetFlagRef = useRef(false);
 
   // Callback ref so the fill span is always captured synchronously when mounted
   const setFillRef = useCallback((el: HTMLSpanElement | null) => {
@@ -378,81 +377,41 @@ export default function ProductSlideshow() {
 
   useEffect(() => { setMounted(true); }, []);
 
-
   const goTo = useCallback(
     (idx: number, dir: "left" | "right" = "right") => {
       if (animating) return;
-
       const next = ((idx % products.length) + products.length) % products.length;
-
       setDirection(dir);
       setAnimating(true);
       setDescExpanded(false);
-
-      // ✅ RESET ONLY HERE (single source of truth)
       progressRef.current = 0;
+      if (fillRef.current) fillRef.current.style.width = "0%";
       lastTickRef.current = Date.now();
-      resetFlagRef.current = true;
-
-      requestAnimationFrame(() => {
-        if (fillRef.current) {
-          fillRef.current.style.width = "0%";
-        }
-      });
-
-      setTimeout(() => {
-        setCurrent(next);
-        setAnimating(false);
-      }, 360);
+      setTimeout(() => { setCurrent(next); setAnimating(false); }, 360);
     },
     [animating]
   );
 
-  const currentRef = useRef(current);
-
-  useEffect(() => {
-    currentRef.current = current;
-  }, [current]);
-
   useEffect(() => {
     let raf: number;
-
     const tick = () => {
-  if (!pausedRef.current) {
-    const now = Date.now();
-
-    if (resetFlagRef.current) {
-      lastTickRef.current = now;
-      resetFlagRef.current = false;
-    } else {
-      const delta = now - lastTickRef.current;
-      lastTickRef.current = now;
-
-      progressRef.current = Math.min(progressRef.current + delta / DURATION, 1);
-    }
-
-    if (fillRef.current) {
-      fillRef.current.style.width = progressRef.current * 100 + "%";
-    }
-
-    if (progressRef.current >= 1) {
-      lastTickRef.current = Date.now();
-      goTo(currentRef.current + 1, "right");
-      return;
-    }
-  } else {
-    lastTickRef.current = Date.now();
-  }
-
-  raf = requestAnimationFrame(tick);
-};
-
+      if (!pausedRef.current) {
+        const now = Date.now();
+        const delta = now - lastTickRef.current;
+        lastTickRef.current = now;
+        progressRef.current = Math.min(progressRef.current + delta / DURATION, 1);
+        if (fillRef.current) {
+          fillRef.current.style.width = `${progressRef.current * 100}%`;
+        }
+        if (progressRef.current >= 1) goTo(current + 1, "right");
+      } else {
+        lastTickRef.current = Date.now();
+      }
+      raf = requestAnimationFrame(tick);
+    };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
-
-
-
+  }, [current, goTo]);
 
   useEffect(() => { pausedRef.current = paused; }, [paused]);
 
@@ -747,17 +706,9 @@ export default function ProductSlideshow() {
             >
               {i === current && mounted && (
                 <span
-                  ref={(el) => {
-                    if (i === current) {
-                      setFillRef(el);
-                    }
-                  }}
+                  ref={setFillRef}
                   className="ss-dot-fill"
-                  style={{
-                    width: i === current ? `${progressRef.current * 100}%` : "0%",
-                    background: accent,
-                    opacity: i === current ? 1 : 0,
-                  }}
+                  style={{ width: "0%", background: accent }}
                 />
               )}
             </button>
