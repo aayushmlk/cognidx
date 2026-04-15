@@ -19,16 +19,7 @@ A Next.js 14 website for Cognidx Enterprises Pvt. Ltd., a biomedical diagnostic 
 npm install
 ```
 
-### 2. Add the logo
-
-Copy `Cognidx_Logo.png` into the `/public` folder and rename it to `logo.png`:
-
-```
-public/
-  logo.png   ← place the Cognidx logo here
-```
-
-### 3. Run the development server
+### 2. Run the development server
 
 ```bash
 npm run dev
@@ -36,35 +27,32 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-### 4. Build for production
-
-```bash
-npm run build
-npm start
-```
-
----
 
 ## Project Structure
 
 ```
 src/
 ├── app/
-│   ├── layout.tsx        # Root layout (metadata, fonts)
-│   ├── page.tsx          # Home page (assembles all sections)
-│   └── globals.css       # Global styles + Tailwind
+│   ├── contacts/page.tsx          # Contacts Page to show it in a different page (Send Message via Email, Phone numbers)
+│   ├── products/page.tsx          # Products Page to show it in a different page
+│   ├── layout.tsx                 # Root layout (metadata, fonts)
+│   ├── page.tsx                   # Home page (assembles all sections)
+│   └── globals.css                # Global styles + Tailwind
 ├── components/
-│   ├── GenzBanner.tsx    # Scrolling "We Support GenZ" top banner
-│   ├── Navbar.tsx        # Sticky nav with product category dropdown
-│   ├── Hero.tsx          # Full-screen hero section
-│   ├── ScrollFade.tsx    # Purple-to-white gradient transition
-│   ├── About.tsx         # Company info, stats, values
-│   ├── Products.tsx      # Category tabs + product grid
-│   ├── ProductCard.tsx   # Individual product card with visitor counter
-│   ├── Donate.tsx        # Donation prompt section
-│   └── Footer.tsx        # Footer with contact + links
+│   ├── About.tsx                  # Company info, stats, values
+│   ├── BrandClient.tsx            # Info about Brand Partners and Clients
+│   ├── CTA Button.tsx             # CTA Floating Button with contact options
+│   ├── Donate.tsx                 # Donation prompt section
+│   └── Footer.tsx                 # Footer with brief information and links
+│   ├── GenzBanner.tsx             # Scrolling "We Support GenZ" top banner
+│   ├── Hero.tsx                   # Full-screen hero section showcasing company information
+│   ├── Navbar.tsx                 # Navigation bar with links
+│   ├── Hero.tsx                   # Full-screen hero section
+│   ├── ProductCard.tsx            # Product card design
+│   ├── Products.tsx               # Main product page with Category tabs + product grid
+│   ├── ProductsSlideshow.tsx      # Slideshow of products with Product brief description and highlights
 └── data/
-    └── products.ts       # All product data + category definitions
+    └── products.ts                # All product data + category definitions
 ```
 
 ---
