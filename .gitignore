@@ -7,7 +7,7 @@
 dist
 /.pnp
 .pnp.js
-.yarn/install-state.gz7
+.yarn/install-state.gz
 
 #performance-metrics
 .unlighthouse
@@ -39,4 +39,4 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+

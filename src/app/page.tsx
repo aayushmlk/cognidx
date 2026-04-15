@@ -1,17 +1,19 @@
 import Hero from "@/components/Hero";
 import About from "@/components/About";
+import Services from "@/components/Services";
 import ProductSlideshow from "@/components/ProductSlideshow";
+import BrandClient from "@/components/BrandClient";
 import Donate from "@/components/Donate";
 
-import Services from "@/components/Services";
 
 export default function Home() {
   return (
     <main>
       <Hero />
       <About />
-      <Services/>
+      <Services />
       <ProductSlideshow />
+      <BrandClient />
       <Donate />
     </main>
   );

@@ -1,8 +1,8 @@
 "use client";
 
-import { FlaskConical, Users, Award, Microscope, Wrench, BookOpen, Package, Building2 } from "lucide-react";
+import { FlaskConical, Award, Microscope, Building2 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const stats = [
   { num: "50+", label: "Product Lines", icon: FlaskConical },
@@ -11,12 +11,56 @@ const stats = [
   { num: "70+", label: "Test Parameters", icon: Microscope },
 ];
 
+const brandPartners = [
+  {
+    name: "Anbio",
+    full: "Anbio Biotechnology",
+    origin: "China · Shenzhen",
+    products: ["Rapid test kits", "FIA analyzers", "PCR reagents"],
+    desc: "Point-of-care diagnostics for infectious disease & immunology.",
+  },
+  {
+    name: "Seamaty",
+    full: "Seamaty Medical",
+    origin: "China · Chengdu",
+    products: ["Biochemistry analyzers", "Electrolyte analyzers"],
+    desc: "Compact, fully-automated chemistry analyzers for routine lab work.",
+  },
+  {
+    name: "Bioelab",
+    full: "Bioelab",
+    origin: "China",
+    products: ["Haematology analyzers", "Reagents"],
+    desc: "Automated blood cell counting and CBC analysis instruments.",
+  },
+  {
+    name: "DiyaLab",
+    full: "DiyaLab",
+    origin: "China",
+    products: ["FIA analyzers", "Immunoassay strips"],
+    desc: "Fluorescence immunoassay systems for rapid quantitative testing.",
+  },
+  {
+    name: "Fapon",
+    full: "Fapon Biotech",
+    origin: "China · Shenzhen",
+    products: ["Chemiluminescence analyzers", "Immunoassay reagents"],
+    desc: "High-sensitivity CLIA platforms for hormones, tumour markers & more.",
+  },
+  {
+    name: "Rayto",
+    full: "Rayto Life Sciences",
+    origin: "China · Shenzhen",
+    products: ["ELISA readers", "Urine analyzers", "Microplate washers"],
+    desc: "Full-range lab instruments covering urinalysis and immunology workflows.",
+  },
+];
+
 export default function About() {
-  const [animatedNums, setAnimatedNums] = useState(stats.map(() => 0));
+  const [activeBrand, setActiveBrand] = useState<string | null>(null);
 
   return (
-    <section
-      id="about"
+    <section id="about"
       style={{
         position: "relative",
         padding: "80px 20px",
@@ -35,6 +79,7 @@ export default function About() {
           background: "linear-gradient(90deg, transparent, #7c3aed66, #7c3aed, #7c3aed66, transparent)",
         }}
       />
+
       {/* Soft background blobs */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
         <div style={{
@@ -56,11 +101,6 @@ export default function About() {
           gap: 72px;
           align-items: center;
         }
-        .about-services-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 16px;
-        }
         .about-stats-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -76,15 +116,6 @@ export default function About() {
           border: 2px solid rgba(124,58,237,0.25);
           box-shadow: 0 8px 48px rgba(109,40,217,0.18), 0 2px 12px rgba(109,40,217,0.1);
         }
-        .about-cert-badges {
-          position: absolute;
-          bottom: 20px;
-          right: 0;
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          z-index: 10;
-        }
         .about-services-header {
           display: flex;
           align-items: flex-end;
@@ -93,13 +124,45 @@ export default function About() {
           flex-wrap: wrap;
           gap: 16px;
         }
+        /* Brand pill tooltip */
+        .brand-pill-wrapper {
+          position: relative;
+          display: inline-block;
+        }
+        .brand-tooltip {
+          display: none;
+          position: absolute;
+          bottom: calc(100% + 10px);
+          left: 50%;
+          transform: translateX(-50%);
+          width: 230px;
+          background: #fff;
+          border: 1px solid rgba(124,58,237,0.18);
+          border-radius: 14px;
+          padding: 14px 16px;
+          z-index: 50;
+          box-shadow: 0 8px 32px rgba(109,40,217,0.14), 0 2px 8px rgba(109,40,217,0.08);
+          pointer-events: none;
+        }
+        .brand-pill-wrapper:hover .brand-tooltip {
+          display: block;
+        }
+        .brand-tooltip::after {
+          content: "";
+          position: absolute;
+          bottom: -5px;
+          left: 50%;
+          transform: translateX(-50%) rotate(45deg);
+          width: 8px;
+          height: 8px;
+          background: #fff;
+          border-right: 1px solid rgba(124,58,237,0.18);
+          border-bottom: 1px solid rgba(124,58,237,0.18);
+        }
         @media (max-width: 900px) {
           .about-hero-grid {
             grid-template-columns: 1fr;
             gap: 48px;
-          }
-          .about-services-grid {
-            grid-template-columns: repeat(2, 1fr);
           }
           .about-image-col {
             display: flex;
@@ -108,25 +171,24 @@ export default function About() {
           .about-image-wrapper {
             max-width: 320px;
           }
-          .about-cert-badges {
-            right: 0;
-            bottom: 10px;
+          /* On mobile, show tooltip above or below depending on space */
+          .brand-tooltip {
+            left: 0;
+            transform: none;
+            width: 210px;
+          }
+          .brand-tooltip::after {
+            left: 24px;
+            transform: translateX(0) rotate(45deg);
           }
         }
         @media (max-width: 600px) {
-          .about-services-grid {
-            grid-template-columns: 1fr;
-          }
           .about-stats-grid {
             grid-template-columns: 1fr 1fr;
             gap: 8px;
           }
           .about-image-wrapper {
             max-width: 260px;
-          }
-          .about-cert-badges {
-            right: -8px;
-            bottom: 0;
           }
           .about-services-header {
             flex-direction: column;
@@ -140,7 +202,6 @@ export default function About() {
       `}</style>
 
       <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto" }}>
-
 
         {/* Eyebrow */}
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 52 }}>
@@ -236,12 +297,12 @@ export default function About() {
               color: "#4b3f6b", lineHeight: 1.8,
               marginBottom: 40,
             }}>
-              Since 2080 B.S., we’ve partnered with over 100 hospitals, from small hill clinics to large urban labs, ensuring the right equipment reaches every healthcare facility, so quality care is available everywhere.
+              Since 2080 B.S., we&apos;ve partnered with over 100 hospitals, from small hill clinics to large urban labs, ensuring the right equipment reaches every healthcare facility, so quality care is available everywhere.
             </p>
 
             {/* Stats 2×2 */}
             <div className="about-stats-grid">
-              {stats.map((s, idx) => {
+              {stats.map((s) => {
                 const Icon = s.icon;
                 return (
                   <div
@@ -275,60 +336,110 @@ export default function About() {
 
             {/* Brand partners */}
             <div style={{ marginTop: 28 }}>
-         <div style={{ display: "flex", alignItems: "center", gap: 10 , marginBottom:12}}>
-  {/* Vertical Gradient Line */}
-  <div
-    style={{
-      width: 3,
-      height: 18,
-      borderRadius: 2,
-      background: "linear-gradient(180deg, #6a5cff, #b46cff)", // adjust to your gradient
-    }}
-  />
+              {/* Label */}
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                <div style={{
+                  width: 3, height: 18, borderRadius: 2,
+                  background: "linear-gradient(180deg, #6a5cff, #b46cff)",
+                }} />
+                <p style={{
+                  fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase",
+                  color: "#997bf3", marginBottom: 0, fontWeight: 600,
+                }}>
+                  Brand Partners
+                </p>
+              </div>
 
-  {/* Text */}
-  <p
-    style={{
-      fontSize: 11,
-      letterSpacing: "0.2em",
-      textTransform: "uppercase",
-      color: "#997bf3",
-      marginBottom: 0,
-      fontWeight: 600,
-    }}
-  >
-    Brand Partners
-  </p>
-</div>
+              {/* Pills with hover tooltips */}
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {["Anbio", "Seamaty", "Bioelab", "DiyaLab", "Fapon", "Rayto"].map((b) => (
-                  <span key={b} style={{
-                    fontSize: 13, fontWeight: 600,
-                    padding: "6px 16px", borderRadius: 100,
-                    background: "#ede9fe",
-                    border: "1px solid rgba(124,58,237,0.18)",
-                    color: "#5b21b6",
-                    transition: "background 0.2s, transform 0.2s",
-                    cursor:"pointer"
-                  }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "#ddd6fe";
-                      e.currentTarget.style.transform = "translateY(-1px)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "#ede9fe";
-                      e.currentTarget.style.transform = "translateY(0)";
-                    }}
-                  >
-                    {b}
-                  </span>
+
+                {brandPartners.map((b) => (
+
+                  <div key={b.name} className="brand-pill-wrapper">
+                    <span
+                      style={{
+                        display: "inline-block",
+                        fontSize: 13, fontWeight: 600,
+                        padding: "6px 16px", borderRadius: 100,
+                        background: activeBrand === b.name ? "#ddd6fe" : "#ede9fe",
+                        border: "1px solid rgba(124,58,237,0.18)",
+                        color: "#5b21b6",
+                        transition: "background 0.2s, transform 0.2s",
+                        transform: activeBrand === b.name ? "translateY(-1px)" : "translateY(0)",
+                        cursor: "pointer",
+                        userSelect: "none",
+                      }}
+                      onMouseEnter={() => setActiveBrand(b.name)}
+                      onMouseLeave={() => setActiveBrand(null)}
+                    >
+                      <a href="/#brandclients" rel="noopener noreferrer">
+                        {b.name}
+                      </a>
+                    </span>
+
+
+                    {/* Tooltip */}
+                    <div className="brand-tooltip">
+                      {/* Brand name + origin */}
+
+                      <div style={{ marginBottom: 8 }}>
+                        <div style={{
+                          fontSize: 13, fontWeight: 700,
+                          color: "#140830", marginBottom: 3,
+                        }}>
+                          {b.full}
+                        </div>
+                        <div style={{
+                          display: "inline-flex", alignItems: "center", gap: 4,
+                          fontSize: 11, fontWeight: 600,
+                          color: "#7c3aed", letterSpacing: "0.02em",
+                        }}>
+                          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style={{ flexShrink: 0 }}>
+                            <circle cx="5" cy="4" r="2.5" stroke="#7c3aed" strokeWidth="1.2" fill="none" />
+                            <path d="M5 6.5 C5 6.5 2 8.5 2 9" stroke="#7c3aed" strokeWidth="1.2" strokeLinecap="round" />
+                            <path d="M5 6.5 C5 6.5 8 8.5 8 9" stroke="#7c3aed" strokeWidth="1.2" strokeLinecap="round" />
+                          </svg>
+                          {b.origin}
+                        </div>
+                      </div>
+
+                      {/* Divider */}
+                      <div style={{
+                        borderTop: "1px solid rgba(124,58,237,0.12)",
+                        margin: "8px 0",
+                      }} />
+
+                      {/* Product tags */}
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 8 }}>
+                        {b.products.map((p) => (
+                          <span key={p} style={{
+                            fontSize: 11, fontWeight: 500,
+                            padding: "2px 8px", borderRadius: 6,
+                            background: "#ede9fe",
+                            color: "#5b21b6",
+                            border: "1px solid rgba(124,58,237,0.15)",
+                          }}>
+                            {p}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* One-line description */}
+                      <p style={{
+                        fontSize: 11.5, color: "#4b3f6b",
+                        lineHeight: 1.6, margin: 0,
+                      }}>
+                        {b.desc}
+                      </p>
+                    </div>
+                  </div>
+
                 ))}
               </div>
             </div>
           </div>
 
         </div>
-
       </div>
     </section>
   );

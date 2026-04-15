@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { MapPin, Phone, Mail, MessageCircle, ArrowUpRight } from "lucide-react";
 import { categories } from "@/data/products";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const companyLinks = [
   { label: "About Us", href: "/#about" },
@@ -14,7 +15,51 @@ const companyLinks = [
   { label: "Contact", href: "/#contact" },
 ];
 
-const brandPartners = ["Anbio", "Seamaty", "Bioelab", "DiyaLab", "Fapon", "Rayto"];
+
+const brandPartners = [
+  {
+    name: "Anbio",
+    full: "Anbio Biotechnology",
+    origin: "China · Shenzhen",
+    products: ["Rapid test kits", "FIA analyzers", "PCR reagents"],
+    desc: "Point-of-care diagnostics for infectious disease & immunology.",
+  },
+  {
+    name: "Seamaty",
+    full: "Seamaty Medical",
+    origin: "China · Chengdu",
+    products: ["Biochemistry analyzers", "Electrolyte analyzers"],
+    desc: "Compact, fully-automated chemistry analyzers for routine lab work.",
+  },
+  {
+    name: "Bioelab",
+    full: "Bioelab",
+    origin: "China",
+    products: ["Haematology analyzers", "Reagents"],
+    desc: "Automated blood cell counting and CBC analysis instruments.",
+  },
+  {
+    name: "DiyaLab",
+    full: "DiyaLab",
+    origin: "China",
+    products: ["FIA analyzers", "Immunoassay strips"],
+    desc: "Fluorescence immunoassay systems for rapid quantitative testing.",
+  },
+  {
+    name: "Fapon",
+    full: "Fapon Biotech",
+    origin: "China · Shenzhen",
+    products: ["Chemiluminescence analyzers", "Immunoassay reagents"],
+    desc: "High-sensitivity CLIA platforms for hormones, tumour markers & more.",
+  },
+  {
+    name: "Rayto",
+    full: "Rayto Life Sciences",
+    origin: "China · Shenzhen",
+    products: ["ELISA readers", "Urine analyzers", "Microplate washers"],
+    desc: "Full-range lab instruments covering urinalysis and immunology workflows.",
+  },
+];
 
 const phoneNumbers = [
   { label: "+977 9819425801", href: "tel:+9779819425801" },
@@ -53,6 +98,7 @@ const contactItems = [
 ];
 
 export default function Footer() {
+  const [activeBrand, setActiveBrand] = useState<string | null>(null);
   const router = useRouter();
   useEffect(() => {
     const scrollToHash = () => {
@@ -296,24 +342,94 @@ export default function Footer() {
                 fontFamily: "Raleway, system-ui, sans-serif"
               }}
             >
-              Partners
+              Brand Partners
             </h4>
-            <div className="flex flex-wrap gap-2">
-              {brandPartners.map((b) => (
-                <span
-                  key={b}
-                  className="text-[13px] font-semibold px-3 py-1.5 rounded-full cursor-default transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
-                  style={{
-                    background: "white",
-                    color: "#7c3aed",
-                    border: "1px solid #e9d5ff",
-                    boxShadow: "0 1px 4px rgba(124,58,237,0.08)",
-                  }}
-                >
-                  {b}
-                </span>
-              ))}
-            </div>
+            {/* Pills with hover tooltips */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+
+                {brandPartners.map((b) => (
+
+                  <div key={b.name} className="brand-pill-wrapper">
+                    <span
+                      style={{
+                        display: "inline-block",
+                        fontSize: 13, fontWeight: 600,
+                        padding: "6px 16px", borderRadius: 100,
+                        background: activeBrand === b.name ? "#ddd6fe" : "#ede9fe",
+                        border: "1px solid rgba(124,58,237,0.18)",
+                        color: "#5b21b6",
+                        transition: "background 0.2s, transform 0.2s",
+                        transform: activeBrand === b.name ? "translateY(-1px)" : "translateY(0)",
+                        cursor: "pointer",
+                        userSelect: "none",
+                      }}
+                      onMouseEnter={() => setActiveBrand(b.name)}
+                      onMouseLeave={() => setActiveBrand(null)}
+                    >
+                      <a href="/#brandclients" rel="noopener noreferrer">
+                        {b.name}
+                      </a>
+                    </span>
+
+
+                    {/* Tooltip */}
+                    <div className="brand-tooltip">
+                      {/* Brand name + origin */}
+
+                      <div style={{ marginBottom: 8 }}>
+                        <div style={{
+                          fontSize: 13, fontWeight: 700,
+                          color: "#140830", marginBottom: 3,
+                        }}>
+                          {b.full}
+                        </div>
+                        <div style={{
+                          display: "inline-flex", alignItems: "center", gap: 4,
+                          fontSize: 11, fontWeight: 600,
+                          color: "#7c3aed", letterSpacing: "0.02em",
+                        }}>
+                          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style={{ flexShrink: 0 }}>
+                            <circle cx="5" cy="4" r="2.5" stroke="#7c3aed" strokeWidth="1.2" fill="none" />
+                            <path d="M5 6.5 C5 6.5 2 8.5 2 9" stroke="#7c3aed" strokeWidth="1.2" strokeLinecap="round" />
+                            <path d="M5 6.5 C5 6.5 8 8.5 8 9" stroke="#7c3aed" strokeWidth="1.2" strokeLinecap="round" />
+                          </svg>
+                          {b.origin}
+                        </div>
+                      </div>
+
+                      {/* Divider */}
+                      <div style={{
+                        borderTop: "1px solid rgba(124,58,237,0.12)",
+                        margin: "8px 0",
+                      }} />
+
+                      {/* Product tags */}
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 8 }}>
+                        {b.products.map((p) => (
+                          <span key={p} style={{
+                            fontSize: 11, fontWeight: 500,
+                            padding: "2px 8px", borderRadius: 6,
+                            background: "#ede9fe",
+                            color: "#5b21b6",
+                            border: "1px solid rgba(124,58,237,0.15)",
+                          }}>
+                            {p}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* One-line description */}
+                      <p style={{
+                        fontSize: 11.5, color: "#4b3f6b",
+                        lineHeight: 1.6, margin: 0,
+                      }}>
+                        {b.desc}
+                      </p>
+                    </div>
+                  </div>
+
+                ))}
+              </div>
           </div>
 
         </div>
