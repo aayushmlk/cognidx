@@ -144,14 +144,14 @@ export default function BrandClient() {
 
                 {/* Name */}
                 <h3 style={{ fontFamily: "Raleway, system-ui, sans-serif" }} className="text-lg font-semibold text-[#140830]">
-                  {b.name}
-                </h3>
-                <p style={{ fontFamily: "Raleway, system-ui, sans-serif" }} className="text-sm text-purple-500 mb-2">
                   {b.full}
-                </p>
+                </h3>
+                {/*<p style={{ fontFamily: "Raleway, system-ui, sans-serif" }} className="text-sm font-bold text-purple-600 mb-2">
+                  {b.full}
+                </p>*/}
 
                 {/* Origin */}
-                <span style={{ fontFamily: "Raleway, system-ui, sans-serif" }} className="text-xs font-semibold text-purple-600 bg-purple-100 px-2 py-1 rounded-full">
+                <span style={{ fontFamily: "Raleway, system-ui, sans-serif" }} className="text-[12px] font-semibold text-purple-600 bg-purple-100 px-2 py-1 rounded-full">
                   {b.origin}
                 </span>
 
@@ -162,6 +162,9 @@ export default function BrandClient() {
 
                 {/* Products */}
                 <div className="flex flex-wrap gap-2 mt-4">
+                  <p style={{ fontFamily: "Raleway, system-ui, sans-serif" }} className="text-[13px] font-bold text-gray-800 w-full">
+                    KEY PRODUCTS:
+                  </p>
                   {b.products.map((p, i) => (
                     <span
                       key={i}
