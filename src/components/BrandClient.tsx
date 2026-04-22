@@ -58,7 +58,7 @@ const brandPartners = [
   },
 ];
 
-const clients = [
+{/* const clients = [
   { name: "Agilus Diagnostic Nepal Pvt. Ltd." },
   { name: "Alfa Diagnostic Lab" },
   { name: "Alfa Polyclinic Pvt. Ltd." },
@@ -74,7 +74,7 @@ const clients = [
   { name: "Genomic Diagnostic Lab" },
   { name: "Gulmi Model Hospital Pvt. Ltd." },
   { name: "Hamro Diagnostic Suppliers" },
-];
+]; */}
 
 // ── Typed helpers ──────────────────────────────────────────────────────────────
 function getInitials(name: string): string {
@@ -273,7 +273,7 @@ const GLOBAL_STYLE = `
 export default function BrandClient() {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [hoveredClient, setHoveredClient] = useState<string | null>(null);
-  const count = useCountUp(clients.length);
+  // const count = useCountUp(clients.length);
 
   return (
     <>
@@ -314,14 +314,14 @@ export default function BrandClient() {
           pointerEvents: "none",
         }} />
 
-        
 
-        
+
+
 
         <div style={{ maxWidth: 1160, margin: "0 auto", position: "relative", zIndex: 1 }}>
 
           {/* ══ BRAND PARTNERS ══════════════════════════════════════════════════ */}
-          <div className="bc-animate" style={{ marginBottom: 88 }}>
+          <div className="bc-animate" style={{ marginBottom: 5 }}>
             {/* Label */}
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
               <div style={{ width: 28, height: 2.5, background: `linear-gradient(90deg,${p[600]},${p[300]})`, borderRadius: 2 }} />
@@ -445,9 +445,9 @@ export default function BrandClient() {
           </div>
 
           {/* ══ CLIENTS ═════════════════════════════════════════════════════════ */}
-          <div>
+          {/*<div>/*}
             {/* Header row */}
-            <div style={{
+          {/* <div style={{
               display: "flex", alignItems: "flex-end",
               justifyContent: "space-between",
               marginBottom: 40, flexWrap: "wrap", gap: 20,
@@ -485,10 +485,10 @@ export default function BrandClient() {
                 <p style={{ fontSize: 14, color: "#6b6882", margin: 0, lineHeight: 1.6 }}>
                   Hospitals &amp; diagnostic centres that rely on us daily.
                 </p>
-              </div>
+              </div> */}
 
-              {/* Animated stat ring */}
-              <div className="bc-stat-ring">
+          {/* Animated stat ring */}
+          {/* <div className="bc-stat-ring">
                 <svg viewBox="0 0 100 100" width="100" height="100">
                   <circle cx="50" cy="50" r="44" fill="none" stroke={p[100]} strokeWidth="6" />
                   <circle
@@ -522,15 +522,15 @@ export default function BrandClient() {
                   </span>
                 </div>
               </div>
-            </div>
+            </div>*/}
 
-            {/* Client grid */}
-            <div style={{
+          {/* Client grid */}
+          {/*<div style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
               gap: 10,
-            }}>
-              {clients.map((c, i) => {
+            }}> */}
+          {/* {clients.map((c, i) => {
                 const initials = getInitials(c.name);
                 const isHov = hoveredClient === c.name;
                 return (
@@ -555,8 +555,7 @@ export default function BrandClient() {
                 );
               })}
             </div>
-          </div>
-
+          </div> */}
         </div>
       </section>
     </>
