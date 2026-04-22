@@ -9,22 +9,22 @@ const services = [
   {
     icon: Package,
     title: "Supply and Distribution",
-    desc: "From analyzers to reagents, we get the right products to your facility — whether you are in Kathmandu or a clinic three hills away.",
+    desc: "We ensure timely and reliable delivery of analyzers, reagents, and essential supplies to healthcare facilities, from major hospitals in Kathmandu to clinics in remote locations.",
   },
   {
     icon: Wrench,
     title: "Machine Installation",
-    desc: "We come to you. Our team sets everything up on-site and does not leave until the machine is working exactly as it should.",
+    desc: "Our experienced technicians provide on-site installation, ensuring all equipment is properly set up, calibrated, and fully operational according to industry standards.",
   },
   {
     icon: Users,
     title: "Staff Training",
-    desc: "We sit with your team and walk through everything hands-on. No manuals, no guesswork, just clear practical guidance at your pace.",
+    desc: "We offer comprehensive, hands-on training to your team, enabling them to operate and maintain equipment efficiently with confidence and accuracy.",
   },
   {
     icon: BookOpen,
     title: "After Sales Support",
-    desc: "Questions come up after the sale too. We pick up the phone and help you sort things out, however long it takes.",
+    desc: "Our support continues beyond installation. We provide responsive and ongoing assistance to address any questions or technical concerns, ensuring uninterrupted operations.",
   },
 ];
 

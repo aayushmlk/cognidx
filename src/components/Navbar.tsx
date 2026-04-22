@@ -76,11 +76,11 @@ export default function Navbar() {
         <div className="max-w-[1280px] mx-auto px-6 flex items-center justify-between h-[72px]">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center shrink-0 group">
+          {/* <Link href="/" className="flex items-center shrink-0 group">
             <div className="relative h-12 w-64 flex-shrink-0 transition-opacity duration-200 group-hover:opacity-80">
               <Image src="/cognidx_logo.png" alt="Cognidx" width={195} height={40} className="object-contain object-left" priority />
             </div>
-          </Link>
+          </Link> */}
 
           {/* ── Desktop center nav ── */}
           <div className="hidden lg:flex items-center">
